@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import {auth} from "./firebase";
+import { auth } from "./firebase";
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -17,8 +17,11 @@ export default function useFirebaseAuth() {
   const [loading, setLoading] = useState(true);
 
   const authStateChanged = async (authState) => {
+    console.log("authStateChanged", authState)
+
     if (!authState) {
       setLoading(false);
+      setAuthUser(null)
       return;
     }
 
@@ -37,18 +40,13 @@ export default function useFirebaseAuth() {
   };
 
   const signIn = async (email, password) => {
-    signInWithEmailAndPassword(auth, email, password).then((firebaseUser) => {
-      console.log("after authSignInWithEmailAndPassword:", firebaseUser);
-      //firebaseUser.user.getIdTokenResult();
-      console.log("signInWithEmailAndPassword.firebaseUser", firebaseUser);
-
-    });
+    return signInWithEmailAndPassword(auth, email, password)
   };
 
 
-  const signOut = () => {
+  const signOut = async () => {
     console.log("signout authuser: ", authUser);
-    firbaseSignOut(auth)
+    await firbaseSignOut(auth)
   };
 
   useEffect(() => {
