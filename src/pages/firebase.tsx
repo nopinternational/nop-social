@@ -1,13 +1,10 @@
 import { type NextPage } from "next";
+import { useState } from "react"
 import Head from "next/head";
-import Link from "next/link";
-import { signIn, signOut, useSession } from "next-auth/react";
 import useFirebaseAuth from "../lib/firebase/useFirebaseAuth";
 
-import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
 
   return (
     <>
@@ -27,9 +24,7 @@ const Home: NextPage = () => {
 
 
           </div>
-          <div className="flex flex-col items-center gap-2">
-            <AuthShowcase />
-          </div>
+
         </div>
       </main>
     </>
@@ -40,39 +35,70 @@ export default Home;
 
 const FirebaseAuthDemo: React.FC = () => {
 
+  const [signinData, setSigninData] = useState({})
+  const [signinError, setSigninError] = useState(false)
   const { authUser, loading, signIn, signOut } = useFirebaseAuth()
+
+  const update = (event) => {
+    setSigninData((data) => {
+      signinData[event.target.name] = event.target.value
+      return signinData
+    })
+  }
+
+  const signOutUser = () => {
+    signOut();
+    setSigninData({})
+  }
+
+  const signInUser = () => {
+    setSigninError(false);
+    console.log("signinUser: ", signinData)
+    const si = signIn(signinData.email, signinData.password)
+      .then((authUser) => console.log("signin:", authUser))
+      .catch((error) => {
+        console.error("failed signin");
+        console.error(error.message);
+        setSigninError(true);
+      });
+  }
+
   return (
-    <div>
+    <>
       <h3 className="text-2xl font-bold">FirebaseAuthDemo →</h3>
       <div className="text-lg">UID: <span className="text-">{authUser && authUser.uid || "-"}</span></div>
       <div className="text-lg">Email: <span className="text-">{authUser && authUser.email || "-"}</span></div>
-      <div className="text-lg">
-        Just the basics - Everything you need to know to set up your
-        database and authentication.
-      </div>
-    </div>)
+
+      {authUser &&
+        <button
+          className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+          onClick={signOutUser}
+        >
+          Sign out
+        </button>}
+
+      {!authUser && <>
+        Email
+        <input
+          className="rounded-full bg-white px-10 py-3 font-semibold text-[hsl(280,100%,70%)] no-underline transition hover:bg-white/5"
+          name="email"
+          type="text"
+          onChange={update}
+        />
+        Password
+        <input
+          className="rounded-full bg-white px-10 py-3 font-semibold text-[hsl(280,100%,70%)] no-underline transition hover:bg-white/5"
+          name="password"
+          type="password"
+          onChange={update}
+        />
+        <button
+          className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+          onClick={signInUser}
+        >
+          Sign in
+        </button>
+        {signinError && <p>Error on signin</p>}</>}
+
+    </>)
 }
-
-const AuthShowcase: React.FC = () => {
-  const { data: sessionData } = useSession();
-
-  const { data: secretMessage } = api.example.getSecretMessage.useQuery(
-    undefined, // no input
-    { enabled: sessionData?.user !== undefined },
-  );
-
-  return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      <p className="text-center text-2xl text-white">
-        {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-        {secretMessage && <span> - {secretMessage}</span>}
-      </p>
-      <button
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-        onClick={sessionData ? () => void signOut() : () => void signIn()}
-      >
-        {sessionData ? "Sign out" : "Sign in"}
-      </button>
-    </div>
-  );
-};
