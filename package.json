@@ -26,6 +26,7 @@
     "compressorjs": "^1.2.1",
     "dayjs": "^1.11.7",
     "dotenv": "^16.0.3",
+    "firebase": "^9.17.2",
     "next": "^13.2.1",
     "next-auth": "^4.19.0",
     "node-fetch": "^3.3.1",
