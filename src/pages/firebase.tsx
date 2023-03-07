@@ -18,7 +18,7 @@ const Home: NextPage = () => {
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             Firebase <span className="text-[hsl(280,100%,70%)]">Auth</span>
           </h1>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:gap-8 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
+          <div className="grid grid-cols-1 min-w-full md:min-w-0 gap-4 sm:grid-cols-1 md:gap-8 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
 
             <FirebaseAuthDemo />
 
@@ -80,14 +80,14 @@ const FirebaseAuthDemo: React.FC = () => {
       {!authUser && <>
         Email
         <input
-          className="rounded-full bg-white px-10 py-3 font-semibold text-[hsl(280,100%,70%)] no-underline transition hover:bg-white/5"
+          className="rounded-full bg-white px-40 py-3 font-semibold text-[hsl(280,100%,70%)] no-underline transition hover:bg-white/5"
           name="email"
           type="text"
           onChange={update}
         />
         Password
         <input
-          className="rounded-full bg-white px-10 py-3 font-semibold text-[hsl(280,100%,70%)] no-underline transition hover:bg-white/5"
+          className="rounded-full bg-white px-40 py-3 font-semibold text-[hsl(280,100%,70%)] no-underline transition hover:bg-white/5"
           name="password"
           type="password"
           onChange={update}
