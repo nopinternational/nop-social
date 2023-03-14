@@ -7,6 +7,14 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { env } from "../env.mjs";
 import { prisma } from "./db";
+import { auth as authApp } from "../lib/firebase/firebase";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from "firebase/auth";
+import { use } from "react";
 import { getSession } from "next-auth/react";
 
 /**
@@ -36,7 +44,21 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
+  callbacks: {
+    session({ session, user }) {
+      console.log("callbacks.session.session", session);
+      console.log("callbacks.session.user", user)
+      if (session.user && user) {
+
+        session.user.id = user.id;
+        // session.user.role = user.role; <-- put other properties on the session here
+      }
+      console.log("callbacks.session.return_session", session);
+      return session;
+    },
+  },
+  //adapter: PrismaAdapter(prisma),
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     // ...add more providers here
     CredentialsProvider({
@@ -53,6 +75,58 @@ export const authOptions: NextAuthOptions = {
         return user;
       },
     }),
+    CredentialsProvider({
+
+
+
+
+
+      id: "nop-auth",
+      name: "NoP Auth",
+      async authorize(credentials, req) {
+
+        console.log("CredentialsProvider.authorize.credentials", credentials)
+        //console.log("CredentialsProvider.authorize.req", req)
+
+
+        const fbuser = await signInWithEmailAndPassword(authApp, credentials.username, credentials.password)
+          .then((firebaseUser) => {
+
+
+
+
+            //console.log("after authSignInWithEmailAndPassword:", firebaseUser);
+            return {
+              "id": firebaseUser.user.uid,
+              "name": firebaseUser.user.displayName,
+              "email": firebaseUser.user.email
+            }
+          }, (error) => {
+
+            console.error("error in signInWithEmailAndPassword:", error);
+            return null
+          })
+
+
+        const returnObject = { "user": fbuser }
+        console.log("authorize,  returnObject:", fbuser)
+        return fbuser
+
+      },
+      credentials: {
+        username: { label: "Username", type: "text ", placeholder: "jsmith" },
+        password: { label: "Password", type: "password" },
+      },
+    }),
+    /**
+     * ...add more providers here.
+     *
+     * Most other providers require a bit more work than the Discord provider. For example, the
+     * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
+     * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
+     *
+     * @see https://next-auth.js.org/providers/github
+     */
   ],
   secret: env.NEXTAUTH_SECRET,
   session: {
