@@ -5,9 +5,19 @@ import {
   type DefaultSession,
 } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
+import CredentialsProvider from "next-auth/providers/credentials";
+
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
+import { auth as authApp } from "../lib/firebase/firebase";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from "firebase/auth";
+import { use } from "react";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -38,18 +48,66 @@ declare module "next-auth" {
 export const authOptions: NextAuthOptions = {
   callbacks: {
     session({ session, user }) {
-      if (session.user) {
+      console.log("callbacks.session.session", session);
+      console.log("callbacks.session.user", user)
+      if (session.user && user) {
+
         session.user.id = user.id;
         // session.user.role = user.role; <-- put other properties on the session here
       }
+      console.log("callbacks.session.return_session", session);
       return session;
     },
   },
-  adapter: PrismaAdapter(prisma),
+  //adapter: PrismaAdapter(prisma),
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     DiscordProvider({
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
+    }),
+    CredentialsProvider({
+
+
+
+
+
+      id: "nop-auth",
+      name: "NoP Auth",
+      async authorize(credentials, req) {
+
+        console.log("CredentialsProvider.authorize.credentials", credentials)
+        //console.log("CredentialsProvider.authorize.req", req)
+
+
+        const fbuser = await signInWithEmailAndPassword(authApp, credentials.username, credentials.password)
+          .then((firebaseUser) => {
+
+
+
+
+            //console.log("after authSignInWithEmailAndPassword:", firebaseUser);
+            return {
+              "id": firebaseUser.user.uid,
+              "name": firebaseUser.user.displayName,
+              "email": firebaseUser.user.email
+            }
+          }, (error) => {
+
+            console.error("error in signInWithEmailAndPassword:", error);
+            return null
+          })
+
+
+        const returnObject = { "user": fbuser }
+        console.log("authorize,  returnObject:", fbuser)
+        return fbuser
+
+      },
+      credentials: {
+        username: { label: "Username", type: "text ", placeholder: "jsmith" },
+        password: { label: "Password", type: "password" },
+      },
     }),
     /**
      * ...add more providers here.
