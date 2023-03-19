@@ -48,16 +48,13 @@ model Session {
 }
 
 model User {
-  id             String        @id @default(cuid())
+  id             String                    @id @default(cuid())
   name           String?
-  email          String?       @unique
+  email          String?                   @unique
   emailVerified  DateTime?
   image          String?
   accounts       Account[]
   sessions       Session[]
-  Conversation   Conversation? @relation(fields: [conversationId], references: [id])
-  conversationId String?
-  Message        Message[]
 }
 
 model VerificationToken {
@@ -69,11 +66,21 @@ model VerificationToken {
 }
 
 model Conversation {
-  id           String    @id @default(cuid())
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  participants User[]
+  id           String                    @id @default(cuid())
+  createdAt    DateTime                  @default(now())
+  updatedAt    DateTime                  @updatedAt
+  participants ConversationParticipant[]
   messages     Message[]
+}
+
+model ConversationParticipant {
+  id             String       @id @default(cuid())
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime     @updatedAt
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  conversationId String
+  userId  String
 }
 
 model Message {
@@ -81,7 +88,6 @@ model Message {
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   conversation   Conversation @relation(fields: [conversationId], references: [id])
-  creator        User         @relation(fields: [userId], references: [id])
   content        String
   conversationId String
   userId         String
