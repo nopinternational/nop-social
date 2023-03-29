@@ -9,7 +9,7 @@ const Chat: NextPage = () => {
   const conversations = api.conversation.getAllConversations.useQuery();
   const utils = api.useContext();
   const mutation = api.conversation.createConversation.useMutation(
-  {
+    {
       onSuccess(data) {
         void utils.conversation.getAllConversations.invalidate();
         //void router.push(`/app/space/${space.id}/content/${data.id}`);
@@ -17,13 +17,37 @@ const Chat: NextPage = () => {
     }
   );
 
-  const conversationsList = conversations.data?.map((conversation) => (<div key={conversation.id} >
-    <Link href={`/conversation/${conversation.id}`}>
-    <span>{conversation.createdAt.toISOString()}</span>
-    <span>{conversation.id}</span>
-    {conversation.participants.map((participant) => <span key={participant.id}>{participant.userId}</span>)}
-    </Link>
-  </div>));
+  const conversationsList = conversations.data?.map((conversation) => {
+    const spans = conversation.participants.map((participant) => participant.userId)
+    console.log("spans:", spans)
+    const userlist = spans.join(", ")
+    console.log("userlist:", userlist)
+    return (<div key={conversation.id} >
+      <div className="grid grid-cols-6 gap-4 sm:grid-cols-6 md:gap-8">
+        <div className="col-start-2 col-span-4">
+
+          <Link
+            className="flex max-w-xl flex-col  gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
+            href={`/conversation/${conversation.id}`}
+          >
+            <h3 className="text-2xl font-bold">{conversation.id}→</h3>
+            <div className="text-lg">
+              Join the conversation with {userlist}
+            </div>
+            <button
+              className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20 truncate"
+              onClick={() => null}
+            > Join room</button>
+          </Link>
+        </div>
+        {/* <Link href={`/conversation/${conversation.id}`}>
+        <span>{conversation.createdAt.toISOString()}</span>
+        <span>{conversation.id}</span>
+        {conversation.participants.map((participant) => <span key={participant.id}>{participant.userId}</span>)}
+      </Link> */}
+      </div>
+    </div>)
+  });
 
   return (
     <>
@@ -34,7 +58,7 @@ const Chat: NextPage = () => {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-         
+
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
             <button type="submit" onClick={() => mutation.mutate()} className="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Create conversation</button>
           </div>

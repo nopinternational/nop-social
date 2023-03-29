@@ -44,6 +44,20 @@ const Home: NextPage = () => {
               </div>
             </Link>
           </div>
+          <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
+            <div className="col-span-2">
+              <Link
+                className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
+                href="chat"
+                target="_blank"
+              >
+                <h3 className="text-2xl font-bold">Chat →</h3>
+                <div className="text-lg">
+                  Get in touch with others - talk to others in chat rooms.
+                </div>
+              </Link>
+            </div>
+          </div>
           <div className="flex flex-col items-center gap-2">
             <p className="text-2xl text-white">
               {hello.data ? hello.data.greeting : "Loading tRPC query..."}
