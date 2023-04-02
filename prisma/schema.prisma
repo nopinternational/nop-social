@@ -48,13 +48,13 @@ model Session {
 }
 
 model User {
-  id             String                    @id @default(cuid())
-  name           String?
-  email          String?                   @unique
-  emailVerified  DateTime?
-  image          String?
-  accounts       Account[]
-  sessions       Session[]
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
 }
 
 model VerificationToken {
@@ -66,11 +66,26 @@ model VerificationToken {
 }
 
 model Conversation {
-  id           String                    @id @default(cuid())
-  createdAt    DateTime                  @default(now())
-  updatedAt    DateTime                  @updatedAt
-  participants ConversationParticipant[]
-  messages     Message[]
+  id                  String                    @id @default(cuid())
+  createdAt           DateTime                  @default(now())
+  updatedAt           DateTime                  @updatedAt
+  participants        ConversationParticipant[]
+  messages            Message[]
+  PrivateConversation PrivateConversation[]
+}
+
+model PrivateConversation {
+  id             String        @id @default(cuid())
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  conversation   Conversation? @relation(fields: [conversationId], references: [id])
+  conversationId String?
+  initiatorId    String
+  recipientId    String
+  message        String?
+  acceptedAt     DateTime?
+  deletedAt      DateTime?
+  rejectedAt     DateTime?
 }
 
 model ConversationParticipant {
@@ -80,7 +95,8 @@ model ConversationParticipant {
   deletedAt      DateTime     @updatedAt
   conversation   Conversation @relation(fields: [conversationId], references: [id])
   conversationId String
-  userId  String
+  userId         String
+  acceptedAt     DateTime?
 }
 
 model Message {
@@ -91,4 +107,47 @@ model Message {
   content        String
   conversationId String
   userId         String
+}
+
+model Profile {
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  userId          String   @unique
+  name            String   @unique
+  type            String
+  county          String?
+  city            String?
+  aboutUs         String?
+  weAreLookingFor String?
+  Male            Male[]
+  Female          Female[]
+}
+
+model Male {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  profileId   String
+  Profile     Profile  @relation(fields: [profileId], references: [id])
+  dateOfBirth DateTime
+  sexuality   String
+  length      String
+  bodyType    String
+  dickSize    String
+  tags        String
+}
+
+model Female {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  profileId   String
+  Profile     Profile  @relation(fields: [profileId], references: [id])
+  dateOfBirth DateTime
+  sexuality   String
+  length      String
+  bodyType    String
+  breasts     String
+  tags        String
 }

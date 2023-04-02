@@ -1,4 +1,4 @@
-import { Message } from "@prisma/client";
+import type { Message } from "@prisma/client";
 import { observable } from "@trpc/server/observable";
 import { z } from "zod";
 
@@ -116,6 +116,7 @@ export const conversationRouter = createTRPCRouter({
             emit.next(data);
           }
         };
+        // Todo: Check if user is part of conversation.
         void ctx.prisma.message
           .findMany({
             where: { conversationId: input.conversationId },

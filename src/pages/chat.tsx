@@ -5,6 +5,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 import { api } from "~/utils/api";
 
+
 const Chat: NextPage = () => {
   const conversations = api.conversation.getAllConversations.useQuery();
   const utils = api.useContext();
