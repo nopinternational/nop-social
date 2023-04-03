@@ -4,12 +4,30 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 import { api } from "~/utils/api";
 import { useRouter } from "next/router";
-
+import type { PrivateConversation, Profile } from "@prisma/client";
+import { Session } from "next-auth";
+import Link from "next/link";
 
 function ProfileView({ profileName }: { profileName: string }) {
+  const { data: sessionData } = useSession();
+  const utils = api.useContext();
   const profileQuery = api.profile.getProfileByName.useQuery({ profileName });
+  
+  const inviteToConversationMutation = api.privateConversation.inviteToPrivateConversation.useMutation({
+    onSuccess() {
+      void utils.profile.getProfileByName.invalidate();
+    }
+  });
+
+  const acceptConversationMutation = api.privateConversation.acceptPrivateConversation.useMutation({
+    onSuccess() {
+      void utils.profile.getProfileByName.invalidate();
+    }
+  });
+
+
   if (profileQuery.isLoading) return <div>loading...</div>;
-  if (!profileQuery.data) return <div>No profile found</div>;
+  if (!profileQuery.data?.profile) return <div>No profile found</div>;
 
   return (
     <>
@@ -23,7 +41,17 @@ function ProfileView({ profileName }: { profileName: string }) {
           <h1 className="text-xl tracking-tight text-white ">
             Welcome to profile: {profileName}
           </h1>
-          <ProfileAboutCard profile={profileQuery.data} />
+          <ProfileAboutCard
+            profile={profileQuery.data.profile}
+            sessionData={sessionData}
+            privateConversation={profileQuery.data.privateConversation}
+            onInviteClick={() => {              
+                inviteToConversationMutation.mutate({recipientId: profileQuery.data?.profile.id || "ERROR"})
+            }}
+            onAcceptClick={() => {
+              acceptConversationMutation.mutate({ privateConversaionId: profileQuery.data?.privateConversation?.id || "ERROR" })
+            }}
+          />
 
           <div className="flex flex-col items-center gap-2">
             <AuthShowcase />
@@ -69,7 +97,19 @@ const AuthShowcase: React.FC = () => {
   );
 };
 
-function ProfileAboutCard({ profile }: { profile: Profile }) {
+function ProfileAboutCard({
+  profile,
+  sessionData,
+  onInviteClick,
+  onAcceptClick,
+  privateConversation
+}: {
+  profile: Profile;
+  sessionData: Session | null;
+  onInviteClick?: () => void;
+  onAcceptClick?: () => void;
+  privateConversation: PrivateConversation | undefined
+}) {
   return (
     <div className="rounded-sm bg-white p-3 shadow-sm">
       <div className="flex items-center space-x-2 font-semibold leading-8 text-gray-900">
@@ -127,7 +167,31 @@ function ProfileAboutCard({ profile }: { profile: Profile }) {
           </div>
         </div>
       </div>
-      <a href="#" class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Invite to conversation</a>
+      {privateConversation?.rejectedAt && <div>You are blocked.</div>}
+      {privateConversation?.acceptedAt && <Link href={`/conversation/${privateConversation.conversationId || 'error'}`}>Chat</Link>}
+      {privateConversation && !privateConversation?.acceptedAt && !privateConversation?.rejectedAt && <div>Invitation sent</div> }
+      {sessionData?.user?.name !== profile.userId && !privateConversation && (
+        <div>
+          <button
+            onClick={(e) => {e.preventDefault(), onInviteClick && onInviteClick()}}
+            className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            Invite to conversation
+          </button>
+        </div>
+      )}
+       {sessionData?.user?.name !== profile.userId && privateConversation 
+       && privateConversation.recipientId === sessionData?.user?.name
+       && !privateConversation.acceptedAt && !privateConversation.rejectedAt && (
+        <div>
+          <button
+            onClick={(e) => {e.preventDefault(), onAcceptClick && onAcceptClick()}}
+            className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            Accept conversation
+          </button>
+        </div>
+      )}
     </div>
   );
 }

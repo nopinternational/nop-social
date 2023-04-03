@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { ProfileSchema, ProfileType } from "~/utils/validation/profile";
-import { profile } from "console";
 
 export const profileRouter = createTRPCRouter({
   getAllProfiles: protectedProcedure.query(({ ctx }) => {
@@ -14,8 +13,36 @@ export const profileRouter = createTRPCRouter({
     }),
     getProfileByName: protectedProcedure
     .input(z.object({ profileName: z.string() }))
-    .query(({ ctx, input }) => {
-      return ctx.prisma.profile.findUnique({ where: { name: input.profileName } });
+    .query(async ({ ctx, input }) => {
+      const profile = await ctx.prisma.profile.findUnique({ where: { name: input.profileName } });
+      if(!profile) return null;
+
+      const privateConversations = await ctx.prisma.privateConversation.findMany(
+        {
+          where: {
+            AND: [
+              {
+                OR: [ 
+                  { initiatorId: ctx.session.user.name as string, 
+                    recipientId: profile?.id },
+                    { initiatorId: profile?.id, 
+                      recipientId: ctx.session.user.name as string  }
+                ],
+              deletedAt: null,
+              rejectedAt: null,
+              }
+            ]
+            
+          },
+          include: {
+            conversation: true,
+          },
+          orderBy: { createdAt: "desc" },
+        }
+      );
+      
+      
+      return {profile, privateConversation: privateConversations[0]}
     }),
     getMyProfile: protectedProcedure
     .query(({ ctx }) => {

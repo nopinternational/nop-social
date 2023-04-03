@@ -3,6 +3,7 @@ import Head from "next/head";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { api } from "~/utils/api";
 import { ProfileGrid } from "~/components/ProfileGrid";
+import { PrivateAcceptedInvites, PrivateOpenInvites, PrivateUnawnseredInvites } from "~/components/PrivateInvites";
 
 
 const ProfilePage: NextPage = () => {
@@ -25,7 +26,19 @@ const ProfilePage: NextPage = () => {
 
          
           <div className=" gap-4 md:gap-8">
-            <ProfileGrid profiles={[]}  />
+            <ProfileGrid />
+          </div>
+
+          <div className=" gap-4 md:gap-8">
+            <PrivateUnawnseredInvites />
+          </div>
+
+          <div className=" gap-4 md:gap-8">
+            <PrivateOpenInvites />
+          </div>
+
+          <div className=" gap-4 md:gap-8">
+            <PrivateAcceptedInvites />
           </div>
 
           <div className="flex flex-col items-center gap-2">
