@@ -29,12 +29,12 @@ function Conversation({ conversationId }: { conversationId: string }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
+        <div className="container flex flex-col  items-center justify-center gap-12 px-4 py-16">
           <h1 className="text-3xl font-bold tracking-tight text-white ">
             Welcome to room {conversation.data?.id}
           </h1>
 
-          <div className="flex-1 gap-4 md:gap-8">
+          <div className="flex-1 min-w-full xs:max-w-xs gap-4 md:gap-8">
             <UserList usernames={conversation.data?.participants.map(p => p.userId) || []} />
 
           </div>
@@ -44,7 +44,7 @@ function Conversation({ conversationId }: { conversationId: string }) {
               Join conversation
             </button>
           </div>
-          <div className=" gap-4 md:gap-8">
+          <div className=" gap-4 md:gap-8 min-w-full xs:max-w-sm">
             <Chat conversationId={conversationId} />
           </div>
 
@@ -116,7 +116,7 @@ function Chat({ conversationId }: { conversationId: string }) {
   return <div className="flex-1">
 
     <h1 className="text-xl font-extrabold tracking-tight text-white">CHAT:</h1>
-    <div id="messages" className="m-1 text-m bg-white h-96  flex flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch">
+    <div id="messages" className="m-1 text-m rounded-md bg-white h-96  flex flex-col  space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch">
       {messages.map((message) => {
 
         if (message.userId === sessionData?.user?.name) {
@@ -125,7 +125,7 @@ function Chat({ conversationId }: { conversationId: string }) {
               <div className="flex flex-col space-y-2  mx-2 order-2 items-start">
                 <div><span className="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-300 text-gray-600">{message.content} - {message.userId}</span></div>
               </div>
-              <img src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144" alt="My profile" className="w-6 h-6 rounded-full order-1" />
+              <img src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144" alt="My profile" className="w-10 h-10 rounded-full order-1" />
             </div>
           </div>)
         }
@@ -135,7 +135,7 @@ function Chat({ conversationId }: { conversationId: string }) {
             <div className="flex flex-col space-y-2  max-w-xs mx-2 order-1 items-end">
               <div><span className="px-4 py-2 rounded-lg inline-block rounded-br-none bg-blue-600 text-white ">{message.content} - {message.userId}</span></div>
             </div>
-            <img src="https://images.unsplash.com/photo-1590031905470-a1a1feacbb0b?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144" alt="My profile" className="w-6 h-6 rounded-full order-2" />
+            <img src="https://images.unsplash.com/photo-1590031905470-a1a1feacbb0b?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144" alt="My profile" className="w-10 h-10 rounded-full order-2" />
           </div>
         </div>
       }
@@ -147,14 +147,17 @@ function Chat({ conversationId }: { conversationId: string }) {
 
 
     </div>
-    <form className="flex " onSubmit={(e) => {
-      e.preventDefault();
-      sendMessage({ conversationId, content: message });
-    }}>
-      <textarea className=" " onChange={(e) => setMessage(e.target.value)}></textarea>
-      <div><button type="submit" className="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Send</button></div>
-    </form>
-
+    <div className=" ">
+      <form className="flex flex-nowrap items-end" onSubmit={(e) => {
+        e.preventDefault();
+        sendMessage({ conversationId, content: message });
+      }}>
+        <textarea className="m-1 grow rounded-md" onChange={(e) => setMessage(e.target.value)}></textarea>
+        <div>
+          <button type="submit" className="m-1 inline-flex  w-32 justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Send</button>
+        </div>
+      </form>
+    </div>
   </div>
 
 }
