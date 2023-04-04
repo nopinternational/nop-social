@@ -46,7 +46,7 @@ function ProfileView({ profileName }: { profileName: string }) {
             sessionData={sessionData}
             privateConversation={profileQuery.data.privateConversation}
             onInviteClick={() => {              
-                inviteToConversationMutation.mutate({recipientId: profileQuery.data?.profile.id || "ERROR"})
+                inviteToConversationMutation.mutate({recipientId: profileQuery.data?.profile.userId || "ERROR"})
             }}
             onAcceptClick={() => {
               acceptConversationMutation.mutate({ privateConversaionId: profileQuery.data?.privateConversation?.id || "ERROR" })

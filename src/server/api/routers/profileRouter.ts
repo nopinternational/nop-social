@@ -24,8 +24,8 @@ export const profileRouter = createTRPCRouter({
               {
                 OR: [ 
                   { initiatorId: ctx.session.user.name as string, 
-                    recipientId: profile?.id },
-                    { initiatorId: profile?.id, 
+                    recipientId: profile.userId },
+                    { initiatorId: profile.userId, 
                       recipientId: ctx.session.user.name as string  }
                 ],
               deletedAt: null,

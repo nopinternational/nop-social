@@ -91,7 +91,7 @@ model PrivateConversation {
 
 model Circle {
   id             String        @id @default(cuid())
-  name           String
+  name           String        @unique
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
   conversation   Conversation? @relation(fields: [conversationId], references: [id])
@@ -100,6 +100,19 @@ model Circle {
   recipientId    String
   description    String?
   type           String
+  moderators     CircleModerators[]
+}
+
+model CircleModerators {
+  id             String        @id @default(cuid())
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  circle         Circle?       @relation(fields: [circleId], references: [id])
+  circleId       String?
+  moderatorId    String
+  acceptedAt     DateTime?
+  rejectedAt     DateTime?
+  deletedAt      DateTime?
 }
 
 model ConversationParticipant {
