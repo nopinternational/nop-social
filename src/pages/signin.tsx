@@ -2,7 +2,8 @@ import { useRef } from "react"
 import Head from "next/head";
 import Link from "next/link";
 // import { providers, signIn, getSession, csrfToken } from "next-auth/client/";
-import { getProviders, signIn } from "next-auth/react"
+import { getProviders, signIn, signOut, getCsrfToken, getSession, useSession } from "next-auth/react"
+
 
 function Signin({ providers }) {
     console.log("signin: ", providers)
@@ -11,30 +12,41 @@ function Signin({ providers }) {
 
     const nopAuthSignIn = (providers) => {
         const nopSigninProvider = Object.values(providers).filter(provider => provider.id == "nop-auth")[0]
-        console.log("nopAuthSignIn.nopSigninProvider: ", nopSigninProvider)
+        //console.log("nopAuthSignIn.nopSigninProvider: ", nopSigninProvider)
 
 
         if (!nopSigninProvider) return <div>no nop</div>
 
-        const signinNopAuth = () => {
+        const signinNopAuth = async (event: React.FormEvent<HTMLFormElement>) => {
+            console.log("Signin.nopAuthSignIn.signinNopAuth.event", event)
+            event.preventDefault()
             console.log("Signin.nopAuthSignIn.signinNopAuth", inputUsername.current, inputPassword)
             console.log("Signin.nopAuthSignIn.signinNopAuth", inputUsername.current.value, inputPassword)
-            signIn('nop-auth', { redirect: false, username: inputUsername.current.value, password: inputPassword.current.value })
+            const signinreturn = await signIn('nop-auth', {
+                redirect: true,
+                username: inputUsername.current.value,
+                password: inputPassword.current.value
+            })
+            console.log("Signin.nopAuthSignIn.signinNopAuth.signinreturn", signinreturn)
         }
 
-        return (<><div>nop-signin</div>
-            <form className="m-2" >
-                <div className="m-2">email</div>
-                <input
-                    className="m-2 rounded-full"
-                    name="username" ref={inputUsername}></input><br />
-                <div className="m-2">password</div>
-                <input className="m-2 rounded-full"
-                    name="password" type="password" ref={inputPassword}></input><br />
-                <button
-                    className="m-2 rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-                    onClick={() => signinNopAuth()}>Signin</button>
-            </form></>)
+        return (
+            <>
+                <div>nop-signin</div>
+                <form className="m-2" >
+                    <div className="m-2">email</div>
+                    <input
+                        className="m-2 rounded-full text-black"
+                        name="username" ref={inputUsername}></input><br />
+                    <div className="m-2">password</div>
+                    <input className="m-2 rounded-full text-black"
+                        name="password" type="password" ref={inputPassword}></input><br />
+                    <button
+                        className="m-2 rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+                        onClick={(event) => signinNopAuth(event)}>Signin</button>
+                </form>
+            </>
+        )
     }
 
     return (
@@ -68,18 +80,51 @@ function Signin({ providers }) {
                                 Back
                             </button></Link>
                     </div>
+                    <div className="flex flex-col items-center gap-2">
+                        <AuthShowcase />
+                    </div>
                 </div>
             </main>
         </>
     );
 }
 
+const AuthShowcase: React.FC = () => {
+    const { data: sessionData } = useSession();
+
+
+
+    console.log("AuthShowcase.sessionData", sessionData)
+    return (
+        <div className="flex flex-col items-center justify-center gap-4">
+            <p className="text-center text-2xl text-white">
+                {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
+            </p>
+            <button
+                className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+                onClick={sessionData ? () => void signOut() : () => void signIn()}
+            >
+                {sessionData ? "Sign out" : "Sign in"}
+            </button>
+        </div>
+    );
+};
 export default Signin;
 
 export async function getServerSideProps() {
+
+    const session = await getSession();
+
+    if (session) {
+        return {
+            redirect: { destination: "/" },
+        };
+    }
+
     return {
         props: {
             providers: await getProviders(),
+            csrfToken: await getCsrfToken(),
         },
     };
 }
