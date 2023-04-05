@@ -3,6 +3,7 @@ import { observable } from "@trpc/server/observable";
 import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { CircleType } from "~/utils/circle";
 
 export const conversationRouter = createTRPCRouter({
   getAllConversations: protectedProcedure.query(({ ctx }) => {
@@ -22,14 +23,44 @@ export const conversationRouter = createTRPCRouter({
 
   getConversation: protectedProcedure
     .input(z.object({ conversationId: z.string() }))
-    .query(({ ctx, input }) => {
+    .query(async ({ ctx, input }) => {
       // TODO: Check if user is part of conversation
-      const conversation = ctx.prisma.conversation.findUnique({
+      const conversation = await ctx.prisma.conversation.findUnique({
         where: { id: input.conversationId },
-        include: { participants: true },
+        include: { participants: true, PrivateConversation: true, Circle: true },
       });
 
-      return conversation;
+      if(!conversation) {
+        throw new Error("Conversation not found");
+      }
+
+      const participation = await ctx.prisma.conversationParticipant.findMany({
+        where: {
+          conversationId: input.conversationId,
+          userId: ctx.session.user.name as string,
+          deletedAt: null,
+        }
+      });
+
+      if((!participation || participation.length === 0) && conversation.Circle && conversation.Circle.type === CircleType.Open) {
+        return {partcipation: null, conversation};
+      }
+
+      return {conversation, partcipation: participation[0]};
+    }),
+
+    acceptConversationInvitation: protectedProcedure
+    .input(z.object({ conversationParticipantId: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      return ctx.prisma.conversationParticipant.updateMany({
+        where:{
+          id: input.conversationParticipantId,
+          userId: ctx.session.user.name as string,
+        },
+        data: {
+          acceptedAt: new Date(),
+        },
+      });
     }),
 
   createConversation: protectedProcedure.mutation(async ({ ctx }) => {
@@ -47,7 +78,7 @@ export const conversationRouter = createTRPCRouter({
 
     return conversation[0];
   }),
-
+/*
   joinConversation: protectedProcedure
     .input(z.object({ conversationId: z.string() }))
     .mutation(async ({ ctx, input }) => {
@@ -72,7 +103,7 @@ export const conversationRouter = createTRPCRouter({
 
       return newParticipation;
     }),
-
+*/
   sendMessage: protectedProcedure
     .input(z.object({ conversationId: z.string(), content: z.string() }))
     .mutation(async ({ ctx, input }) => {

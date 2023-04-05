@@ -1,8 +1,5 @@
 import { z } from "zod";
 
-export enum ProfileType {
-    HeterosexualPair = "HeterosexualPair",
-  }
   
   export const ProfileSchema = z.object({
     name: z.string(),

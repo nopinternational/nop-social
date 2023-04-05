@@ -9,18 +9,20 @@ import { Message } from "@prisma/client";
 import { UserList } from "~/components/UserList";
 
 function Conversation({ conversationId }: { conversationId: string }) {
-  const conversation = api.conversation.getConversation.useQuery({ conversationId });
+  const conversationRequest = api.conversation.getConversation.useQuery({ conversationId });
   const utils = api.useContext();
-  const joinMutation = api.conversation.joinConversation.useMutation({
+  
+  const joinMutation = api.circle.joinOpenCircle.useMutation({
     onSuccess() {
       void utils.conversation.getConversation.invalidate({ conversationId });
       void utils.conversation.getAllConversations.invalidate();
     }
   });
 
-  if (conversation.isLoading) return (<div>loading...</div>);
+  if (conversationRequest.isLoading) return (<div>loading...</div>);
+  if (conversationRequest.isError) return (<div>Error</div>);
 
-
+  const {conversation, partcipation} = conversationRequest.data;
   return (
     <>
       <Head>
@@ -30,20 +32,21 @@ function Conversation({ conversationId }: { conversationId: string }) {
       </Head>
       <main className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
         <div className="container flex flex-col  items-center justify-center gap-12 px-4 py-16">
-          <h1 className="text-3xl font-bold tracking-tight text-white ">
-            Welcome to room {conversation.data?.id}
-          </h1>
+          {conversation.Circle && <h1 className="text-3xl font-bold tracking-tight text-white ">Welcome to circle {conversation.Circle.name}</h1>}
+          {!conversation.Circle && <h1 className="text-3xl font-bold tracking-tight text-white "> 
+            A conversation with {conversation.participants.map(p => p.userId).join(", ")}
+          </h1> }
 
           <div className="flex-1 min-w-full xs:max-w-xs gap-4 md:gap-8">
-            <UserList usernames={conversation.data?.participants.map(p => p.userId) || []} />
-
+            <UserList usernames={conversation.participants.map(p => p.userId) || []} />
           </div>
 
+          {partcipation && !partcipation.acceptedAt && 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-            <button type="submit" onClick={() => joinMutation.mutate({ conversationId })} className="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
+            <button type="submit" onClick={() => joinMutation.mutate({ circleId: conversation.Circle?.id as string })} className="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
               Join conversation
             </button>
-          </div>
+          </div>}
           <div className=" gap-4 md:gap-8 min-w-full xs:max-w-sm">
             <Chat conversationId={conversationId} />
           </div>

@@ -72,7 +72,7 @@ model Conversation {
   participants        ConversationParticipant[]
   messages            Message[]
   PrivateConversation PrivateConversation[]
-  Circle              Circle[]
+  Circle              Circle?
 }
 
 model PrivateConversation {
@@ -90,29 +90,29 @@ model PrivateConversation {
 }
 
 model Circle {
-  id             String        @id @default(cuid())
-  name           String        @unique
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  conversation   Conversation? @relation(fields: [conversationId], references: [id])
-  conversationId String?
-  initiatorId    String
-  recipientId    String
+  id             String            @id @default(cuid())
+  name           String            @unique
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  conversation   Conversation     @relation(fields: [conversationId], references: [id])
+  conversationId String            @unique
+  creatorId      String
   description    String?
   type           String
-  moderators     CircleModerators[]
+  moderators     CircleModerator[]
 }
 
-model CircleModerators {
-  id             String        @id @default(cuid())
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  circle         Circle?       @relation(fields: [circleId], references: [id])
-  circleId       String?
-  moderatorId    String
-  acceptedAt     DateTime?
-  rejectedAt     DateTime?
-  deletedAt      DateTime?
+model CircleModerator {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  circle      Circle?   @relation(fields: [circleId], references: [id])
+  circleId    String?
+  moderatorId String
+  invitedBy   String
+  acceptedAt  DateTime?
+  rejectedAt  DateTime?
+  deletedAt   DateTime?
 }
 
 model ConversationParticipant {
