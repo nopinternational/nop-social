@@ -3,7 +3,8 @@ import Head from "next/head";
 import Link from "next/link";
 // import { providers, signIn, getSession, csrfToken } from "next-auth/client/";
 import { getProviders, signIn, signOut, getCsrfToken, getSession, useSession } from "next-auth/react"
-
+import { authOptions } from "./api/auth/[...nextauth]"
+import { getServerSession } from "next-auth/next"
 
 function Signin({ providers }) {
     console.log("signin: ", providers)
@@ -27,18 +28,18 @@ function Signin({ providers }) {
                 username: inputUsername.current.value,
                 password: inputPassword.current.value
             })
-            console.log("Signin.nopAuthSignIn.signinNopAuth.signinreturn", signinreturn)
+            console.log("--------------------Signin.nopAuthSignIn.signinNopAuth.signinreturn", signinreturn)
         }
 
         return (
             <>
-                <form className="m-2" >
+                <form className="p-2" >
                     <div className="m-2">email</div>
                     <input
-                        className="m-2 rounded-full text-black"
+                        className="w-full px-3 py-3 rounded-full text-black text-center"
                         name="username" ref={inputUsername}></input><br />
                     <div className="m-2">password</div>
-                    <input className="m-2 rounded-full text-black"
+                    <input className="w-full px-3 py-3 rounded-full text-black text-center"
                         name="password" type="password" ref={inputPassword}></input><br />
                     <button
                         className="m-2 rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
@@ -60,8 +61,8 @@ function Signin({ providers }) {
                     <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
                         Signin to <span className="text-[hsl(280,100%,70%)]">Night of Passion</span>
                     </h1>
-                    <div className="grid grid-cols-1 sm:grid-cols-1 gap-4 md:gap-8">
-                        <div className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
+                    <div className="grid w-full xl:w-1/2 grid-cols-1 sm:grid-cols-1 gap-4 md:gap-8">
+                        <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
 
                             <h3 className="text-2xl font-bold">Signin →</h3>
                             <div className="text-lg">
@@ -110,9 +111,9 @@ const AuthShowcase: React.FC = () => {
 };
 export default Signin;
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
 
-    const session = await getSession();
+    const session = await getServerSession(context.req, context.res, authOptions)
 
     if (session) {
         return {
