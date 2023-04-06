@@ -62,16 +62,7 @@ export const authOptions: NextAuthOptions = {
   //adapter: PrismaAdapter(prisma),
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
-    DiscordProvider({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
-    }),
     CredentialsProvider({
-
-
-
-
-
       id: "nop-auth",
       name: "NoP Auth",
       async authorize(credentials, req) {
