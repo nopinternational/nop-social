@@ -5,13 +5,16 @@ import Link from "next/link";
 import { getProviders, signIn, signOut, getCsrfToken, getSession, useSession } from "next-auth/react"
 import { authOptions } from "./api/auth/[...nextauth]"
 import { getServerSession } from "next-auth/next"
+import type {
+    Provider
+} from "next-auth/providers"
 
-function Signin({ providers }) {
+function Signin({ providers: Provider[] },) {
     console.log("signin: ", providers)
-    const inputUsername = useRef(null);
-    const inputPassword = useRef("hej123");
+    const inputUsername = useRef<HTMLInputElement>(null);
+    const inputPassword = useRef<HTMLInputElement>(null);
 
-    const nopAuthSignIn = (providers) => {
+    const nopAuthSignIn = (providers: Provider[]) => {
         const nopSigninProvider = Object.values(providers).filter(provider => provider.id == "nop-auth")[0]
         //console.log("nopAuthSignIn.nopSigninProvider: ", nopSigninProvider)
 
@@ -22,11 +25,11 @@ function Signin({ providers }) {
             console.log("Signin.nopAuthSignIn.signinNopAuth.event", event)
             event.preventDefault()
             console.log("Signin.nopAuthSignIn.signinNopAuth", inputUsername.current, inputPassword)
-            console.log("Signin.nopAuthSignIn.signinNopAuth", inputUsername.current.value, inputPassword)
+            console.log("Signin.nopAuthSignIn.signinNopAuth", inputUsername.current?.value, inputPassword)
             const signinreturn = await signIn('nop-auth', {
                 redirect: true,
-                username: inputUsername.current.value,
-                password: inputPassword.current.value
+                username: inputUsername.current?.value,
+                password: inputPassword.current?.value
             })
             console.log("--------------------Signin.nopAuthSignIn.signinNopAuth.signinreturn", signinreturn)
         }
