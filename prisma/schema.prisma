@@ -94,7 +94,7 @@ model Circle {
   name           String            @unique
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @updatedAt
-  conversation   Conversation     @relation(fields: [conversationId], references: [id])
+  conversation   Conversation      @relation(fields: [conversationId], references: [id])
   conversationId String            @unique
   creatorId      String
   description    String?
@@ -179,4 +179,14 @@ model Female {
   bodyType    String
   breasts     String
   tags        String
+}
+
+model Image {
+  id            String    @id @default(cuid())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  url           String?
+  uploadedAt    DateTime?
+  contentLength Int
+  uploadedBy    String
 }
