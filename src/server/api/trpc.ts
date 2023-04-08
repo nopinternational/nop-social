@@ -19,6 +19,7 @@ import { type Session } from "next-auth";
 
 import { getServerAuthSession } from "~/server/auth";
 import { prisma } from "../db";
+import {s3} from "../s3"
 
 const eventEmitter = new EventEmitter();
 
@@ -41,6 +42,7 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
     session: opts.session,
     prisma,
     eventEmitter,
+    s3
   };
 };
 

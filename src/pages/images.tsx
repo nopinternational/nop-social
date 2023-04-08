@@ -2,13 +2,10 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { api } from "~/utils/api";
-import { ProfileGrid } from "~/components/ProfileGrid";
-import { PrivateAcceptedInvites, PrivateOpenInvites, PrivateUnawnseredInvites } from "~/components/PrivateInvites";
-import { ListOfOpenRooms } from "~/components/ListOfOpenRooms";
 import { ImageUpload } from "~/components/ImageUpload";
 
 
-const ProfilePage: NextPage = () => {
+const ImagesPage: NextPage = () => {
   
 
   return (
@@ -24,24 +21,6 @@ const ProfilePage: NextPage = () => {
             A list of all profiles
           </h1>
 
-          <div className=" gap-4 md:gap-8">
-            <ProfileGrid />
-          </div>
-
-          <div className=" gap-4 md:gap-8">
-            <PrivateUnawnseredInvites />
-          </div>
-
-          <div className=" gap-4 md:gap-8">
-            <PrivateOpenInvites />
-          </div>
-
-          <div className=" gap-4 md:gap-8">
-            <PrivateAcceptedInvites />
-          </div>
-          <div className=" gap-4 md:gap-8">
-            <ListOfOpenRooms />
-          </div>
 
           <div>
             <ImageUpload />
@@ -59,7 +38,7 @@ const ProfilePage: NextPage = () => {
 }
 
 
-export default ProfilePage;
+export default ImagesPage;
 
 const AuthShowcase: React.FC = () => {
   const { data: sessionData } = useSession();

@@ -5,6 +5,7 @@ import fetch from "node-fetch";
 import { profileRouter } from "./routers/profileRouter";
 import { privateConversationRouter } from "./routers/privateConversationRouter";
 import { circleRouter } from "./routers/circleRouter";
+import { imageRouter } from "./routers/imageRouter";
 if(!global.fetch) {
   (global.fetch as any) = fetch; 
 }
@@ -18,7 +19,8 @@ export const appRouter = createTRPCRouter({
   conversation: conversationRouter,
   profile: profileRouter,
   privateConversation: privateConversationRouter,
-  circle: circleRouter
+  circle: circleRouter,
+  image: imageRouter
 });
 
 // export type definition of API
