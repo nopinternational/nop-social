@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { type NextPage } from "next";
 import { useState } from "react"
 import Head from "next/head";
@@ -35,18 +39,21 @@ export default Home;
 
 const FirebaseAuthDemo: React.FC = () => {
 
-  const [signinData, setSigninData] = useState({})
+  const [signinData, setSigninData] = useState<any>({})
   const [signinError, setSigninError] = useState(false)
   const { authUser, loading, signIn, signOut } = useFirebaseAuth()
 
-  const update = (event) => {
-    setSigninData((data) => {
+  const update = (event: any) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    setSigninData(() => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       signinData[event.target.name] = event.target.value
       return signinData
     })
   }
 
   const signOutUser = () => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     signOut();
     setSigninData({})
   }

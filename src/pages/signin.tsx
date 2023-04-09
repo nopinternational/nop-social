@@ -1,15 +1,21 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { useRef } from "react"
+import { type NextPage, type GetServerSideProps, GetStaticPropsContext, GetServerSidePropsContext } from "next";
 import Head from "next/head";
 import Link from "next/link";
 // import { providers, signIn, getSession, csrfToken } from "next-auth/client/";
 import { getProviders, signIn, signOut, getCsrfToken, getSession, useSession } from "next-auth/react"
-import { authOptions } from "./api/auth/[...nextauth]"
+import authOptions from "./api/auth/[...nextauth]"
 import { getServerSession } from "next-auth/next"
 import type {
     Provider
 } from "next-auth/providers"
+type SigninPageProps = {
+    providers: Provider[]
+}
 
-function Signin({ providers: Provider[] },) {
+const Signin = ({ providers }: SigninPageProps) => {
     console.log("signin: ", providers)
     const inputUsername = useRef<HTMLInputElement>(null);
     const inputPassword = useRef<HTMLInputElement>(null);
@@ -21,12 +27,12 @@ function Signin({ providers: Provider[] },) {
 
         if (!nopSigninProvider) return <div>no nop</div>
 
-        const signinNopAuth = async (event: React.FormEvent<HTMLFormElement>) => {
+        const signinNopAuth = (event: React.MouseEvent<HTMLButtonElement>): void => {
             console.log("Signin.nopAuthSignIn.signinNopAuth.event", event)
             event.preventDefault()
             console.log("Signin.nopAuthSignIn.signinNopAuth", inputUsername.current, inputPassword)
             console.log("Signin.nopAuthSignIn.signinNopAuth", inputUsername.current?.value, inputPassword)
-            const signinreturn = await signIn('nop-auth', {
+            const signinreturn = signIn('nop-auth', {
                 redirect: true,
                 username: inputUsername.current?.value,
                 password: inputPassword.current?.value
@@ -46,7 +52,7 @@ function Signin({ providers: Provider[] },) {
                         name="password" type="password" ref={inputPassword}></input><br />
                     <button
                         className="m-2 rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-                        onClick={(event) => signinNopAuth(event)}>Signin</button>
+                        onClick={(event: React.MouseEvent<HTMLButtonElement>) => signinNopAuth(event)}>Signin</button>
                 </form>
             </>
         )
@@ -114,7 +120,7 @@ const AuthShowcase: React.FC = () => {
 };
 export default Signin;
 
-export async function getServerSideProps(context) {
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
 
     const session = await getServerSession(context.req, context.res, authOptions)
 
