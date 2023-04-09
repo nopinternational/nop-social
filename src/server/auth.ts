@@ -84,7 +84,7 @@ export const authOptions: NextAuthOptions = {
         //console.log("CredentialsProvider.authorize.req", req)
 
 
-        const fbuser = await signInWithEmailAndPassword(authApp, credentials.username, credentials.password)
+        const fbuser = await signInWithEmailAndPassword(authApp, credentials?.username || "", credentials?.password || "")
           .then((firebaseUser) => {
 
 
