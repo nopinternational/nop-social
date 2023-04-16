@@ -76,11 +76,6 @@ export const authOptions: NextAuthOptions = {
       },
     }),
     CredentialsProvider({
-
-
-
-
-
       id: "nop-auth",
       name: "NoP Auth",
       async authorize(credentials, req) {
