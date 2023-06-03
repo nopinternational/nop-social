@@ -1,9 +1,9 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 import { api } from "~/utils/api";
-import SigninButton from "~/components/SigninButton";
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
@@ -18,7 +18,7 @@ const Home: NextPage = () => {
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-            <span className="text-[hsl(280,100%,70%)]">Night of Passion</span>
+            Välkommen till <span className="text-[hsl(280,100%,70%)]">Night of Passion</span>
           </h1>
           {/* <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
             <Link
@@ -46,15 +46,12 @@ const Home: NextPage = () => {
           </div> */}
           <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
             <div className="col-span-2">
-              <Link
-                className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-                href="signin"
-              >
-                <h3 className="text-2xl font-bold">Logga in →</h3>
+              <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
+                <h3 className="text-2xl font-bold">Par, par, par ❤️❤️❤️</h3>
                 <div className="text-lg">
-                  Logga in för att börja med det roliga
+                  Night of Passion är fullt av trevliga par. Njut av dom på våra träffar som vi annonserar på vår site. 
                 </div>
-              </Link>
+              </div>
             </div>
           </div>
           <div className="flex flex-col items-center gap-2">
@@ -68,3 +65,27 @@ const Home: NextPage = () => {
 
 export default Home;
 
+const SigninButton: React.FC = () => {
+  const { data: sessionData } = useSession();
+
+  const { data: secretMessage } = api.example.getSecretMessage.useQuery(
+    undefined, // no input
+    { enabled: sessionData?.user !== undefined },
+  );
+
+  console.log("AuthShowcase.sessionData", sessionData)
+  return (
+    <div className="flex flex-col items-center justify-center gap-4">
+      <p className="text-center text-2xl text-white">
+        {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
+        {secretMessage && <span> - {secretMessage}</span>}
+      </p>
+      <button
+        className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+        onClick={sessionData ? () => void signOut() : () => void signIn()}
+      >
+        {sessionData ? "Logga ut" : "Logga in"}
+      </button>
+    </div>
+  );
+};

@@ -46,16 +46,28 @@ declare module "next-auth" {
 export const authOptions: NextAuthOptions = {
   callbacks: {
     session({ session, user }) {
-      console.log("callbacks.session.session", session);
-      console.log("callbacks.session.user", user)
       if (session.user && user) {
 
         session.user.id = user.id;
         // session.user.role = user.role; <-- put other properties on the session here
       }
-      console.log("callbacks.session.return_session", session);
       return session;
     },
+    signIn(signinOpts) {
+      console.log("callbacks.signIn.signinOpts", signinOpts)
+      console.log("typeof", typeof signinOpts.user.subscription)
+      console.log("!= \"true\"", signinOpts.user.subscription == "true")
+      console.log("!== \"true\"", signinOpts.user.subscription === "true")
+      console.log("!= true", signinOpts.user.subscription == true)
+      console.log("!== true", signinOpts.user.subscription === true)
+
+
+      if (signinOpts.user.subscription === true) { return true }
+      if (signinOpts.user.subscription !== "true")
+        throw new Error("403")
+
+      return false
+    }
   },
   //adapter: PrismaAdapter(prisma),
   secret: process.env.NEXTAUTH_SECRET,
@@ -80,21 +92,41 @@ export const authOptions: NextAuthOptions = {
       name: "NoP Auth",
       async authorize(credentials, req) {
 
-        console.log("CredentialsProvider.authorize.credentials", credentials)
-        //console.log("CredentialsProvider.authorize.req", req)
-
-
         const fbuser = await signInWithEmailAndPassword(authApp, credentials?.username || "", credentials?.password || "")
-          .then((firebaseUser) => {
+          .then(async (firebaseUser) => {
+
+            const idTokenResult = await firebaseUser.user.getIdTokenResult()
+            console.log("============================================================")
+            console.log("============================================================")
+            console.log("idTokenResult.claims.subscription", idTokenResult.claims.subscription)
+            console.log("------------------------------------")
+            console.log("------------------------------------")
+            // .then((idTokenResult) => {
 
 
+            //   // Confirm the user is an Admin.
+            if (idTokenResult.claims.subscriptionEEE != "true") {
+              // Show admin UI.
+              // console.error("upsi")
+              // throw new Error("this is bad...")
+            }
+            //     // Show regular user UI.
+            //   }
+            //   console.error("upsi")
+            //   throw new Error("this is bad...")
+            // })
+            // .catch((error) => {
+            //   console.log(error);
+            //   throw error
+            // });
 
 
             //console.log("after authSignInWithEmailAndPassword:", firebaseUser);
             return {
               "id": firebaseUser.user.uid,
               "name": firebaseUser.user.displayName,
-              "email": firebaseUser.user.email
+              "email": firebaseUser.user.email,
+              "subscription": idTokenResult.claims.subscription == "true"
             }
           }, (error) => {
 
@@ -103,7 +135,6 @@ export const authOptions: NextAuthOptions = {
           })
 
 
-        const returnObject = { "user": fbuser }
         console.log("authorize,  returnObject:", fbuser)
         return fbuser
 
@@ -123,7 +154,10 @@ export const authOptions: NextAuthOptions = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
-  pages: { signIn: "/signin" },
+  pages: {
+    signIn: "/signin",
+    error: '/signin/error'
+  },
   secret: env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
@@ -139,5 +173,5 @@ export const getServerAuthSession = (ctx: {
   req: GetServerSidePropsContext["req"];
   res: GetServerSidePropsContext["res"];
 }) => {
-  return getSession({req: ctx.req});
+  return getSession({ req: ctx.req });
 };
