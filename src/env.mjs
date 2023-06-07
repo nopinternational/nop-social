@@ -20,10 +20,10 @@ const server = z.object({
   ),
   // Add `.min(1) on ID and SECRET if you want to make sure they're not empty
 
-  AWS_ACCESS_KEY_ID: z.string(),
-  AWS_SECRET_ACCESS_KEY: z.string(),
-  BUCKET_NAME: z.string(),
-  REGION: z.string(),
+  // AWS_ACCESS_KEY_ID: z.string(),
+  // AWS_SECRET_ACCESS_KEY: z.string(),
+  // BUCKET_NAME: z.string(),
+  // REGION: z.string(),
 
 });
 
@@ -46,11 +46,11 @@ const processEnv = {
   NODE_ENV: process.env.NODE_ENV,
   NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
   NEXTAUTH_URL: process.env.NEXTAUTH_URL,
-  AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
-  AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
-  BUCKET_NAME: process.env.BUCKET_NAME,
-  REGION: process.env.REGION,
-  // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
+  // AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+  // AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
+  // BUCKET_NAME: process.env.BUCKET_NAME,
+  // REGION: process.env.REGION,
+  // // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
 };
 
 // Don't touch the part below
