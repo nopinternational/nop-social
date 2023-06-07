@@ -2,7 +2,7 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
-
+import SigninButton from "~/components/SigninButton";
 import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
@@ -49,7 +49,7 @@ const Home: NextPage = () => {
               <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
                 <h3 className="text-2xl font-bold">Par, par, par ❤️❤️❤️</h3>
                 <div className="text-lg">
-                  Night of Passion är fullt av trevliga par. Njut av dom på våra träffar som vi annonserar på vår site. 
+                  Night of Passion är fullt av trevliga par. Njut av dom på våra träffar 😘
                 </div>
               </div>
             </div>
@@ -65,27 +65,3 @@ const Home: NextPage = () => {
 
 export default Home;
 
-const SigninButton: React.FC = () => {
-  const { data: sessionData } = useSession();
-
-  const { data: secretMessage } = api.example.getSecretMessage.useQuery(
-    undefined, // no input
-    { enabled: sessionData?.user !== undefined },
-  );
-
-  console.log("AuthShowcase.sessionData", sessionData)
-  return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      <p className="text-center text-2xl text-white">
-        {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-        {secretMessage && <span> - {secretMessage}</span>}
-      </p>
-      <button
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-        onClick={sessionData ? () => void signOut() : () => void signIn()}
-      >
-        {sessionData ? "Logga ut" : "Logga in"}
-      </button>
-    </div>
-  );
-};
