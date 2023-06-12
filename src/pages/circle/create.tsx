@@ -10,7 +10,7 @@ import { CircleSchema } from "~/utils/validation/circle";
 
 const EditProfilePage: NextPage = () => {
   const utils = api.useContext();
-  
+
   const mutation = api.circle.createCircle.useMutation();
 
   const {
@@ -23,7 +23,7 @@ const EditProfilePage: NextPage = () => {
   });
 
 
-  const onSubmit: SubmitHandler<Profile> = (data) => {
+  const onSubmit: SubmitHandler<Circle> = (data) => {
     console.log(data);
     mutation.mutate(data);
     reset();
@@ -81,11 +81,11 @@ const EditProfilePage: NextPage = () => {
                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                         {...register("type")}
                       >
-                        
+
                         <option value={CircleType.Open}>Open</option>
                         <option value={CircleType.Private}>Private</option>
                         <option value={CircleType.Moderated}>Moderated</option>
-                        
+
                       </select>
                     </div>
                   </div>
@@ -93,7 +93,7 @@ const EditProfilePage: NextPage = () => {
               </div>
 
               <div className="mt-6 flex items-center justify-end gap-x-6">
-              
+
                 {mutation.isSuccess && (<div>Saved!</div>)}
                 <button
                   type="submit"
