@@ -2,6 +2,8 @@ import { type GetServerSidePropsContext } from "next";
 import {
   type NextAuthOptions,
   type DefaultSession,
+  CallbacksOptions,
+  User,
 } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
@@ -16,6 +18,7 @@ import {
 } from "firebase/auth";
 import { use } from "react";
 import { getSession } from "next-auth/react";
+import { AdapterUser } from "next-auth/adapters";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -38,6 +41,10 @@ declare module "next-auth" {
   // }
 }
 
+
+interface SigninUser extends User {
+  subscription: string | boolean;
+}
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
  *
@@ -53,17 +60,18 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
-    signIn(signinOpts) {
-      console.log("callbacks.signIn.signinOpts", signinOpts)
-      console.log("typeof", typeof signinOpts.user.subscription)
-      console.log("!= \"true\"", signinOpts.user.subscription == "true")
-      console.log("!== \"true\"", signinOpts.user.subscription === "true")
-      console.log("!= true", signinOpts.user.subscription == true)
-      console.log("!== true", signinOpts.user.subscription === true)
+    signIn({ user }) {
+      const signinUser = user as SigninUser;
+      console.log("callbacks.signIn.signinOpts", signinUser)
+      console.log("typeof", typeof signinUser.subscription)
+      console.log("!= \"true\"", signinUser.subscription == "true")
+      console.log("!== \"true\"", signinUser.subscription === "true")
+      console.log("!= true", signinUser.subscription == true)
+      console.log("!== true", signinUser.subscription === true)
 
 
-      if (signinOpts.user.subscription === true) { return true }
-      if (signinOpts.user.subscription !== "true")
+      if (signinUser.subscription === true) { return true }
+      if (signinUser.subscription !== "true")
         throw new Error("403")
 
       return false
