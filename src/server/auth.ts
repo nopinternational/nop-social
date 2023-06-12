@@ -66,8 +66,8 @@ export const authOptions: NextAuthOptions = {
       console.log("typeof", typeof signinUser.subscription)
       console.log("!= \"true\"", signinUser.subscription == "true")
       console.log("!== \"true\"", signinUser.subscription === "true")
-      console.log("!= true", signinUser.subscription == true)
-      console.log("!== true", signinUser.subscription === true)
+      console.log("== true", signinUser.subscription == true)
+      console.log("=== true", signinUser.subscription === true)
 
 
       if (signinUser.subscription === true) { return true }
