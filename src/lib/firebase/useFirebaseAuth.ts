@@ -43,7 +43,6 @@ export default function useFirebaseAuth() {
   };
 
   const clear = () => {
-    setAuthUser(null);
     setLoading(true);
   };
 
