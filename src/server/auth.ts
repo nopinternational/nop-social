@@ -153,7 +153,6 @@ export const authOptions: NextAuthOptions = {
     signOut: '/signin',
     error: '/signin/error'
   },
-  secret: env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
   },
