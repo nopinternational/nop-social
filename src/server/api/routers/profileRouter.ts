@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { ProfileSchema, ProfileType } from "~/utils/validation/profile";
+import { ProfileSchema } from "~/utils/validation/profile";
 
 export const profileRouter = createTRPCRouter({
   getAllProfiles: protectedProcedure.query(({ ctx }) => {
@@ -65,7 +65,7 @@ export const profileRouter = createTRPCRouter({
       return ctx.prisma.profile.create({
         data: {
           ...input,
-          type: ProfileType.HeterosexualPair,
+          type: "null",
           userId: ctx.session.user.name as string,
         },
       });
