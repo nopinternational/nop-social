@@ -4,6 +4,7 @@ import { useRef } from "react"
 import { type NextPage, type GetServerSideProps, GetStaticPropsContext, GetServerSidePropsContext } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from 'next/router';
 // import { providers, signIn, getSession, csrfToken } from "next-auth/client/";
 import { getProviders, signIn, signOut, getCsrfToken, getSession, useSession } from "next-auth/react"
 import authOptions from "./api/auth/[...nextauth]"
@@ -18,6 +19,9 @@ type SigninPageProps = {
 }
 
 const Signin = ({ providers }: SigninPageProps) => {
+    const router = useRouter();
+    const { error } = router.query;
+
     const inputUsername = useRef<HTMLInputElement>(null);
     const inputPassword = useRef<HTMLInputElement>(null);
 
@@ -42,6 +46,7 @@ const Signin = ({ providers }: SigninPageProps) => {
 
         return (
             <>
+                {error ? <div className="text-[hsl(280,100%,70%)]">Felaktig inloggning, försök igen</div> : null}
                 <form className="p-2" >
                     <div className="m-2">email</div>
                     <input

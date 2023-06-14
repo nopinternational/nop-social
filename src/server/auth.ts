@@ -98,23 +98,6 @@ export const authOptions: NextAuthOptions = {
             // .then((idTokenResult) => {
 
 
-            //   // Confirm the user is an Admin.
-            if (idTokenResult.claims.subscriptionEEE != "true") {
-              // Show admin UI.
-              // console.error("upsi")
-              // throw new Error("this is bad...")
-            }
-            //     // Show regular user UI.
-            //   }
-            //   console.error("upsi")
-            //   throw new Error("this is bad...")
-            // })
-            // .catch((error) => {
-            //   console.log(error);
-            //   throw error
-            // });
-
-
             //console.log("after authSignInWithEmailAndPassword:", firebaseUser);
             return {
               "id": firebaseUser.user.uid,
@@ -124,7 +107,7 @@ export const authOptions: NextAuthOptions = {
             }
           }, (error) => {
 
-            console.error("error in signInWithEmailAndPassword:", error);
+            console.error("error in signInWithEmailAndPassword:", error.message);
             return null
           })
 
