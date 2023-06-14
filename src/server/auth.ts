@@ -19,6 +19,7 @@ import {
 import { use } from "react";
 import { getSession } from "next-auth/react";
 import { AdapterUser } from "next-auth/adapters";
+import { FirebaseError } from "firebase/app";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -106,8 +107,9 @@ export const authOptions: NextAuthOptions = {
               "subscription": idTokenResult.claims.subscription == "true"
             }
           }, (error) => {
-
-            console.error("error in signInWithEmailAndPassword:", error.message);
+            const firebaseError = error as FirebaseError
+            
+            console.error("error in signInWithEmailAndPassword:", firebaseError.message);
             return null
           })
 
