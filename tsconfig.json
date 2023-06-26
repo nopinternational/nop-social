@@ -33,8 +33,11 @@
     "**/*.ts",
     "**/*.tsx",
     "**/*.cjs",
-    "**/*.mjs"
-, "src/pages/firebase.tsx", "src/lib/firebase/useFirebaseAuth.ts"  ],
+    "**/*.mjs",
+    "src/pages/firebase.tsx",
+    "src/lib/firebase/useFirebaseAuth.ts",
+    "src/middleware.js"
+  ],
   "exclude": [
     "node_modules"
   ]
