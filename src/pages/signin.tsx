@@ -37,11 +37,11 @@ const Signin = ({ providers }: SigninPageProps) => {
             event.preventDefault()
             void signIn('nop-auth', {
                 redirect: true,
-                callbackUrl: '/welcome',
+                callbackUrl: '/app/welcome',
                 username: inputUsername.current?.value,
                 password: inputPassword.current?.value
             })
-            
+
 
         }
 
