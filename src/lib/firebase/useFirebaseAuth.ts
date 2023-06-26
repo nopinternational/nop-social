@@ -42,10 +42,6 @@ export default function useFirebaseAuth() {
     setLoading(false);
   };
 
-  const clear = () => {
-    setLoading(true);
-  };
-
   const signIn = async (email: string, password: string) => {
     return signInWithEmailAndPassword(auth, email, password)
   };

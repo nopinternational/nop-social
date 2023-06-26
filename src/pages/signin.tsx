@@ -32,10 +32,10 @@ const Signin = ({ providers }: SigninPageProps) => {
 
         if (!nopSigninProvider) return <div>no nop</div>
 
-        const signinNopAuth = async (event: React.MouseEvent<HTMLButtonElement>): void => {
+        const signinNopAuth = (event: React.MouseEvent<HTMLButtonElement>): void => {
             console.log("Signin.nopAuthSignIn.signinNopAuth.event", event)
             event.preventDefault()
-            await  signIn('nop-auth', {
+            void signIn('nop-auth', {
                 redirect: true,
                 callbackUrl: '/welcome',
                 username: inputUsername.current?.value,

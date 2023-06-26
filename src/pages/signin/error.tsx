@@ -2,7 +2,6 @@
 import Head from "next/head";
 import Link from "next/link";
 
-const ERRORS = { 403: "" }
 const ErrorPage = () => {
     return (
         <>
