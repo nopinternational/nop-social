@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { useRef } from "react"
-import { type NextPage, type GetServerSideProps, GetStaticPropsContext, GetServerSidePropsContext } from "next";
+import { type GetServerSidePropsContext } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from 'next/router';
 // import { providers, signIn, getSession, csrfToken } from "next-auth/client/";
-import { getProviders, signIn, signOut, getCsrfToken, getSession, useSession } from "next-auth/react"
+import { getProviders, signIn, getCsrfToken } from "next-auth/react"
 import authOptions from "./api/auth/[...nextauth]"
 import { getServerSession } from "next-auth/next"
 import type {
@@ -35,12 +35,13 @@ const Signin = ({ providers }: SigninPageProps) => {
         const signinNopAuth = (event: React.MouseEvent<HTMLButtonElement>): void => {
             console.log("Signin.nopAuthSignIn.signinNopAuth.event", event)
             event.preventDefault()
-            const signinreturn = signIn('nop-auth', {
+            void signIn('nop-auth', {
                 redirect: true,
                 callbackUrl: '/welcome',
                 username: inputUsername.current?.value,
                 password: inputPassword.current?.value
             })
+            
 
         }
 

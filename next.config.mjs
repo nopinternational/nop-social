@@ -21,6 +21,5 @@ const config = {
     defaultLocale: "en",
   },
 
-  ignoreBuildErrors: true,
 };
 export default config;

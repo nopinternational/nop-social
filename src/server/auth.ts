@@ -2,24 +2,15 @@ import { type GetServerSidePropsContext } from "next";
 import {
   type NextAuthOptions,
   type DefaultSession,
-  CallbacksOptions,
-  User,
+  type User,
 } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { env } from "../env.mjs";
-import { prisma } from "./db";
 import { auth as authApp } from "../lib/firebase/firebase";
 import {
-  getAuth,
   signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged
 } from "firebase/auth";
-import { use } from "react";
 import { getSession } from "next-auth/react";
-import { AdapterUser } from "next-auth/adapters";
-import { FirebaseError } from "firebase/app";
+import {type FirebaseError } from "firebase/app";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -85,7 +76,7 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       id: "nop-auth",
       name: "NoP Auth",
-      async authorize(credentials, req) {
+      async authorize(credentials) {
 
         const fbuser = await signInWithEmailAndPassword(authApp, credentials?.username || "", credentials?.password || "")
           .then(async (firebaseUser) => {

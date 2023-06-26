@@ -6,7 +6,7 @@ import { profileRouter } from "./routers/profileRouter";
 import { privateConversationRouter } from "./routers/privateConversationRouter";
 import { circleRouter } from "./routers/circleRouter";
 if (!global.fetch) {
-  (global.fetch as any) = fetch;
+  (global.fetch as unknown) = fetch;
 }
 /**
  * This is the primary router for your server.
