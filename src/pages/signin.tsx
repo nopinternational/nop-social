@@ -12,6 +12,7 @@ import { getServerSession } from "next-auth/next"
 import type {
     Provider
 } from "next-auth/providers"
+import HighlightText from "~/components/HighlightText";
 
 
 type SigninPageProps = {
@@ -74,7 +75,7 @@ const Signin = ({ providers }: SigninPageProps) => {
             <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
                 <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
                     <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-                        Logga in till <span className="text-[hsl(280,100%,70%)]">Night of Passion</span>
+                        Logga in till <HighlightText>Night of Passion</HighlightText>
                     </h1>
                     <div className="grid w-full xl:w-1/2 grid-cols-1 sm:grid-cols-1 gap-4 md:gap-8">
                         <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">

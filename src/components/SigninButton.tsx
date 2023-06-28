@@ -1,4 +1,5 @@
 import { signIn, signOut, useSession } from "next-auth/react";
+import HighlightText from "./HighlightText";
 
 
 const SigninButton: React.FC = () => {
@@ -8,7 +9,7 @@ const SigninButton: React.FC = () => {
     return (
         <div className="flex flex-col items-center justify-center gap-4">
             <p className="text-center text-2xl text-white">
-                {sessionData && <span>Ni är inloggade som <span className="text-[hsl(280,100%,70%)]">{sessionData.user?.name}</span></span>}
+                {sessionData && <span>Ni är inloggade som <HighlightText>{sessionData.user?.name}</HighlightText></span>}
 
             </p>
             <button
