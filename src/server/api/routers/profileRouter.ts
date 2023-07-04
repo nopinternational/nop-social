@@ -6,6 +6,9 @@ export const profileRouter = createTRPCRouter({
   getAllProfiles: protectedProcedure.query(({ ctx }) => {
     return ctx.prisma.profile.findMany();
   }),
+  getProfiles: protectedProcedure.query(() => {
+    return "you can now see this secret message!";
+  }),
   getProfileById: protectedProcedure
     .input(z.object({ profileId: z.string() }))
     .query(({ ctx, input }) => {

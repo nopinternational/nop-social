@@ -1,12 +1,38 @@
 import { type NextPage } from "next";
 import Head from "next/head";
+import { useSession } from "next-auth/react";
 import HighlightText from "~/components/HighlightText";
 import SigninButton from "~/components/SigninButton";
-
+import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
   //const hello = api.example.hello.useQuery({ text: "from tRPC" });
-  
+  const foo = useSession();
+  const { data: sessionData } = foo;
+  console.log("profilepage: foo=", foo)
+  console.log("profilepage: sessionData=", sessionData)
+
+  // const message = api.example.getSecretMessage.useQuery(
+  //   undefined, // no input
+  //   { enabled: sessionData?.user !== undefined }
+  // );
+  // // console.log("profilepage: message=", message);
+  const message = { data: "hardcoded message on data key" }
+  const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  //console.log("profilepage: HELLO=", hello);
+  console.log("profilepage: message.data=", message.data);
+  console.log("profilepage: HELLO=", hello.data);
+  console.log("profilepage: HELLO=", hello.data?.greeting);
+  // const profileQuery = api.profile.getProfiles().useQuery();
+
+  // if (profileQuery.isLoading) {
+  //   return <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">Loading...</div>
+  // }
+
+  // if (!profileQuery.data) {
+  //   return <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">Loading...</div>
+  // }
+
   return (
     <>
       <Head>
@@ -49,6 +75,15 @@ const Home: NextPage = () => {
                 <h3 className="text-2xl font-bold">Par, par, par ❤️❤️❤️</h3>
                 <div className="text-lg">
                   Night of Passion är fullt av trevliga par. Njut av dom på våra träffar 😘
+                </div>
+              </div>
+            </div>
+            <div className="col-span-2">
+              <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
+                <h3 className="text-2xl font-bold">Ett hemligt meddelande</h3>
+                <div className="text-lg">
+                  <p>hello: {hello.data?.greeting}</p>
+                  <p>data: {message.data}</p>
                 </div>
               </div>
             </div>

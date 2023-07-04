@@ -52,7 +52,7 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
 export const createTRPCContext = async (opts: CreateNextContextOptions | NodeHTTPCreateContextFnOptions<IncomingMessage, WebSocket>,) => {
   //const { req, res } = opts;
 
-  
+
 
   // Get the session from the server using the getServerSession wrapper function
   const session = await getSession(opts);
@@ -70,9 +70,9 @@ export const createTRPCContext = async (opts: CreateNextContextOptions | NodeHTT
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import EventEmitter from "events";
-import {type NodeHTTPCreateContextFnOptions } from "@trpc/server/dist/adapters/node-http";
-import {type IncomingMessage } from "http";
-import {type WebSocket } from "ws";
+import { type NodeHTTPCreateContextFnOptions } from "@trpc/server/dist/adapters/node-http";
+import { type IncomingMessage } from "http";
+import { type WebSocket } from "ws";
 import { getSession } from "next-auth/react";
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
@@ -107,6 +107,7 @@ export const publicProcedure = t.procedure;
 
 /** Reusable middleware that enforces users are logged in before running the procedure. */
 const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
+  console.log("trpc.enforceUserIsAuthed", ctx, next)
   if (!ctx.session || !ctx.session.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }

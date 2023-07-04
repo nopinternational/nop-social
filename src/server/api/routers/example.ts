@@ -5,6 +5,7 @@ import {
   publicProcedure,
   protectedProcedure,
 } from "../trpc";
+import { log } from "console";
 
 export const exampleRouter = createTRPCRouter({
   hello: publicProcedure
@@ -20,6 +21,7 @@ export const exampleRouter = createTRPCRouter({
   }),
 
   getSecretMessage: protectedProcedure.query(() => {
+    console.log("api.routes.example, all fine!!!")
     return "you can now see this secret message!";
   }),
 });
