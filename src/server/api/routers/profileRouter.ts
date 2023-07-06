@@ -2,7 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { ProfileSchema } from "~/utils/validation/profile";
 
-type Profile = {
+export type Profile = {
   username: string,
   name1: string,
   name2: string,

@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import HighlightText from "~/components/HighlightText";
 import SigninButton from "~/components/SigninButton";
 import { api } from "~/utils/api";
+import { Profile } from "~/server/api/routers/profileRouter";
 
 const Home: NextPage = () => {
   //const hello = api.example.hello.useQuery({ text: "from tRPC" });
