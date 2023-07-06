@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { type NextPage } from "next";
 import Head from "next/head";
 import { useSession } from "next-auth/react";
@@ -16,15 +17,18 @@ const Home: NextPage = () => {
     undefined, // no input
     { enabled: sessionData?.user !== undefined }
   );
+
+  const profiles = api.profile.getAllProfiles.useQuery(
+    undefined, // no input
+    { enabled: sessionData?.user !== undefined }
+  );
+
   // console.log("profilepage: message=", message);
   //const message = { data: "hardcoded message on data key" }
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
   //const hello = { data: { greeting: "hello-data-key" } }
   //console.log("profilepage: HELLO=", hello);
-  console.log("profilepage: message.data=", message.data);
-  console.log("profilepage: HELLO=", hello.data);
-  console.log("profilepage: HELLO=", hello.data?.greeting);
-  // const profileQuery = api.profile.getProfiles().useQuery();
+  console.log("profilepage: profiles.data=", profiles.data);
 
   // if (profileQuery.isLoading) {
   //   return <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">Loading...</div>
@@ -33,6 +37,18 @@ const Home: NextPage = () => {
   // if (!profileQuery.data) {
   //   return <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">Loading...</div>
   // }
+  const renderProfile = (profile: Profile) => {
+
+    return (
+      <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
+        <h3 className="text-2xl font-bold">Här kommer <HighlightText>{profile.username}</HighlightText></h3>
+        <div className="text-lg">
+          <p>{profile.username} är ett par som heter {profile.name1} & {profile.name2}</p>
+
+        </div>
+      </div>
+    )
+  }
 
   return (
     <>
@@ -46,30 +62,6 @@ const Home: NextPage = () => {
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             Våra <HighlightText>härliga</HighlightText> par
           </h1>
-          {/* <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-              href="https://create.t3.gg/en/usage/first-steps"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">First Steps →</h3>
-              <div className="text-lg">
-                Just the basics - Everything you need to know to set up your
-                database and authentication.
-              </div>
-            </Link>
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-              href="https://create.t3.gg/en/introduction"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">Documentation →</h3>
-              <div className="text-lg">
-                Learn more about Create T3 App, the libraries it uses, and how
-                to deploy it.
-              </div>
-            </Link>
-          </div> */}
           <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
             <div className="col-span-2">
               <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
@@ -88,6 +80,8 @@ const Home: NextPage = () => {
                 </div>
               </div>
             </div>
+            {profiles.data?.map((profile) => renderProfile(profile))}
+
           </div>
           <div className="flex flex-col items-center gap-2">
             <SigninButton />
