@@ -5,7 +5,7 @@ import {
   publicProcedure,
   protectedProcedure,
 } from "../trpc";
-import { log } from "console";
+
 
 export const exampleRouter = createTRPCRouter({
   hello: publicProcedure
@@ -15,10 +15,6 @@ export const exampleRouter = createTRPCRouter({
         greeting: `Hello ${input.text}`,
       };
     }),
-
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.example.findMany();
-  }),
 
   getSecretMessage: protectedProcedure.query(() => {
     console.log("api.routes.example, all fine!!!")

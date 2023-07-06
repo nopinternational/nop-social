@@ -10,7 +10,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { getSession } from "next-auth/react";
-import {type FirebaseError } from "firebase/app";
+import { type FirebaseError } from "firebase/app";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -44,23 +44,15 @@ interface SigninUser extends User {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session({ session, user }) {
-      if (session.user && user) {
-
-        session.user.id = user.id;
-        // session.user.role = user.role; <-- put other properties on the session here
-      }
-      return session;
-    },
+    session: ({ session, token }) => ({
+      ...session,
+      user: {
+        ...session.user,
+        id: token.sub,
+      },
+    }),
     signIn({ user }) {
       const signinUser = user as SigninUser;
-      console.log("callbacks.signIn.signinOpts", signinUser)
-      console.log("typeof", typeof signinUser.subscription)
-      console.log("!= \"true\"", signinUser.subscription == "true")
-      console.log("!== \"true\"", signinUser.subscription === "true")
-      console.log("== true", signinUser.subscription == true)
-      console.log("=== true", signinUser.subscription === true)
-
 
       if (signinUser.subscription === true) { return true }
       if (signinUser.subscription !== "true")
@@ -82,11 +74,7 @@ export const authOptions: NextAuthOptions = {
           .then(async (firebaseUser) => {
 
             const idTokenResult = await firebaseUser.user.getIdTokenResult()
-            console.log("============================================================")
-            console.log("============================================================")
-            console.log("idTokenResult.claims.subscription", idTokenResult.claims.subscription)
-            console.log("------------------------------------")
-            console.log("------------------------------------")
+
             // .then((idTokenResult) => {
 
 
@@ -99,7 +87,7 @@ export const authOptions: NextAuthOptions = {
             }
           }, (error) => {
             const firebaseError = error as FirebaseError
-            
+
             console.error("error in signInWithEmailAndPassword:", firebaseError.message);
             return null
           })
@@ -143,5 +131,5 @@ export const getServerAuthSession = (ctx: {
   req: GetServerSidePropsContext["req"];
   res: GetServerSidePropsContext["res"];
 }) => {
-  return getSession({ req: ctx.req });
+  return getSession({ req: ctx.req, authOptions });
 };

@@ -1,13 +1,6 @@
-import { createTRPCRouter } from "./trpc";
 import { exampleRouter } from "~/server/api/routers/example";
-import { conversationRouter } from "./routers/conversationRouter";
-import fetch from "node-fetch";
-import { profileRouter } from "./routers/profileRouter";
-import { privateConversationRouter } from "./routers/privateConversationRouter";
-import { circleRouter } from "./routers/circleRouter";
-if (!global.fetch) {
-  (global.fetch as unknown) = fetch;
-}
+import { createTRPCRouter } from "~/server/api/trpc";
+
 /**
  * This is the primary router for your server.
  *
@@ -15,10 +8,6 @@ if (!global.fetch) {
  */
 export const appRouter = createTRPCRouter({
   example: exampleRouter,
-  conversation: conversationRouter,
-  profile: profileRouter,
-  privateConversation: privateConversationRouter,
-  circle: circleRouter,
 });
 
 // export type definition of API

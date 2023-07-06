@@ -19,6 +19,7 @@ const Home: NextPage = () => {
   // // console.log("profilepage: message=", message);
   const message = { data: "hardcoded message on data key" }
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  //const hello = { data: { greeting: "hello-data-key" } }
   //console.log("profilepage: HELLO=", hello);
   console.log("profilepage: message.data=", message.data);
   console.log("profilepage: HELLO=", hello.data);
