@@ -13,6 +13,7 @@ import type {
     Provider
 } from "next-auth/providers"
 import HighlightText from "~/components/HighlightText";
+import { Sign } from "crypto";
 
 
 type SigninPageProps = {
@@ -21,8 +22,9 @@ type SigninPageProps = {
 
 const Signin = ({ providers }: SigninPageProps) => {
     const router = useRouter();
-    const { error } = router.query;
+    const { error, callbackUrl } = router.query;
 
+    console.log("Signin.router.quert:", router.query)
     const inputUsername = useRef<HTMLInputElement>(null);
     const inputPassword = useRef<HTMLInputElement>(null);
 
@@ -37,8 +39,8 @@ const Signin = ({ providers }: SigninPageProps) => {
             console.log("Signin.nopAuthSignIn.signinNopAuth.event", event)
             event.preventDefault()
             void signIn('nop-auth', {
-                redirect: true,
-                callbackUrl: '/app/welcome',
+                //redirect: true,
+                callbackUrl: callbackUrl as string || '/app/welcome',
                 username: inputUsername.current?.value,
                 password: inputPassword.current?.value
             })

@@ -12,12 +12,12 @@ const Home: NextPage = () => {
   console.log("profilepage: foo=", foo)
   console.log("profilepage: sessionData=", sessionData)
 
-  // const message = api.example.getSecretMessage.useQuery(
-  //   undefined, // no input
-  //   { enabled: sessionData?.user !== undefined }
-  // );
-  // // console.log("profilepage: message=", message);
-  const message = { data: "hardcoded message on data key" }
+  const message = api.example.getSecretMessage.useQuery(
+    undefined, // no input
+    { enabled: sessionData?.user !== undefined }
+  );
+  // console.log("profilepage: message=", message);
+  //const message = { data: "hardcoded message on data key" }
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
   //const hello = { data: { greeting: "hello-data-key" } }
   //console.log("profilepage: HELLO=", hello);

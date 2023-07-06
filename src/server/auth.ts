@@ -3,6 +3,7 @@ import {
   type NextAuthOptions,
   type DefaultSession,
   type User,
+  getServerSession,
 } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { auth as authApp } from "../lib/firebase/firebase";
@@ -59,6 +60,9 @@ export const authOptions: NextAuthOptions = {
         throw new Error("403")
 
       return false
+    },
+    redirect: async ({ url, baseUrl }) => {
+      return Promise.resolve(url)
     }
   },
   //adapter: PrismaAdapter(prisma),
@@ -131,5 +135,5 @@ export const getServerAuthSession = (ctx: {
   req: GetServerSidePropsContext["req"];
   res: GetServerSidePropsContext["res"];
 }) => {
-  return getSession({ req: ctx.req, authOptions });
-};
+  return getServerSession(ctx.req, ctx.res, authOptions);
+}
