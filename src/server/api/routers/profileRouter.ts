@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { ProfileSchema } from "~/utils/validation/profile";
+import { getAllProfilesFromFirestore } from "~/lib/firebase/firebaseProfiles";
 
 export type Profile = {
   username: string,
@@ -15,6 +16,8 @@ const PROFILES: Profile[] = [
 export const profileRouter = createTRPCRouter({
 
   getAllProfiles: protectedProcedure.query(() => {
+    const profilesss = getAllProfilesFromFirestore()
+    console.log("profileRouter.getAllProfiles.profilesss", profilesss)
     return PROFILES
   }),
   getProfiles: protectedProcedure.query(() => {
