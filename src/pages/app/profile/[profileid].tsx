@@ -13,12 +13,13 @@ const Home: NextPage = () => {
   const router = useRouter();
 
   const { profileid } = router.query;
+  const pid = profileid as string;
   //const hello = api.example.hello.useQuery({ text: "from tRPC" });
 
   const { data: sessionData } = useSession();
 
   const profile = api.profile.getProfile.useQuery(
-    { profileid },
+    { profileid: pid},
     { enabled: sessionData?.user !== undefined }
   );
 
@@ -95,11 +96,11 @@ const Home: NextPage = () => {
   }
 
   if (profile.isLoading || false) {
-    return renderLoading(profileid)
+    return renderLoading(pid)
   }
   console.log("before return", profile.data)
   if (!profile.data) {
-    return renderNoProfileFound(profileid)
+    return renderNoProfileFound(pid)
   }
 
   return (
@@ -112,7 +113,7 @@ const Home: NextPage = () => {
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-            Här är <HighlightText>{profileid}</HighlightText>
+            Här är <HighlightText>{pid}</HighlightText>
           </h1>
           <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
             <div className="col-span-2">

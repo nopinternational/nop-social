@@ -49,7 +49,7 @@ export const getProfileFromFirestore = async (profileid: string): Promise<Profil
     if (querySnapshot.docs.length > 0) {
         const profile = querySnapshot.docs[0]?.data()
         //console.log("getProfileFromFirestore", profile);
-        return Promise.resolve(profile);
+        return Promise.resolve(profile as Profile);
     }
 
 
