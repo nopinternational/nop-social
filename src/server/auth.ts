@@ -10,7 +10,6 @@ import { auth as authApp } from "../lib/firebase/firebase";
 import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { getSession } from "next-auth/react";
 import { type FirebaseError } from "firebase/app";
 
 /**
@@ -61,7 +60,7 @@ export const authOptions: NextAuthOptions = {
 
       return false
     },
-    redirect: async ({ url, baseUrl }) => {
+    redirect: async ({ url }) => {
       return Promise.resolve(url)
     }
   },

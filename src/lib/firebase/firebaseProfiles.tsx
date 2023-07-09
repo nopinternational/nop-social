@@ -1,9 +1,7 @@
 import { firestoreFoo } from "./firebase";
 import {
-    type DocumentData,
     type QueryDocumentSnapshot,
     type SnapshotOptions,
-    type WithFieldValue,
     collection,
     getDocs,
 } from "firebase/firestore";
@@ -22,14 +20,35 @@ interface PersonDbModel {
 
 export const getAllProfilesFromFirestore = async () => {
 
-    const querySnapshot = await getDocs(collection(firestoreFoo, "public").withConverter(profileConverter));
+    const querySnapshot = await getDocs(collection(firestoreFoo, "profiles").withConverter(profileConverter));
     const objects: Profile[] = []
-    querySnapshot.forEach((doc) => {
-        console.log(`${doc.id} => `, doc.data());
-        objects.push(doc.data())
+    querySnapshot.forEach((profiledoc) => {
+        //console.log(`${profiledoc.id} => `, profiledoc.data());
+        objects.push(profiledoc.data())
+        //copy profile to new collection
+        // const newRef = doc(firestoreFoo, "profiles", profiledoc.id)
+        // setDoc(newRef, profiledoc.data())
+
     });
+
     return objects;
 };
+
+// const mv = async (collRefSource: CollectionReference<DocumentData>, collRefDest: DocumentReference) => {
+//     const querySnapshot = await getDocs(collRefSource)
+
+//     querySnapshot.forEach((docSnapshot) => {
+//         (async () => {
+//             const destDoc = await getDoc(collRefDest)
+//             //await setDoc(destDoc, docSnapshot.id, docSnapshot.data());
+//             //docSnapshot.ref.delete();
+//         })();
+//         const collRefs = await getDocs(docSnapshot);
+//         collRefs.forEach((collRef) => {
+//             mv(collRef, collRefDest.doc(docSnapshot.id).collection(collRef.id))
+//         })
+//     });
+// };
 
 
 // Firestore data converter

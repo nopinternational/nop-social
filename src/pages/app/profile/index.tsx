@@ -9,10 +9,8 @@ import { type Profile } from "~/server/api/routers/profileRouter";
 
 const Home: NextPage = () => {
   //const hello = api.example.hello.useQuery({ text: "from tRPC" });
-  const foo = useSession();
-  const { data: sessionData } = foo;
-  console.log("profilepage: foo=", foo)
-  console.log("profilepage: sessionData=", sessionData)
+
+  const { data: sessionData } = useSession();
 
   const message = api.example.getSecretMessage.useQuery(
     undefined, // no input
@@ -44,7 +42,7 @@ const Home: NextPage = () => {
       <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
         <h3 className="text-2xl font-bold">Här kommer <HighlightText>{profile.username}</HighlightText></h3>
         <div className="text-lg">
-          <p>{profile.username} är ett par som heter {profile.person1?.name} & {profile.person2.name},
+          <p>{profile.username} är ett par som heter <HighlightText>{profile.person1?.name}</HighlightText> & <HighlightText>{profile.person2.name}</HighlightText>,
             dom är {YEAR - parseInt(profile.person1?.born)} och {YEAR - parseInt(profile.person2?.born)}år.</p>
 
         </div>
