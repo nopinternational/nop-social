@@ -6,6 +6,7 @@ import HighlightText from "~/components/HighlightText";
 import SigninButton from "~/components/SigninButton";
 import { api } from "~/utils/api";
 import { type Profile } from "~/server/api/routers/profileRouter";
+import Link from "next/link";
 
 const Home: NextPage = () => {
   //const hello = api.example.hello.useQuery({ text: "from tRPC" });
@@ -29,15 +30,17 @@ const Home: NextPage = () => {
 
 
   const renderProfile = (profile: Profile) => {
-
+    const profileSlug = `profile/${profile.username}`
     return (
       <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
-        <h3 className="text-2xl font-bold"><HighlightText>{profile.username}</HighlightText></h3>
-        <div className="text-lg">
-          <p>{profile.username} är ett par som heter <HighlightText>{profile.person1?.name}</HighlightText> & <HighlightText>{profile.person2.name}</HighlightText>,
-            dom är {YEAR - profile.person1?.born} och {YEAR - profile.person2?.born}år.</p>
+        <Link href={profileSlug}>
+          <h3 className="text-2xl font-bold"><HighlightText>{profile.username}</HighlightText></h3>
+          <div className="text-lg">
+            <p>{profile.username} är ett par som heter <HighlightText>{profile.person1?.name}</HighlightText> & <HighlightText>{profile.person2.name}</HighlightText>,
+              dom är {YEAR - profile.person1?.born} och {YEAR - profile.person2?.born}år.</p>
 
-        </div>
+          </div>
+        </Link>
       </div>
     )
   }
