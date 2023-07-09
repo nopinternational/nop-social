@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import HighlightText from "~/components/HighlightText";
 import SigninButton from "~/components/SigninButton";
 import { api } from "~/utils/api";
-import { Profile } from "~/server/api/routers/profileRouter";
+import { type Profile } from "~/server/api/routers/profileRouter";
 
 const Home: NextPage = () => {
   //const hello = api.example.hello.useQuery({ text: "from tRPC" });
@@ -30,7 +30,7 @@ const Home: NextPage = () => {
   //const hello = { data: { greeting: "hello-data-key" } }
   //console.log("profilepage: HELLO=", hello);
   console.log("profilepage: profiles.data=", profiles.data);
-
+  const YEAR = new Date().getFullYear()
   // if (profileQuery.isLoading) {
   //   return <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">Loading...</div>
   // }
@@ -44,7 +44,8 @@ const Home: NextPage = () => {
       <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
         <h3 className="text-2xl font-bold">Här kommer <HighlightText>{profile.username}</HighlightText></h3>
         <div className="text-lg">
-          <p>{profile.username} är ett par som heter {profile.name1} & {profile.name2}</p>
+          <p>{profile.username} är ett par som heter {profile.person1?.name} & {profile.person2.name},
+            dom är {YEAR - parseInt(profile.person1?.born)} och {YEAR - parseInt(profile.person2?.born)}år.</p>
 
         </div>
       </div>
