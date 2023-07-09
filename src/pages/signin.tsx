@@ -13,8 +13,6 @@ import type {
     Provider
 } from "next-auth/providers"
 import HighlightText from "~/components/HighlightText";
-import { Sign } from "crypto";
-
 
 type SigninPageProps = {
     providers: Provider[]
