@@ -4,6 +4,8 @@ import {
     type SnapshotOptions,
     collection,
     getDocs,
+    query,
+    where,
 } from "firebase/firestore";
 import { type Profile } from "~/server/api/routers/profileRouter";
 
@@ -33,6 +35,28 @@ export const getAllProfilesFromFirestore = async () => {
 
     return objects;
 };
+
+
+export const getProfileFromFirestore = async (profileid: string): Promise<Profile | null> => {
+    //console.log("getProfileFromFirestore.profileid", profileid);
+    // const query = await getDocs(collection(firestoreFoo, "profiles").withConverter(profileConverter));
+    // query = query.where('username', '==', profileid);
+
+    const q = query(collection(firestoreFoo, "profiles").withConverter(profileConverter), where("username", "==", profileid));
+
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.docs.length > 0) {
+        const profile = querySnapshot.docs[0]?.data()
+        //console.log("getProfileFromFirestore", profile);
+        return Promise.resolve(profile);
+    }
+
+
+
+    console.error("getProfileFromFirestore, found nothing for profileid", profileid);
+    return null
+}
 
 // const mv = async (collRefSource: CollectionReference<DocumentData>, collRefDest: DocumentReference) => {
 //     const querySnapshot = await getDocs(collRefSource)

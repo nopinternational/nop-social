@@ -1,5 +1,6 @@
 import { type NextPage } from "next";
 import Head from "next/head";
+import Link from "next/link";
 import HighlightText from "~/components/HighlightText";
 import SigninButton from "~/components/SigninButton";
 
@@ -45,12 +46,14 @@ const Home: NextPage = () => {
           </div> */}
           <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
             <div className="col-span-2">
-              <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
-                <h3 className="text-2xl font-bold">Par, par, par ❤️❤️❤️</h3>
-                <div className="text-lg">
-                  Night of Passion är fullt av trevliga par. Njut av dom på våra träffar 😘
+              <Link href="profile">
+                <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
+                  <h3 className="text-2xl font-bold">Par, par, par ❤️❤️❤️</h3>
+                  <div className="text-lg">
+                    Night of Passion är fullt av trevliga par. Klicka här så kan ni se vilka dom är 😘
+                  </div>
                 </div>
-              </div>
+              </Link>
             </div>
           </div>
           <div className="flex flex-col items-center gap-2">
