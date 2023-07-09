@@ -12,23 +12,13 @@ const Home: NextPage = () => {
 
   const { data: sessionData } = useSession();
 
-  const message = api.example.getSecretMessage.useQuery(
-    undefined, // no input
-    { enabled: sessionData?.user !== undefined }
-  );
-
   const profiles = api.profile.getAllProfiles.useQuery(
     undefined, // no input
     { enabled: sessionData?.user !== undefined }
   );
 
-  // console.log("profilepage: message=", message);
-  //const message = { data: "hardcoded message on data key" }
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
-  //const hello = { data: { greeting: "hello-data-key" } }
-  //console.log("profilepage: HELLO=", hello);
-  console.log("profilepage: profiles.data=", profiles.data);
   const YEAR = new Date().getFullYear()
+
   // if (profileQuery.isLoading) {
   //   return <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">Loading...</div>
   // }
@@ -36,6 +26,8 @@ const Home: NextPage = () => {
   // if (!profileQuery.data) {
   //   return <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">Loading...</div>
   // }
+
+
   const renderProfile = (profile: Profile) => {
 
     return (
@@ -49,7 +41,28 @@ const Home: NextPage = () => {
       </div>
     )
   }
+  const renderLoading = () => {
+    return (
+      <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
+        <h3 className="text-2xl font-bold"><HighlightText>Laddar...</HighlightText></h3>
+        <div className="text-lg">
+          <p>Den som väntar på något gott 😘 </p>
+        </div>
 
+        <div className="h-12 w-12 mb-4">
+          <div className="flex">
+            <div className="relative">
+              <div className="w-12 h-12 rounded-full absolute
+                            border-8 border-solid border-gray-200"></div>
+              <div className="w-12 h-12 rounded-full animate-spin absolute
+                            border-8 border-solid border-[hsl(280,100%,70%)] border-t-transparent shadow-md"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    )
+  }
   return (
     <>
       <Head>
@@ -70,9 +83,13 @@ const Home: NextPage = () => {
                   Night of Passion är fullt av trevliga par. Nedan hittar ni några av dom 😘
                 </div>
               </div>
-            </div>
+
+            </div >
+            {profiles.isLoading ? renderLoading() : null}
+
 
             {profiles.data?.map((profile) => renderProfile(profile))}
+
 
           </div>
           <div className="flex flex-col items-center gap-2">
