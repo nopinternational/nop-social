@@ -14,7 +14,7 @@ interface ProfileDbModel {
 }
 interface PersonDbModel {
     name: string;
-    born: string;
+    born: number;
 
 }
 
@@ -81,8 +81,6 @@ const profileConverter = {
                 "name": data.person2.name,
                 "born": data.person2.born,
             }
-
-
         }
     }
 };

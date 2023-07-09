@@ -10,14 +10,14 @@ export type Profile = {
 }
 type Person = {
   name: string,
-  born: string,
+  born: number,
 }
 
 export const profileRouter = createTRPCRouter({
 
   getAllProfiles: protectedProcedure.query(async () => {
     const ProfileSchema = await getAllProfilesFromFirestore()
-    
+
     return ProfileSchema
   }),
   getProfiles: protectedProcedure.query(() => {

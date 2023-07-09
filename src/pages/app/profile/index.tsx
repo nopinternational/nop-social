@@ -40,10 +40,10 @@ const Home: NextPage = () => {
 
     return (
       <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
-        <h3 className="text-2xl font-bold">Här kommer <HighlightText>{profile.username}</HighlightText></h3>
+        <h3 className="text-2xl font-bold"><HighlightText>{profile.username}</HighlightText></h3>
         <div className="text-lg">
           <p>{profile.username} är ett par som heter <HighlightText>{profile.person1?.name}</HighlightText> & <HighlightText>{profile.person2.name}</HighlightText>,
-            dom är {YEAR - parseInt(profile.person1?.born)} och {YEAR - parseInt(profile.person2?.born)}år.</p>
+            dom är {YEAR - profile.person1?.born} och {YEAR - profile.person2?.born}år.</p>
 
         </div>
       </div>
@@ -67,19 +67,11 @@ const Home: NextPage = () => {
               <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
                 <h3 className="text-2xl font-bold">Par, par, par ❤️❤️❤️</h3>
                 <div className="text-lg">
-                  Night of Passion är fullt av trevliga par. Njut av dom på våra träffar 😘
+                  Night of Passion är fullt av trevliga par. Nedan hittar ni några av dom 😘
                 </div>
               </div>
             </div>
-            <div className="col-span-2">
-              <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
-                <h3 className="text-2xl font-bold">Ett hemligt meddelande</h3>
-                <div className="text-lg">
-                  <p>hello: {hello.data?.greeting}</p>
-                  <p>data: {message.data}</p>
-                </div>
-              </div>
-            </div>
+
             {profiles.data?.map((profile) => renderProfile(profile))}
 
           </div>
