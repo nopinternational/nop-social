@@ -8,9 +8,14 @@ import SigninButton from "~/components/SigninButton";
 import { api } from "~/utils/api";
 import { type Profile } from "~/server/api/routers/profileRouter";
 import Link from "next/link";
+import { type FC, useRef, useState } from "react";
+
+import { type Person } from "~/server/api/routers/profileRouter";
+
 
 const Home: NextPage = () => {
 
+  const [editPanel1, setEditPanel1] = useState(false)
 
   //const hello = api.example.hello.useQuery({ text: "from tRPC" });
 
@@ -38,6 +43,17 @@ const Home: NextPage = () => {
   //   return <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">Loading...</div>
   // }
 
+  const toggleEditpanel = () => {
+    console.log("toggleEditpanel, current: ", editPanel1)
+    setEditPanel1(!editPanel1)
+    return true
+  }
+
+  const closePanel = (event: React.MouseEvent<HTMLButtonElement>) => {
+    console.log("closePanel")
+    event.stopPropagation()
+    setEditPanel1(false)
+  }
 
 
 
@@ -74,6 +90,7 @@ const Home: NextPage = () => {
   }
 
 
+
   const p = profile.data as Profile
   const p1 = p.person1
   const p2 = p.person2
@@ -99,11 +116,11 @@ const Home: NextPage = () => {
                 </div>
               </div>
             </div >
-            <div className="col-span-2">
+            <div className="col-span-2" onClick={() => setEditPanel1(true)} >
               < div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
-                <h3 className="text-2xl font-bold">Ändra <HighlightText>{p1.name}</HighlightText> →</h3>
+                <h3 className="text-2xl font-bold" >Ändra <HighlightText>{p1.name}</HighlightText> <button onClick={(event) => closePanel(event)} >→</button></h3>
                 <div className="text-lg">
-
+                  {editPanel1 || true ? <PersonEditForm person={p1} ></PersonEditForm> : <p>Klicka för att ändra profil</p>}
                 </div>
               </div>
             </div >
@@ -135,4 +152,41 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+const PersonEditForm: FC<{ person: Person }> = ({ person }) => {
+  const [foo, bar] = useState()
+  const [name, setName] = useState(person.name);
+  const [born, setBorn] = useState(person.born);
+
+  console.log("PersonEditForm.person: ", person)
+
+  const persistData = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    console.log("PersonEditForm.persistData.event.target.value", event.currentTarget.value);
+  }
+  const onChange = (e: React.MouseEvent<HTMLButtonElement>): void => {
+    e.preventDefault()
+    console.log("PersonEditForm.onChange.event.target.value", e.currentTarget);
+    const newP = { name, born }
+    console.log("PersonEditForm.onChange.newP", newP)
+    //this.setState({ text: e.currentTarget.value });
+  };
+  return (
+    <>
+
+      <form className="p-2" >
+        <div className="m-2">Namn</div>
+        <input
+          className="w-full px-3 py-3 rounded-full text-black text-center"
+          name="p1name" value={name} onChange={event => setName(event.target.value)} /><br />
+        <div className="m-2">Födelseår</div>
+        <input className="w-full px-3 py-3 rounded-full text-black text-center"
+          name="p1born" value={born} onChange={event => setBorn(parseInt(event.target.value))} /><br />
+        <button
+          className="m-2 rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+          onClick={(event) => onChange(event)}>Ändra</button>
+      </form>
+    </>
+  )
+}
 

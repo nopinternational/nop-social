@@ -8,7 +8,7 @@ export type Profile = {
   person2: Person,
 
 }
-type Person = {
+export type Person = {
   name: string,
   born: number,
 }
