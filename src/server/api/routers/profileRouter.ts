@@ -15,18 +15,33 @@ type Person = {
 
 export const profileRouter = createTRPCRouter({
 
-  getAllProfiles: protectedProcedure.query(async () => {
-    return await getAllProfilesFromFirestore()
+  getAllProfiles:
+    protectedProcedure
+      .query(async () => {
+        return await getAllProfilesFromFirestore()
 
-  }),
+      }),
 
 
-  getProfile: protectedProcedure
-    .input(z.object({ profileid: z.string() }))
-    .query(async ({ input }) => {
-      return await getProfileFromFirestore(input.profileid)
-    }),
+  getProfile:
+    protectedProcedure
+      .input(z.object({ profileid: z.string() }))
+      .query(async ({ input }) => {
+        return await getProfileFromFirestore(input.profileid)
+      }),
 
+  getMyProfile:
+    protectedProcedure
+
+      .query(async ({ ctx }) => {
+        console.log("profileRouter.getMyProfile.ctx", ctx)
+        console.log("profileRouter.getMyProfile.ctx.session", ctx.session)
+        console.log("profileRouter.getMyProfile.ctx.session.user", ctx.session.user)
+        console.log("profileRouter.getMyProfile.ctx.session.user.name", ctx.session.user.name)
+        return await getProfileFromFirestore(ctx.session.user.name || "")
+      }),
+  //7K7PxXthSmblBF8uJIQN2zWMCyw1
+  //7K7PxXthSmblBF8uJIQN2zWMCyw1""
 
   getProfiles: protectedProcedure.query(() => {
     return "sthlmpar08,soe";

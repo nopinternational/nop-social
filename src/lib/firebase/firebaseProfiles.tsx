@@ -38,7 +38,7 @@ export const getAllProfilesFromFirestore = async () => {
 
 
 export const getProfileFromFirestore = async (profileid: string): Promise<Profile | null> => {
-    //console.log("getProfileFromFirestore.profileid", profileid);
+    console.log("getProfileFromFirestore.profileid", profileid);
     // const query = await getDocs(collection(firestoreFoo, "profiles").withConverter(profileConverter));
     // query = query.where('username', '==', profileid);
 
