@@ -4,10 +4,15 @@ import {
     type SnapshotOptions,
     collection,
     getDocs,
+    setDoc,
     query,
     where,
+    doc,
 } from "firebase/firestore";
-import { type Profile } from "~/server/api/routers/profileRouter";
+import {
+    type Person,
+    type Profile
+} from "~/server/api/routers/profileRouter";
 
 interface ProfileDbModel {
     username: string;
@@ -36,6 +41,11 @@ export const getAllProfilesFromFirestore = async () => {
     return objects;
 };
 
+export const setPersonToProfile = async (id: string, person: Person) => {
+    console.log("setPersonToProfile.person", id, person);
+    await setDoc(doc(firestoreFoo, "profiles", id), { person1: person }, { merge: true });
+
+}
 
 export const getProfileFromFirestore = async (profileid: string): Promise<Profile | null> => {
     console.log("getProfileFromFirestore.profileid", profileid);

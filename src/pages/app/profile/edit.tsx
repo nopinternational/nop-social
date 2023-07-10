@@ -29,6 +29,7 @@ const Home: NextPage = () => {
     undefined,
     { enabled: sessionData?.user !== undefined }
   );
+  const { mutate: persistPerson } = api.profile.setPerson.useMutation()
 
   const pid = profile.data?.username || '';
 
@@ -90,6 +91,10 @@ const Home: NextPage = () => {
   }
 
 
+  const persistPerson_p1 = (person: Person) => {
+    console.log("Edit.persistPerson", person)
+    persistPerson(person)
+  }
 
   const p = profile.data as Profile
   const p1 = p.person1
@@ -120,7 +125,7 @@ const Home: NextPage = () => {
               < div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
                 <h3 className="text-2xl font-bold" >Ändra <HighlightText>{p1.name}</HighlightText> <button onClick={(event) => closePanel(event)} >→</button></h3>
                 <div className="text-lg">
-                  {editPanel1 || true ? <PersonEditForm person={p1} ></PersonEditForm> : <p>Klicka för att ändra profil</p>}
+                  {editPanel1 ? <PersonEditForm person={p1} onsubmitHandler={persistPerson_p1} ></PersonEditForm> : <p>Klicka för att ändra profil</p>}
                 </div>
               </div>
             </div >
@@ -153,40 +158,33 @@ const Home: NextPage = () => {
 
 export default Home;
 
-const PersonEditForm: FC<{ person: Person }> = ({ person }) => {
-  const [foo, bar] = useState()
+const PersonEditForm: FC<{ person: Person, onsubmitHandler: (person: Person) => void }> = ({ person, onsubmitHandler }) => {
+
   const [name, setName] = useState(person.name);
   const [born, setBorn] = useState(person.born);
 
   console.log("PersonEditForm.person: ", person)
 
-  const persistData = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault()
-    console.log("PersonEditForm.persistData.event.target.value", event.currentTarget.value);
-  }
-  const onChange = (e: React.MouseEvent<HTMLButtonElement>): void => {
+  const onChange = (e: React.MouseEvent<HTMLFormElement>): void => {
     e.preventDefault()
-    console.log("PersonEditForm.onChange.event.target.value", e.currentTarget);
     const newP = { name, born }
     console.log("PersonEditForm.onChange.newP", newP)
+    onsubmitHandler(newP)
     //this.setState({ text: e.currentTarget.value });
   };
   return (
-    <>
-
-      <form className="p-2" >
-        <div className="m-2">Namn</div>
-        <input
-          className="w-full px-3 py-3 rounded-full text-black text-center"
-          name="p1name" value={name} onChange={event => setName(event.target.value)} /><br />
-        <div className="m-2">Födelseår</div>
-        <input className="w-full px-3 py-3 rounded-full text-black text-center"
-          name="p1born" value={born} onChange={event => setBorn(parseInt(event.target.value))} /><br />
-        <button
-          className="m-2 rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-          onClick={(event) => onChange(event)}>Ändra</button>
-      </form>
-    </>
+    <form className="p-2" >
+      <div className="m-2">Namn</div>
+      <input
+        className="w-full px-3 py-3 rounded-full text-black text-center"
+        name="name" value={name} onChange={event => setName(event.target.value)} /><br />
+      <div className="m-2">Födelseår</div>
+      <input className="w-full px-3 py-3 rounded-full text-black text-center"
+        name="born" value={born} onChange={event => setBorn(parseInt(event.target.value))} /><br />
+      <button
+        className="m-2 rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+        onClick={(event: React.MouseEvent<HTMLFormElement>) => onChange(event)}>Ändra</button>
+    </form>
   )
 }
 

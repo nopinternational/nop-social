@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { getAllProfilesFromFirestore, getProfileFromFirestore } from "~/lib/firebase/firebaseProfiles";
+import { getAllProfilesFromFirestore, getProfileFromFirestore, setPersonToProfile } from "~/lib/firebase/firebaseProfiles";
 
 export type Profile = {
   username: string,
@@ -42,6 +42,15 @@ export const profileRouter = createTRPCRouter({
       }),
   //7K7PxXthSmblBF8uJIQN2zWMCyw1
   //7K7PxXthSmblBF8uJIQN2zWMCyw1""
+
+  setPerson:
+    protectedProcedure
+      .input(z.object({
+        name: z.string(), born: z.number()
+      }))
+      .mutation(({ input, ctx }) => {
+        return setPersonToProfile(ctx.session.user.id, { name: input.name, born: input.born })
+      }),
 
   getProfiles: protectedProcedure.query(() => {
     return "sthlmpar08,soe";
