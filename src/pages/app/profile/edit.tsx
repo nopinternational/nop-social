@@ -11,6 +11,7 @@ import Link from "next/link";
 import { type FC, useRef, useState } from "react";
 
 import { type Person } from "~/server/api/routers/profileRouter";
+import { PartialProfile } from "~/lib/firebase/firebaseProfiles";
 
 
 const Home: NextPage = () => {
@@ -31,6 +32,7 @@ const Home: NextPage = () => {
     { enabled: sessionData?.user !== undefined }
   );
   const { mutate: setPerson } = api.profile.setPerson.useMutation()
+  const { mutate: mergeProfile } = api.profile.mergeProfile.useMutation()
 
   const pid = profile.data?.username || '';
 
@@ -97,14 +99,13 @@ const Home: NextPage = () => {
   }
 
 
-  const persistPerson = (key: "person1" | "person2", person: Person) => {
-    console.log("Edit.persistPerson", person)
-    const obj = {}
-    obj[key] = person
-    setPerson(obj)
+  const persistPerson = (profile: PartialProfile) => {
+    console.log("Edit.persistPerson", profile)
+
+    mergeProfile(profile)
   }
-  const persistPerson_p1 = (person: Person) => persistPerson("person1", person)
-  const persistPerson_p2 = (person: Person) => persistPerson("person2", person)
+  const persistPerson_p1 = (person: Person) => persistPerson({ "person1": person })
+  const persistPerson_p2 = (person: Person) => persistPerson({ "person2": person })
 
 
 
@@ -175,7 +176,6 @@ const PersonEditForm: FC<{ person: Person, onsubmitHandler: (person: Person) => 
   const [name, setName] = useState(person.name);
   const [born, setBorn] = useState(person.born);
 
-  console.log("PersonEditForm.person: ", person)
 
   const onChange = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault()

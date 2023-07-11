@@ -22,7 +22,11 @@ interface ProfileDbModel {
 interface PersonDbModel {
     name: string;
     born: number;
+}
 
+export type PartialProfile = {
+    person1?: Person,
+    person2?: Person,
 }
 
 export const getAllProfilesFromFirestore = async () => {
@@ -42,21 +46,18 @@ export const getAllProfilesFromFirestore = async () => {
 };
 
 export const setPersonToProfile = async (id: string, person: Person) => {
-    console.log("setPersonToProfile.person", id, person);
+    //console.log("setPersonToProfile.person", id, person);
     await setDoc(doc(firestoreFoo, "profiles", id), person, { merge: true })
 }
 
-type PartialProfile = {
-    person1?: Person,
-    person12: Person,
-}
+
 export const mergeToProfile = async (id: string, partialProfile: PartialProfile) => {
-    console.log("mergeToProfile.partialProfile", id, partialProfile)
-    return Promise.resolve(true)
+    //console.log("mergeToProfile.partialProfile", id, partialProfile)
+    await setDoc(doc(firestoreFoo, "profiles", id), partialProfile, { merge: true })
 }
 
 export const getProfileFromFirestore = async (profileid: string): Promise<Profile | null> => {
-    console.log("getProfileFromFirestore.profileid", profileid);
+    // console.log("getProfileFromFirestore.profileid", profileid);
     // const query = await getDocs(collection(firestoreFoo, "profiles").withConverter(profileConverter));
     // query = query.where('username', '==', profileid);
 
