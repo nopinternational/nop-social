@@ -136,7 +136,7 @@ const Home: NextPage = () => {
               < div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
                 <h3 className="text-2xl font-bold" >Ändra <HighlightText>{p1.name}</HighlightText> <button onClick={(event) => closePanel1(event)} >→</button></h3>
                 <div className="text-lg">
-                  {editPanel1 ? <PersonEditForm person={p1} onsubmitHandler={persistPerson_p1} ></PersonEditForm> : <p>Klicka för att ändra profil</p>}
+                  {editPanel1 ? <PersonEditForm person={p1} onsubmitHandler={persistPerson_p1} /> : <p>Klicka för att ändra profil</p>}
                 </div>
               </div>
             </div >
@@ -144,7 +144,7 @@ const Home: NextPage = () => {
               < div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
                 <h3 className="text-2xl font-bold" >Ändra <HighlightText>{p2.name}</HighlightText> <button onClick={(event) => closePanel2(event)} >→</button></h3>
                 <div className="text-lg">
-                  {editPanel2 ? <PersonEditForm person={p2} onsubmitHandler={persistPerson_p2} ></PersonEditForm> : <p>Klicka för att ändra profil</p>}
+                  {editPanel2 ? <PersonEditForm person={p2} onsubmitHandler={persistPerson_p2} /> : <p>Klicka för att ändra profil</p>}
                 </div>
               </div>
             </div >
