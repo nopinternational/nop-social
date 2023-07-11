@@ -4,10 +4,15 @@ import {
     type SnapshotOptions,
     collection,
     getDocs,
+    setDoc,
     query,
     where,
+    doc,
 } from "firebase/firestore";
-import { type Profile } from "~/server/api/routers/profileRouter";
+import {
+    type Person,
+    type Profile
+} from "~/server/api/routers/profileRouter";
 
 interface ProfileDbModel {
     username: string;
@@ -17,7 +22,11 @@ interface ProfileDbModel {
 interface PersonDbModel {
     name: string;
     born: number;
+}
 
+export type PartialProfile = {
+    person1?: Person,
+    person2?: Person,
 }
 
 export const getAllProfilesFromFirestore = async () => {
@@ -36,9 +45,19 @@ export const getAllProfilesFromFirestore = async () => {
     return objects;
 };
 
+export const setPersonToProfile = async (id: string, person: Person) => {
+    //console.log("setPersonToProfile.person", id, person);
+    await setDoc(doc(firestoreFoo, "profiles", id), person, { merge: true })
+}
+
+
+export const mergeToProfile = async (id: string, partialProfile: PartialProfile) => {
+    //console.log("mergeToProfile.partialProfile", id, partialProfile)
+    await setDoc(doc(firestoreFoo, "profiles", id), partialProfile, { merge: true })
+}
 
 export const getProfileFromFirestore = async (profileid: string): Promise<Profile | null> => {
-    //console.log("getProfileFromFirestore.profileid", profileid);
+    // console.log("getProfileFromFirestore.profileid", profileid);
     // const query = await getDocs(collection(firestoreFoo, "profiles").withConverter(profileConverter));
     // query = query.where('username', '==', profileid);
 
@@ -58,21 +77,7 @@ export const getProfileFromFirestore = async (profileid: string): Promise<Profil
     return null
 }
 
-// const mv = async (collRefSource: CollectionReference<DocumentData>, collRefDest: DocumentReference) => {
-//     const querySnapshot = await getDocs(collRefSource)
 
-//     querySnapshot.forEach((docSnapshot) => {
-//         (async () => {
-//             const destDoc = await getDoc(collRefDest)
-//             //await setDoc(destDoc, docSnapshot.id, docSnapshot.data());
-//             //docSnapshot.ref.delete();
-//         })();
-//         const collRefs = await getDocs(docSnapshot);
-//         collRefs.forEach((collRef) => {
-//             mv(collRef, collRefDest.doc(docSnapshot.id).collection(collRef.id))
-//         })
-//     });
-// };
 
 
 // Firestore data converter
