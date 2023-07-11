@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { type NextPage } from "next";
-import { useRouter } from 'next/router';
 import Head from "next/head";
 import { useSession } from "next-auth/react";
 import HighlightText from "~/components/HighlightText";
@@ -8,10 +7,9 @@ import SigninButton from "~/components/SigninButton";
 import { api } from "~/utils/api";
 import { type Profile } from "~/server/api/routers/profileRouter";
 import Link from "next/link";
-import { type FC, useRef, useState } from "react";
-
+import { type FC, useState } from "react";
 import { type Person } from "~/server/api/routers/profileRouter";
-import { PartialProfile } from "~/lib/firebase/firebaseProfiles";
+import { type PartialProfile } from "~/lib/firebase/firebaseProfiles";
 
 
 const Home: NextPage = () => {
@@ -31,7 +29,7 @@ const Home: NextPage = () => {
     undefined,
     { enabled: sessionData?.user !== undefined }
   );
-  const { mutate: setPerson } = api.profile.setPerson.useMutation()
+
   const { mutate: mergeProfile } = api.profile.mergeProfile.useMutation()
 
   const pid = profile.data?.username || '';
