@@ -16,6 +16,7 @@ import { type Person } from "~/server/api/routers/profileRouter";
 const Home: NextPage = () => {
 
   const [editPanel1, setEditPanel1] = useState(false)
+  const [editPanel2, setEditPanel2] = useState(false)
 
   //const hello = api.example.hello.useQuery({ text: "from tRPC" });
 
@@ -29,7 +30,7 @@ const Home: NextPage = () => {
     undefined,
     { enabled: sessionData?.user !== undefined }
   );
-  const { mutate: persistPerson } = api.profile.setPerson.useMutation()
+  const { mutate: setPerson } = api.profile.setPerson.useMutation()
 
   const pid = profile.data?.username || '';
 
@@ -50,10 +51,15 @@ const Home: NextPage = () => {
     return true
   }
 
-  const closePanel = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const closePanel1 = (event: React.MouseEvent<HTMLButtonElement>) => {
     console.log("closePanel")
     event.stopPropagation()
     setEditPanel1(false)
+  }
+  const closePanel2 = (event: React.MouseEvent<HTMLButtonElement>) => {
+    console.log("closePanel")
+    event.stopPropagation()
+    setEditPanel2(false)
   }
 
 
@@ -91,10 +97,16 @@ const Home: NextPage = () => {
   }
 
 
-  const persistPerson_p1 = (person: Person) => {
+  const persistPerson = (key: "person1" | "person2", person: Person) => {
     console.log("Edit.persistPerson", person)
-    persistPerson(person)
+    const obj = {}
+    obj[key] = person
+    setPerson(obj)
   }
+  const persistPerson_p1 = (person: Person) => persistPerson("person1", person)
+  const persistPerson_p2 = (person: Person) => persistPerson("person2", person)
+
+
 
   const p = profile.data as Profile
   const p1 = p.person1
@@ -123,21 +135,21 @@ const Home: NextPage = () => {
             </div >
             <div className="col-span-2" onClick={() => setEditPanel1(true)} >
               < div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
-                <h3 className="text-2xl font-bold" >Ändra <HighlightText>{p1.name}</HighlightText> <button onClick={(event) => closePanel(event)} >→</button></h3>
+                <h3 className="text-2xl font-bold" >Ändra <HighlightText>{p1.name}</HighlightText> <button onClick={(event) => closePanel1(event)} >→</button></h3>
                 <div className="text-lg">
                   {editPanel1 ? <PersonEditForm person={p1} onsubmitHandler={persistPerson_p1} ></PersonEditForm> : <p>Klicka för att ändra profil</p>}
                 </div>
               </div>
             </div >
-
-            <div className="col-span-2">
+            <div className="col-span-2" onClick={() => setEditPanel2(true)} >
               < div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
-                <h3 className="text-2xl font-bold">Ändra <HighlightText>{p2.name}</HighlightText> →</h3>
+                <h3 className="text-2xl font-bold" >Ändra <HighlightText>{p2.name}</HighlightText> <button onClick={(event) => closePanel2(event)} >→</button></h3>
                 <div className="text-lg">
-
+                  {editPanel2 ? <PersonEditForm person={p2} onsubmitHandler={persistPerson_p2} ></PersonEditForm> : <p>Klicka för att ändra profil</p>}
                 </div>
               </div>
             </div >
+
 
 
           </div>
@@ -165,7 +177,7 @@ const PersonEditForm: FC<{ person: Person, onsubmitHandler: (person: Person) => 
 
   console.log("PersonEditForm.person: ", person)
 
-  const onChange = (e: React.MouseEvent<HTMLFormElement>): void => {
+  const onChange = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault()
     const newP = { name, born }
     console.log("PersonEditForm.onChange.newP", newP)
@@ -183,8 +195,10 @@ const PersonEditForm: FC<{ person: Person, onsubmitHandler: (person: Person) => 
         name="born" value={born} onChange={event => setBorn(parseInt(event.target.value))} /><br />
       <button
         className="m-2 rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-        onClick={(event: React.MouseEvent<HTMLFormElement>) => onChange(event)}>Ändra</button>
+        onClick={(event: React.MouseEvent<HTMLButtonElement>) => onChange(event)}>Ändra</button>
     </form>
   )
 }
+
+
 

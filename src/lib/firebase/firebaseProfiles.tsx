@@ -43,8 +43,16 @@ export const getAllProfilesFromFirestore = async () => {
 
 export const setPersonToProfile = async (id: string, person: Person) => {
     console.log("setPersonToProfile.person", id, person);
-    await setDoc(doc(firestoreFoo, "profiles", id), { person1: person }, { merge: true });
+    await setDoc(doc(firestoreFoo, "profiles", id), person, { merge: true })
+}
 
+type PartialProfile = {
+    person1?: Person,
+    person12: Person,
+}
+export const mergeToProfile = async (id: string, partialProfile: PartialProfile) => {
+    console.log("mergeToProfile.partialProfile", id, partialProfile)
+    return Promise.resolve(true)
 }
 
 export const getProfileFromFirestore = async (profileid: string): Promise<Profile | null> => {
@@ -68,21 +76,7 @@ export const getProfileFromFirestore = async (profileid: string): Promise<Profil
     return null
 }
 
-// const mv = async (collRefSource: CollectionReference<DocumentData>, collRefDest: DocumentReference) => {
-//     const querySnapshot = await getDocs(collRefSource)
 
-//     querySnapshot.forEach((docSnapshot) => {
-//         (async () => {
-//             const destDoc = await getDoc(collRefDest)
-//             //await setDoc(destDoc, docSnapshot.id, docSnapshot.data());
-//             //docSnapshot.ref.delete();
-//         })();
-//         const collRefs = await getDocs(docSnapshot);
-//         collRefs.forEach((collRef) => {
-//             mv(collRef, collRefDest.doc(docSnapshot.id).collection(collRef.id))
-//         })
-//     });
-// };
 
 
 // Firestore data converter

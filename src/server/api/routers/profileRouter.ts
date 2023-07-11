@@ -46,10 +46,22 @@ export const profileRouter = createTRPCRouter({
   setPerson:
     protectedProcedure
       .input(z.object({
-        name: z.string(), born: z.number()
+        person1:
+          z.object({
+            name: z.string(),
+            born: z.number()
+          }).optional(),
+
+        person2:
+          z.object({
+            name: z.string(),
+            born: z.number()
+          }).optional(),
+
       }))
       .mutation(({ input, ctx }) => {
-        return setPersonToProfile(ctx.session.user.id, { name: input.name, born: input.born })
+        console.log("setPerson.input", input)
+        return setPersonToProfile(ctx.session.user.id, input)
       }),
 
   getProfiles: protectedProcedure.query(() => {
