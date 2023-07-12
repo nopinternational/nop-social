@@ -6,6 +6,7 @@ export type Profile = {
   username: string,
   person1: Person,
   person2: Person,
+  description: string
 
 }
 export type Person = {
@@ -32,7 +33,6 @@ export const profileRouter = createTRPCRouter({
 
   getMyProfile:
     protectedProcedure
-
       .query(async ({ ctx }) => {
         return await getProfileFromFirestore(ctx.session.user.name || "")
       }),
@@ -44,17 +44,22 @@ export const profileRouter = createTRPCRouter({
           z.object({
             name: z.string(),
             born: z.number()
-          }).optional(),
+          })
+            .optional(),
 
         person2:
           z.object({
             name: z.string(),
             born: z.number()
-          }).optional(),
+          })
+            .optional(),
+
+        description: z.string()
+          .optional(),
 
       }))
       .mutation(({ input, ctx }) => {
-        console.log("mergeProfile.input", input)
+        console.log("------------mergeProfile.input", input)
         return mergeToProfile(ctx.session.user.id, input)
       }),
 

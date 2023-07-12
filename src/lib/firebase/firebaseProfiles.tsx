@@ -18,6 +18,7 @@ interface ProfileDbModel {
     username: string;
     person1: PersonDbModel
     person2: PersonDbModel
+    description: string
 }
 interface PersonDbModel {
     name: string;
@@ -27,6 +28,7 @@ interface PersonDbModel {
 export type PartialProfile = {
     person1?: Person,
     person2?: Person,
+    description?: string
 }
 
 export const getAllProfilesFromFirestore = async () => {
@@ -92,7 +94,8 @@ const profileConverter = {
             "person2": {
                 "name": profile.person2.name,
                 "born": profile.person2.born,
-            }
+            },
+            "description": profile.description
         };
     },
     fromFirestore: (
@@ -109,7 +112,8 @@ const profileConverter = {
             "person2": {
                 "name": data.person2.name,
                 "born": data.person2.born,
-            }
+            },
+            "description": data.description
         }
     }
 };
