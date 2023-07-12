@@ -62,7 +62,7 @@ const Home: NextPage = () => {
   }
   const closePanel3 = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation()
-    setEditPanel2(false)
+    setEditPanel3(false)
   }
 
 
@@ -144,7 +144,7 @@ const Home: NextPage = () => {
               < div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
                 <h3 className="text-2xl font-bold" >Ändra <HighlightText>{p1.name}</HighlightText> <button onClick={(event) => closePanel1(event)} >→</button></h3>
                 <div className="text-lg">
-                  {editPanel1 ? <PersonEditForm person={p1} onsubmitHandler={persistPerson_p1} /> : <p>Klicka för att ändra profil</p>}
+                  {editPanel1 ? <PersonEditForm person={p1} onsubmitHandler={persistPerson_p1} /> : <p>Klicka för att ändra person</p>}
                 </div>
               </div>
             </div >
@@ -152,7 +152,7 @@ const Home: NextPage = () => {
               < div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
                 <h3 className="text-2xl font-bold" >Ändra <HighlightText>{p2.name}</HighlightText> <button onClick={(event) => closePanel2(event)} >→</button></h3>
                 <div className="text-lg">
-                  {editPanel2 ? <PersonEditForm person={p2} onsubmitHandler={persistPerson_p2} /> : <p>Klicka för att ändra profil</p>}
+                  {editPanel2 ? <PersonEditForm person={p2} onsubmitHandler={persistPerson_p2} /> : <p>Klicka för att ändra person</p>}
                 </div>
               </div>
             </div >
@@ -190,7 +190,6 @@ const DescriptionEditForm: FC<{ description: string, onsubmitHandler: (descripti
 
   const [desc, setdescription] = useState(description);
 
-  console.log("DescriptionEditForm.description", description)
 
   const onChange = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault()
@@ -228,7 +227,7 @@ const PersonEditForm: FC<{ person: Person, onsubmitHandler: (person: Person) => 
   const onChange = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault()
     const newP = { name, born }
-    console.log("PersonEditForm.onChange.newP", newP)
+
     onsubmitHandler(newP)
     //this.setState({ text: e.currentTarget.value });
   };
