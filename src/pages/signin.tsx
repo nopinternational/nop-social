@@ -52,13 +52,13 @@ const Signin = ({ providers }: SigninPageProps) => {
                 <form className="p-2" >
                     <div className="m-2">email</div>
                     <input
-                        className="w-full px-3 py-3 rounded-full text-black text-center"
+                        className="w-full px-3 py-3 rounded-lg text-black text-center"
                         name="username" ref={inputUsername}></input><br />
                     <div className="m-2">lösenord</div>
-                    <input className="w-full px-3 py-3 rounded-full text-black text-center"
+                    <input className="w-full px-3 py-3 rounded-lg text-black text-center"
                         name="password" type="password" ref={inputPassword}></input><br />
                     <button
-                        className="m-2 rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+                        className="mt-4 mb-3 rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
                         onClick={(event: React.MouseEvent<HTMLButtonElement>) => signinNopAuth(event)}>Logga in</button>
                 </form>
             </>
@@ -80,7 +80,7 @@ const Signin = ({ providers }: SigninPageProps) => {
                     <div className="grid w-full xl:w-1/2 grid-cols-1 sm:grid-cols-1 gap-4 md:gap-8">
                         <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
 
-                            <h3 className="text-2xl font-bold">Logga in →</h3>
+                            <h3 className="text-2xl font-bold ">Logga in →</h3>
                             <div className="text-lg">
                                 {nopAuthSignIn(providers)}
                             </div>
