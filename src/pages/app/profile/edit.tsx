@@ -202,9 +202,13 @@ const DescriptionEditForm: FC<{ description: string, onsubmitHandler: (descripti
   return (
     <form className="p-2" >
       <div className="m-2">Beskrivning</div>
-      <input
-        className="w-full px-3 py-3 rounded-full text-black text-center"
-        name="name" value={desc} onChange={event => setdescription(event.target.value)} /><br />
+      <textarea
+        className="w-full px-3 py-3 rounded-lg text-black "
+        name="name"
+        value={desc}
+        onChange={event => setdescription(event.target.value)}
+        rows={4}
+      ></textarea><br />
 
       <button
         className="mt-4 mb-3 rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
@@ -232,10 +236,10 @@ const PersonEditForm: FC<{ person: Person, onsubmitHandler: (person: Person) => 
     <form className="p-2" >
       <div className="m-2">Namn</div>
       <input
-        className="w-full px-3 py-3 rounded-full text-black text-center"
+        className="w-full px-3 py-3 rounded-lg text-black text-center"
         name="name" value={name} onChange={event => setName(event.target.value)} /><br />
       <div className="m-2">Födelseår</div>
-      <input className="w-full px-3 py-3 rounded-full text-black text-center"
+      <input className="w-full px-3 py-3 rounded-lg text-black text-center"
         name="born" value={born} onChange={event => setBorn(parseInt(event.target.value))} /><br />
       <button
         className="mt-4 mb-3 rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
