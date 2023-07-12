@@ -33,7 +33,6 @@ export const profileRouter = createTRPCRouter({
 
   getMyProfile:
     protectedProcedure
-
       .query(async ({ ctx }) => {
         return await getProfileFromFirestore(ctx.session.user.name || "")
       }),
@@ -55,13 +54,12 @@ export const profileRouter = createTRPCRouter({
           })
             .optional(),
 
-        description:
-          z.object({ text: z.string() })
-            .optional(),
+        description: z.string()
+          .optional(),
 
       }))
       .mutation(({ input, ctx }) => {
-        console.log("mergeProfile.input", input)
+        console.log("------------mergeProfile.input", input)
         return mergeToProfile(ctx.session.user.id, input)
       }),
 
