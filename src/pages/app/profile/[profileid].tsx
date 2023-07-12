@@ -126,8 +126,10 @@ const Home: NextPage = () => {
               <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/10">
                 <h3 className="text-2xl font-bold">Så här <HighlightText>beskriver</HighlightText> dom sig</h3>
                 <div className="text-lg">
-                  <p className="p-2 rounded-xl bg-white/10 whitespace-pre-wrap" >{p.description}</p>
-
+                  {p.description ?
+                    <p className="p-2 rounded-xl bg-white/10 whitespace-pre-wrap italic" >{p.description}</p> :
+                    <p className="p-2 rounded-xl bg-white/10 whitespace-pre-wrap text-center" ><span className="italic">Här var det tomt</span> 🙁</p>
+                  }
                 </div>
               </div>
             </div >
