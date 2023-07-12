@@ -6,6 +6,7 @@ export type Profile = {
   username: string,
   person1: Person,
   person2: Person,
+  description: string
 
 }
 export type Person = {
@@ -44,13 +45,19 @@ export const profileRouter = createTRPCRouter({
           z.object({
             name: z.string(),
             born: z.number()
-          }).optional(),
+          })
+            .optional(),
 
         person2:
           z.object({
             name: z.string(),
             born: z.number()
-          }).optional(),
+          })
+            .optional(),
+
+        description:
+          z.object({ text: z.string() })
+            .optional(),
 
       }))
       .mutation(({ input, ctx }) => {
