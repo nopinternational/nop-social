@@ -40,6 +40,8 @@ export const profileRouter = createTRPCRouter({
   mergeProfile:
     protectedProcedure
       .input(z.object({
+        username: z.string().optional(),
+
         person1:
           z.object({
             name: z.string(),

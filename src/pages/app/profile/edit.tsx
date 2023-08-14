@@ -18,6 +18,7 @@ const Home: NextPage = () => {
   const [editPanel2, setEditPanel2] = useState(false)
   const [editPanel3, setEditPanel3] = useState(false)
 
+  const trpcCtx = api.useContext()
   //const hello = api.example.hello.useQuery({ text: "from tRPC" });
 
   const { data: sessionData } = useSession();
@@ -113,9 +114,21 @@ const Home: NextPage = () => {
 
     mergeProfile(description)
   }
+  const default_user: Profile = {
+    username: "",
+    person1: {
+      name: "",
+      born: YEAR
+    },
+    person2: {
+      name: "",
+      born: YEAR
+    },
+    description: ""
+  }
 
-
-  const p = profile.data as Profile
+  const p = profile.data as Profile || default_user
+  console.log("profile.edit.p", p)
   const p1 = p.person1
   const p2 = p.person2
   return (
