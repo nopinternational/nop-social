@@ -1,21 +1,30 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import { api } from "~/utils/api";
+import HighlightText from "~/components/HighlightText";
 import SigninButton from "~/components/SigninButton";
-import { EVENTS, type Event } from "~/lib/event/events";
+
+type Event = {
+  name: string,
+  title: string,
+  description: string
+}
 
 
 
 const Home: NextPage = () => {
   //const hello = api.example.hello.useQuery({ text: "from tRPC" });
 
+  const events = api.event.getAllEvents.useQuery()
 
   const eventRender = (event: Event) => {
+    console.log("eventRender", event)
     return (
-      <div className="col-span-2">
+      <div className="col-span-2" key={event.title}>
         <Link
           className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-          href={"event/" + event.id}
+          href={"event/"}
         >
 
           <h3 className="text-2xl font-bold">{event.title}</h3>
@@ -27,6 +36,30 @@ const Home: NextPage = () => {
       </div>
     )
   }
+
+  const renderLoading = () => {
+    return (
+      <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
+        <h3 className="text-2xl font-bold"><HighlightText>Laddar...</HighlightText></h3>
+        <div className="text-lg">
+          <p>Den som väntar på något gott 😘 </p>
+        </div>
+
+        <div className="h-12 w-12 mb-4">
+          <div className="flex">
+            <div className="relative">
+              <div className="w-12 h-12 rounded-full absolute
+                            border-8 border-solid border-gray-200"></div>
+              <div className="w-12 h-12 rounded-full animate-spin absolute
+                            border-8 border-solid border-[hsl(280,100%,70%)] border-t-transparent shadow-md"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    )
+  }
+
   return (
     <>
       <Head>
@@ -37,19 +70,15 @@ const Home: NextPage = () => {
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-            Event med <span className="text-[hsl(280,100%,70%)]">Night of Passion</span>
+            Träffar med <span className="text-[hsl(280,100%,70%)]">Night of Passion</span>
           </h1>
 
           <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
-            <div className="col-span-2">
-              <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
-                <h3 className="text-2xl font-bold">Par, par, par ❤️❤️❤️</h3>
-                <div className="text-lg">
-                  Night of Passion är fullt av trevliga par. Njut av dom på våra träffar 😘
-                </div>
-              </div>
-            </div>
-            {EVENTS.map(event => { return eventRender(event) })}
+
+            {events.isLoading ? renderLoading() : null}
+
+
+            {events.data?.map((event) => { return eventRender(event) })}
 
           </div>
           <div className="flex flex-col items-center gap-2">
