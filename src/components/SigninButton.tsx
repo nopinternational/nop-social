@@ -17,6 +17,11 @@ const BUTTONS: CTA_Button[] = [
         text: "Ändra er profil",
         url: "/app/profile/edit"
     },
+
+    {
+        text: "Visa alla träffar",
+        url: "/app/event"
+    },
 ]
 
 const SigninButton: React.FC = () => {
@@ -44,7 +49,7 @@ const SigninButton: React.FC = () => {
     const renderButton = (button: CTA_Button) => {
 
         return (
-            <div className="p-2">
+            <div className="p-2" key={button.url}>
                 <Link href={button.url}>
                     <button
                         className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
