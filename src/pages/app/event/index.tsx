@@ -20,7 +20,7 @@ const Home: NextPage = () => {
   const events = api.event.getAllEvents.useQuery()
 
   const eventRender = (event: Event) => {
-    console.log("eventRender", event)
+
     return (
       <div className="col-span-2" key={event.id}>
         <Link

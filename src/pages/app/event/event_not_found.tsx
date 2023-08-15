@@ -4,9 +4,6 @@ import SigninButton from "~/components/SigninButton";
 
 
 const Home: NextPage = () => {
-    console.log("event.event_not_found")
-    //const hello = api.example.hello.useQuery({ text: "from tRPC" });
-
 
     return (
         <>

@@ -12,26 +12,8 @@ const Home: NextPage = () => {
     const { eventid } = router.query;
     const { data: sessionData } = useSession();
 
-    // const [event, setEvent] = useState<Event | undefined>(undefined)
 
-    // useEffect(() => {
-    //     const loadedevent = EVENTS.find(event => {
-    //         console.log(" EVENTS.find->event", event);
-    //         console.log(" EVENTS.find->event.id == eventid", event.id == eventid);
-    //         return event.id == eventid;
-    //     })
-    //     console.log(" EVENTS.find->loadedevent", loadedevent);
-
-    //     if (!loadedevent) {
-    //         console.log("NO EVENT FOUND", loadedevent)
-    //         console.log("NO EVENT FOUND", !loadedevent)
-    //         void router.push('/app/event/event_not_found')
-    //     }
-    //     setEvent(loadedevent)
-    // })
     const queryInput = { eventId: eventid as string }
-    console.log("queryInput", queryInput, "as: " + typeof queryInput)
-    console.log("queryInput.eventId", queryInput.eventId, "as: " + typeof queryInput.eventId)
     const event = api.event.getEvent.useQuery(queryInput,
         { enabled: sessionData?.user !== undefined })
 
