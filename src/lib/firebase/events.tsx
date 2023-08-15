@@ -19,11 +19,9 @@ export const getAllEventsFromFirestore = async () => {
 }
 
 export const getEvent = async (eventid: string) => {
-    console.log("firestore.getEvent for eventid: ", eventid)
     const docRef = doc(firestoreFoo, "events", eventid);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data());
         return docSnap.data()
     } else {
         // docSnap.data() will be undefined in this case
