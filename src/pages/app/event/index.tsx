@@ -38,6 +38,16 @@ const Home: NextPage = () => {
     )
   }
 
+  const renderNoEvents = () => {
+    return (
+      <div className="flex flex-col col-span-2 gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
+        <h3 className="text-2xl font-bold"><HighlightText>Inga träffar planerade...</HighlightText></h3>
+        <div className="text-lg">
+          <p>Just nu har vi inga träffar planeradde, men återkom snart så har vi säkerligen något kul på gång 😘 </p>
+        </div>
+      </div>
+    )
+  }
   const renderLoading = () => {
     return (
       <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
@@ -57,7 +67,6 @@ const Home: NextPage = () => {
           </div>
         </div>
       </div>
-
     )
   }
 
@@ -75,12 +84,9 @@ const Home: NextPage = () => {
           </h1>
 
           <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
-
             {events.isLoading ? renderLoading() : null}
-
-
             {events.data?.map((event) => { return eventRender(event) })}
-
+            {events.data ? renderNoEvents() : null}
           </div>
           <div className="flex flex-col items-center gap-2">
             <SigninButton />
