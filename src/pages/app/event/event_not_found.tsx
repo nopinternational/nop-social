@@ -1,9 +1,6 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
 import SigninButton from "~/components/SigninButton";
-import { EVENTS, type Event } from "~/lib/event/events";
-
 
 
 const Home: NextPage = () => {

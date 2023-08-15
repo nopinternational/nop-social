@@ -1,13 +1,9 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import { useSession } from "next-auth/react";
-//import Link from "next/link";
 import SigninButton from "~/components/SigninButton";
-//import { EVENTS, type Event } from "~/lib/event/events";
 import { useRouter } from 'next/router'
 import { api } from "~/utils/api";
-//import React, { useEffect, useState } from "react";
-
 
 
 const Home: NextPage = () => {
@@ -48,8 +44,6 @@ const Home: NextPage = () => {
     }
 
     const e = event.data
-    console.log(e)
-    console.log(typeof e.date.seconds)
 
     return (
         <>
