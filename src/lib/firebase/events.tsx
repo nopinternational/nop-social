@@ -10,18 +10,14 @@ export const getAllEventsFromFirestore = async () => {
     const querySnapshot = await getDocs(collection(firestoreFoo, "events").withConverter(eventConverter));
     const objects: Event[] = []
     querySnapshot.forEach((eventDoc) => {
-        //console.log(`${profiledoc.id} => `, profiledoc.data());
         objects.push(eventDoc.data())
-        //copy profile to new collection
-        // const newRef = doc(firestoreFoo, "profiles", profiledoc.id)
-        // setDoc(newRef, profiledoc.data())
-
     });
 
     return objects;
 }
 
 type Event = {
+    id: string
     name: string,
     title: string,
     description: string
@@ -41,6 +37,7 @@ const eventConverter = {
         options: SnapshotOptions
     ): Event => {
         const data = snapshot.data(options) as EventFirestoreModel;
-        return { ...data }
+
+        return { id: snapshot.id, ...data }
     }
 };
