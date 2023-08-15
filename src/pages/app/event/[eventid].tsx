@@ -49,6 +49,8 @@ const Home: NextPage = () => {
 
     const e = event.data
     console.log(e)
+    console.log(typeof e.date.seconds)
+
     return (
         <>
             <Head>
@@ -69,10 +71,10 @@ const Home: NextPage = () => {
                             >
 
                                 <h3 className="text-2xl font-bold">{e.title}</h3>
-                                <div className="text-lg">
-                                    {e.description}
-                                </div>
 
+                                <div className="text-lg whitespace-pre-wrap">
+                                    {e.when}
+                                </div>
                                 <div className="text-lg whitespace-pre-wrap">
                                     {e.longDesc}
                                 </div>
