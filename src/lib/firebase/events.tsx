@@ -6,6 +6,7 @@ import {
     doc,
     getDoc,
     getDocs,
+    setDoc
 } from "firebase/firestore";
 
 export const getAllEventsFromFirestore = async () => {
@@ -27,6 +28,11 @@ export const getEvent = async (eventid: string) => {
         // docSnap.data() will be undefined in this case
         console.log("No such document!", eventid);
     }
+}
+
+export const signupToEvent = async (userid: string, eventId: string) => {
+    console.log("signupToEvent", userid, eventId)
+    await setDoc(doc(firestoreFoo, "events", eventId, "signups", userid), { when: new Date().toISOString() },)
 }
 
 export type Event = {

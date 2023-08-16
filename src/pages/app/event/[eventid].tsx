@@ -23,10 +23,11 @@ const Home: NextPage = () => {
         { enabled: sessionData?.user !== undefined })
 
 
+    const { mutate: eventSignUp } = api.event.signupForEvent.useMutation()
     const attendToEventHandler = () => {
         console.log("attendToEventHandler")
         setAttendToEvent(true)
-
+        eventSignUp({eventId: eventid as string})
     }
 
     const renderAttending = () => {
@@ -46,8 +47,8 @@ const Home: NextPage = () => {
                                 className="m-auto"
                                 src={swishPic}
                                 alt="Swish QR för träffen"
-                                width={500}
-                                height={500}
+                                width={400}
+                                height={400}
                             // blurDataURL="data:..." automatically provided
                             // placeholder="blur" // Optional blur-up while loading
                             />
