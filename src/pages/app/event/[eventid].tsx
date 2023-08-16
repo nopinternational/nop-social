@@ -1,6 +1,7 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import { useSession } from "next-auth/react";
+import HighlightText from "~/components/HighlightText";
 import SigninButton from "~/components/SigninButton";
 import { useRouter } from 'next/router'
 import { api } from "~/utils/api";
@@ -37,7 +38,7 @@ const Home: NextPage = () => {
             <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
                 <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
                     <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem] text-center">
-                        Träff med <span className="text-[hsl(280,100%,70%)]">Night of Passion</span>
+                        Träff med <HighlightText>Night of Passion</HighlightText>
                     </h1>
 
                     <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
@@ -46,7 +47,7 @@ const Home: NextPage = () => {
                                 className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
                             >
 
-                                <h3 className="text-2xl font-bold">{e.title}</h3>
+                                <h3 className="text-2xl font-bold"><HighlightText>{e.title}</HighlightText></h3>
 
                                 <div className="text-lg whitespace-pre-wrap">
                                     {e.when}
