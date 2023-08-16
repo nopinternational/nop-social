@@ -16,6 +16,9 @@ const Home: NextPage = () => {
     const router = useRouter();
     const { eventid } = router.query;
     const { data: sessionData } = useSession();
+    console.log("session: ", sessionData)
+    //sessionData?.user?.append("name1") = "jw"
+
     const [attendingToEvent, setAttendToEvent] = useState(false)
 
     const queryInput = { eventId: eventid as string }
@@ -27,7 +30,7 @@ const Home: NextPage = () => {
     const attendToEventHandler = () => {
         console.log("attendToEventHandler")
         setAttendToEvent(true)
-        eventSignUp({eventId: eventid as string})
+        eventSignUp({ eventId: eventid as string })
     }
 
     const renderAttending = () => {
@@ -39,7 +42,7 @@ const Home: NextPage = () => {
                     >
                         <h3 className="text-2xl font-bold"><HighlightText>Välkommen på Cocktailträff 🎉🍸🍾</HighlightText></h3>
                         <div className="text-lg whitespace-pre-wrap">
-                            Kostnaden för träffen är 100:- som ni swishar till 0700066099, märk er betalning med era namm (XX & YY)
+                            Kostnaden för träffen är 100:- som ni swishar till 0700066099, märk er betalning med era namn (XX & YY)
                             Eller så öppnar ni upp er swish app och skannar QR koden nedan.
                         </div>
                         <div>
@@ -54,7 +57,7 @@ const Home: NextPage = () => {
                             />
                         </div>
                         <div className="text-lg whitespace-pre-wrap">
-                            Efter betalningen så kommer vi lägga till er till träffen och ni kan då få se vilka andra som har anält sig. Vi kommer att skicka ut mer info om träffen några dagar innan.
+                            Efter betalningen så kommer vi lägga till er till träffen och ni kan då få se vilka andra som har anmält sig. Vi kommer att skicka ut mer info om träffen några dagar innan.
                         </div>
                     </div>
                 </div>
@@ -82,7 +85,7 @@ const Home: NextPage = () => {
             <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
                 <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
                     <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem] text-center">
-                        Träff med <HighlightText>Night of Passion</HighlightText>
+                        Vilka kommer på  <HighlightText>{e.title}</HighlightText>?
                     </h1>
 
                     <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
@@ -95,26 +98,27 @@ const Home: NextPage = () => {
                                     {e.when}
                                 </div>
                                 <div className="text-lg whitespace-pre-wrap">
-                                    {e.longDesc}
+                                    <EventAttendes />
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div className="flex flex-col items-center justify-center gap-4">
                         <div className="flex flex-wrap justify-center justify-self-center">
                             <div className="p-2" >
-
-                                <button
-                                    onClick={() => attendToEventHandler()}
-                                    className="rounded-full bg-white/10 bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-[hsl(280,100%,70%)]">
-                                    Anmäl er till träffen
-                                </button>
-
+                                <Link href={router.asPath + "/.."}>
+                                    <button
+                                        className="rounded-full bg-white/10 bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-[hsl(280,100%,70%)]">
+                                        Tillbaka
+                                    </button>
+                                </Link>
                             </div>
-                            {/* {BUTTONS.map(button => renderButton(button))} */}
+
                         </div>
                     </div>
                     {attendingToEvent ? renderAttending() : null}
+
                     <div className="flex flex-col items-center gap-2">
                         <SigninButton />
                     </div>
@@ -123,6 +127,21 @@ const Home: NextPage = () => {
         </>
     );
 };
+
+const EventAttendes: React.FC = () => {
+    return (
+        <div className="text-white">
+            <p>Vi säger välkomna till:</p>
+            <Attende profilename="sthlmpar08" ></Attende>
+            <Attende profilename="soe" />
+        </div>
+    )
+}
+
+const Attende: React.FC<{ profilename: string }> = ({ profilename }) => {
+    return (<p >{profilename}</p>)
+}
+
 
 export default Home;
 
