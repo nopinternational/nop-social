@@ -28,7 +28,7 @@ const Home: NextPage = () => {
           href={"event/" + event.id}
         >
 
-          <h3 className="text-2xl font-bold">{event.title}</h3>
+          <h3 className="text-2xl font-bold"><HighlightText>{event.title}</HighlightText></h3>
           <div className="text-lg">
             {event.description}
           </div>
@@ -50,7 +50,7 @@ const Home: NextPage = () => {
   }
   const renderLoading = () => {
     return (
-      <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
+      <div className="flex flex-col col-span-2 gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
         <h3 className="text-2xl font-bold"><HighlightText>Laddar...</HighlightText></h3>
         <div className="text-lg">
           <p>Den som väntar på något gott 😘 </p>
@@ -70,6 +70,8 @@ const Home: NextPage = () => {
     )
   }
 
+  console.log("events: -> events.data:", events.data)
+
   return (
     <>
       <Head>
@@ -86,7 +88,7 @@ const Home: NextPage = () => {
           <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
             {events.isLoading ? renderLoading() : null}
             {events.data?.map((event) => { return eventRender(event) })}
-            {events.data ? renderNoEvents() : null}
+            {events.data && events.data.length == 0 ? renderNoEvents() : null}
           </div>
           <div className="flex flex-col items-center gap-2">
             <SigninButton />
