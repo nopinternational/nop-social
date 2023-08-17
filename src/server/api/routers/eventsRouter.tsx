@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { getAllEventsFromFirestore, getEvent, signupToEvent } from "~/lib/firebase/events";
+import { getAllEventsFromFirestore, getEvent, getEventAttendes, signupToEvent } from "~/lib/firebase/events";
 
 export const eventRouter = createTRPCRouter({
     getAllEvents:
@@ -21,5 +21,12 @@ export const eventRouter = createTRPCRouter({
                 console.log("------------signupForEvent.input", input)
                 return signupToEvent(ctx.session.user.id, input.eventId)
             }),
-        
+    getEventAttendes:
+        protectedProcedure
+            .input(z.object({ eventId: z.string() }))
+            .query(({ input }) => {
+                console.log("------------getEventAttendes.input", input)
+                return getEventAttendes(input.eventId)
+            }),
+
 })

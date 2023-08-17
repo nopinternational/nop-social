@@ -6,9 +6,7 @@ import SigninButton from "~/components/SigninButton";
 import { useRouter } from 'next/router'
 import { api } from "~/utils/api";
 import Link from "next/link";
-import { useState } from "react";
-import Image from 'next/image'
-import swishPic from './swish.png'
+import { type FC } from "react";
 
 
 const Home: NextPage = () => {
@@ -19,50 +17,12 @@ const Home: NextPage = () => {
     console.log("session: ", sessionData)
     //sessionData?.user?.append("name1") = "jw"
 
-    const [attendingToEvent, setAttendToEvent] = useState(false)
-
     const queryInput = { eventId: eventid as string }
     const event = api.event.getEvent.useQuery(queryInput,
         { enabled: sessionData?.user !== undefined })
 
 
-    const { mutate: eventSignUp } = api.event.signupForEvent.useMutation()
-    const attendToEventHandler = () => {
-        console.log("attendToEventHandler")
-        setAttendToEvent(true)
-        eventSignUp({ eventId: eventid as string })
-    }
 
-    const renderAttending = () => {
-        return (
-            <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
-                <div className="col-span-2">
-                    <div
-                        className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-                    >
-                        <h3 className="text-2xl font-bold"><HighlightText>Välkommen på Cocktailträff 🎉🍸🍾</HighlightText></h3>
-                        <div className="text-lg whitespace-pre-wrap">
-                            Kostnaden för träffen är 100:- som ni swishar till 0700066099, märk er betalning med era namn (XX & YY)
-                            Eller så öppnar ni upp er swish app och skannar QR koden nedan.
-                        </div>
-                        <div>
-                            <Image
-                                className="m-auto"
-                                src={swishPic}
-                                alt="Swish QR för träffen"
-                                width={400}
-                                height={400}
-                            // blurDataURL="data:..." automatically provided
-                            // placeholder="blur" // Optional blur-up while loading
-                            />
-                        </div>
-                        <div className="text-lg whitespace-pre-wrap">
-                            Efter betalningen så kommer vi lägga till er till träffen och ni kan då få se vilka andra som har anmält sig. Vi kommer att skicka ut mer info om träffen några dagar innan.
-                        </div>
-                    </div>
-                </div>
-            </div>)
-    }
 
     if (event.isLoading || false) {
         return <p>laddar träff...</p>
@@ -98,7 +58,7 @@ const Home: NextPage = () => {
                                     {e.when}
                                 </div>
                                 <div className="text-lg whitespace-pre-wrap">
-                                    <EventAttendes />
+                                    <EventAttendes eventid={eventid as string} />
                                 </div>
                             </div>
                         </div>
@@ -117,7 +77,7 @@ const Home: NextPage = () => {
 
                         </div>
                     </div>
-                    {attendingToEvent ? renderAttending() : null}
+
 
                     <div className="flex flex-col items-center gap-2">
                         <SigninButton />
@@ -128,17 +88,35 @@ const Home: NextPage = () => {
     );
 };
 
-const EventAttendes: React.FC = () => {
+const EventAttendes: FC<{ eventid: string }> = ({ eventid }) => {
+    const attendes = api.event.getEventAttendes.useQuery(
+        { eventId: eventid }
+    )
+
+    if (attendes.isLoading || false) {
+        return <p>laddar deltagare...</p>
+    }
+
+    if (!attendes.data) {
+        return <p>hittar ingen deltagare...</p>
+    }
+    console.log("attendes.data", attendes.data)
+
+    if (attendes.data.length == 0)
+        return < p >Du måste vara deltagare på träffen för att se vilka som kommer</p >
+
+
     return (
         <div className="text-white">
             <p>Vi säger välkomna till:</p>
-            <Attende profilename="sthlmpar08" ></Attende>
-            <Attende profilename="soe" />
+            {attendes.data.map((attende) => { return (<Attende key={attende.id} profilename={attende.name}></Attende>) })}
+
         </div>
     )
 }
 
-const Attende: React.FC<{ profilename: string }> = ({ profilename }) => {
+const Attende: FC<{ profilename: string }> = ({ profilename }) => {
+    console.log("Attende.profilename", profilename)
     return (<p >{profilename}</p>)
 }
 
