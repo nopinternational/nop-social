@@ -100,10 +100,15 @@ const EventAttendes: FC<{ eventid: string }> = ({ eventid }) => {
     if (!attendes.data) {
         return <p>hittar ingen deltagare...</p>
     }
-    console.log("attendes.data", attendes.data)
+
 
     if (attendes.data.length == 0)
-        return < p >Du måste vara deltagare på träffen för att se vilka som kommer</p >
+        return (
+            <div>
+                <p>Ni måste vara deltagare på träffen för att se vilka som kommer.</p >
+                <p>Har ni betalat nyligen så kommer vi strax lägga till er som deltagare, ha tålamod 😉</p >
+            </div>
+        )
 
 
     return (
