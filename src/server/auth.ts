@@ -8,9 +8,14 @@ import {
 import CredentialsProvider from "next-auth/providers/credentials";
 import { auth as authApp } from "../lib/firebase/firebase";
 import {
+  browserSessionPersistence,
+  onAuthStateChanged,
   signInWithEmailAndPassword,
+  signOut,
+  setPersistence
 } from "firebase/auth";
 import { type FirebaseError } from "firebase/app";
+import { object } from "zod";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -72,7 +77,24 @@ export const authOptions: NextAuthOptions = {
       id: "nop-auth",
       name: "NoP Auth",
       async authorize(credentials) {
-
+        await setPersistence(authApp, browserSessionPersistence)
+        onAuthStateChanged(authApp, (user) => {
+          console.log("-------------------------------")
+          console.log("-------------------------------")
+          console.log("-------------------------------")
+          console.log("onAuthStateChanged -> user", user?.uid)
+          console.log("-------------------------------")
+          console.log("-------------------------------")
+          console.log("-------------------------------")
+          if (user) {
+            // User is signed in, see docs for a list of available properties
+            // https://firebase.google.com/docs/reference/js/auth.user
+            // ...
+          } else {
+            // User is signed out
+            // ...
+          }
+        });
         const fbuser = await signInWithEmailAndPassword(authApp, credentials?.username || "", credentials?.password || "")
           .then(async (firebaseUser) => {
 
@@ -123,6 +145,18 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
+  events: {
+    signIn: (obj) => {
+      console.log("EVENT: signin ", obj)
+    },
+    signOut: (obj) => {
+      console.log("EVENT: signout ", obj)
+      signOut(authApp)
+        .then(() => { console.log("firebase signout OK") })
+        .catch((err) => { console.log("firebase signout ERROR ", err) })
+
+    }
+  }
 };
 
 /**
