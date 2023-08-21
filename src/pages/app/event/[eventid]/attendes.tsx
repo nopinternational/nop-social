@@ -121,7 +121,7 @@ const EventAttendes: FC<{ eventid: string }> = ({ eventid }) => {
 }
 
 const Attende: FC<{ profilename: string }> = ({ profilename }) => {
-    #("Attende.profilename", profilename)
+    // console.log("Attende.profilename", profilename)
     return (<p >{profilename}</p>)
 }
 
