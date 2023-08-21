@@ -48,7 +48,7 @@ const Home: NextPage = () => {
   // }
 
   const toggleEditpanel = () => {
-    console.log("toggleEditpanel, current: ", editPanel1)
+    //console.log("toggleEditpanel, current: ", editPanel1)
     setEditPanel1(!editPanel1)
     return true
   }
@@ -102,7 +102,7 @@ const Home: NextPage = () => {
 
 
   const persistPerson = (profile: PartialProfile) => {
-    console.log("Edit.persistPerson", profile)
+    //console.log("Edit.persistPerson", profile)
 
     mergeProfile(profile)
   }
@@ -110,7 +110,7 @@ const Home: NextPage = () => {
   const persistPerson_p2 = (person: Person) => persistPerson({ "person2": person })
 
   const persistDescription = (description: PartialProfile) => {
-    console.log("Edit.persistDescription", description)
+    //console.log("Edit.persistDescription", description)
 
     mergeProfile(description)
   }
@@ -128,7 +128,7 @@ const Home: NextPage = () => {
   }
 
   const p = profile.data as Profile || default_user
-  console.log("profile.edit.p", p)
+  //console.log("profile.edit.p", p)
   const p1 = p.person1
   const p2 = p.person2
   return (
@@ -207,7 +207,7 @@ const DescriptionEditForm: FC<{ description: string, onsubmitHandler: (descripti
   const onChange = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault()
 
-    console.log("PersonEditForm.onChange.description", desc)
+    //console.log("PersonEditForm.onChange.description", desc)
     onsubmitHandler({ description: desc })
     //this.setState({ text: e.currentTarget.value });
   };

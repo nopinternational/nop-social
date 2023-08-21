@@ -16,7 +16,7 @@ const Home: NextPage = () => {
     const router = useRouter();
     const { eventid } = router.query;
     const { data: sessionData } = useSession();
-    console.log("router.asPath: ", router.asPath)
+    //console.log("router.asPath: ", router.asPath)
     //sessionData?.user?.append("name1") = "jw"
 
     const [attendingToEvent, setAttendToEvent] = useState(false)
@@ -28,7 +28,7 @@ const Home: NextPage = () => {
 
     const { mutate: eventSignUp } = api.event.signupForEvent.useMutation()
     const attendToEventHandler = () => {
-        console.log("attendToEventHandler")
+        //console.log("attendToEventHandler")
         setAttendToEvent(true)
         eventSignUp({ eventId: eventid as string })
     }

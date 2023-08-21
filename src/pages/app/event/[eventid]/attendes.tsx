@@ -14,7 +14,7 @@ const Home: NextPage = () => {
     const router = useRouter();
     const { eventid } = router.query;
     const { data: sessionData } = useSession();
-    console.log("session: ", sessionData)
+    //console.log("session: ", sessionData)
     //sessionData?.user?.append("name1") = "jw"
 
     const queryInput = { eventId: eventid as string }
@@ -121,7 +121,7 @@ const EventAttendes: FC<{ eventid: string }> = ({ eventid }) => {
 }
 
 const Attende: FC<{ profilename: string }> = ({ profilename }) => {
-    console.log("Attende.profilename", profilename)
+    #("Attende.profilename", profilename)
     return (<p >{profilename}</p>)
 }
 

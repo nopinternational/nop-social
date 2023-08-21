@@ -61,7 +61,7 @@ export const profileRouter = createTRPCRouter({
 
       }))
       .mutation(({ input, ctx }) => {
-        console.log("------------mergeProfile.input", input)
+        // console.log("------------mergeProfile.input", input)
         return mergeToProfile(ctx.session.user.id, input)
       }),
 

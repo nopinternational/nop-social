@@ -79,13 +79,13 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         await setPersistence(authApp, browserSessionPersistence)
         onAuthStateChanged(authApp, (user) => {
-          console.log("-------------------------------")
-          console.log("-------------------------------")
-          console.log("-------------------------------")
-          console.log("onAuthStateChanged -> user", user?.uid)
-          console.log("-------------------------------")
-          console.log("-------------------------------")
-          console.log("-------------------------------")
+          // console.log("-------------------------------")
+          // console.log("-------------------------------")
+          // console.log("-------------------------------")
+          // console.log("onAuthStateChanged -> user", user?.uid)
+          // console.log("-------------------------------")
+          // console.log("-------------------------------")
+          // console.log("-------------------------------")
           if (user) {
             // User is signed in, see docs for a list of available properties
             // https://firebase.google.com/docs/reference/js/auth.user
@@ -118,7 +118,7 @@ export const authOptions: NextAuthOptions = {
           })
 
 
-        console.log("authorize,  returnObject:", fbuser)
+        // console.log("authorize,  returnObject:", fbuser)
         return fbuser
 
       },
@@ -147,10 +147,10 @@ export const authOptions: NextAuthOptions = {
   },
   events: {
     signIn: (obj) => {
-      console.log("EVENT: signin ", obj)
+      // console.log("EVENT: signin ", obj)
     },
     signOut: (obj) => {
-      console.log("EVENT: signout ", obj)
+      // console.log("EVENT: signout ", obj)
       signOut(authApp)
         .then(() => { console.log("firebase signout OK") })
         .catch((err) => { console.log("firebase signout ERROR ", err) })

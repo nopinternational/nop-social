@@ -22,7 +22,7 @@ const Signin = ({ providers }: SigninPageProps) => {
     const router = useRouter();
     const { error, callbackUrl } = router.query;
 
-    console.log("Signin.router.quert:", router.query)
+    //console.log("Signin.router.quert:", router.query)
     const inputUsername = useRef<HTMLInputElement>(null);
     const inputPassword = useRef<HTMLInputElement>(null);
 
@@ -34,7 +34,7 @@ const Signin = ({ providers }: SigninPageProps) => {
         if (!nopSigninProvider) return <div>no nop</div>
 
         const signinNopAuth = (event: React.MouseEvent<HTMLButtonElement>): void => {
-            console.log("Signin.nopAuthSignIn.signinNopAuth.event", event)
+            //console.log("Signin.nopAuthSignIn.signinNopAuth.event", event)
             event.preventDefault()
             void signIn('nop-auth', {
                 //redirect: true,

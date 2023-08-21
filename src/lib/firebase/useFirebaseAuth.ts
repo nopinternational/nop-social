@@ -25,7 +25,7 @@ export default function useFirebaseAuth() {
   const [loading, setLoading] = useState(true);
 
   const authStateChanged = (authState: User | null): void => {
-    console.log("authStateChanged", authState)
+    //console.log("authStateChanged", authState)
 
     if (!authState) {
       setLoading(false);
@@ -36,7 +36,7 @@ export default function useFirebaseAuth() {
     setLoading(true);
 
     const formattedUser: NopUser = formatAuthUser(authState);
-    console.log("authStateChanged", authState, formattedUser);
+    //console.log("authStateChanged", authState, formattedUser);
     setAuthUser(formattedUser);
 
     setLoading(false);
@@ -48,7 +48,7 @@ export default function useFirebaseAuth() {
 
 
   const signOut = async () => {
-    console.log("signout authuser: ", authUser);
+    //console.log("signout authuser: ", authUser);
     await firbaseSignOut(auth)
   };
 

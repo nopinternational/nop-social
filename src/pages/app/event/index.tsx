@@ -70,7 +70,7 @@ const Home: NextPage = () => {
     )
   }
 
-  console.log("events: -> events.data:", events.data)
+  //console.log("events: -> events.data:", events.data)
 
   return (
     <>
