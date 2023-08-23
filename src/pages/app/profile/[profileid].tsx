@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { type NextPage } from "next";
 import { useRouter } from 'next/router';
+import { useParams } from 'next/navigation'
 import Head from "next/head";
 import { useSession } from "next-auth/react";
 import HighlightText from "~/components/HighlightText";
@@ -13,13 +14,14 @@ const Home: NextPage = () => {
   const router = useRouter();
 
   const { profileid } = router.query;
-  const pid = profileid as string;
-  //const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  const pid = profileid as string
 
+  // console.log("profileid", pid)
+  // console.log("useParams()", useParams())
   const { data: sessionData } = useSession();
 
   const profile = api.profile.getProfile.useQuery(
-    { profileid: pid },
+    { profileid: pid},
     { enabled: sessionData?.user !== undefined }
   );
 
@@ -37,7 +39,7 @@ const Home: NextPage = () => {
 
 
   const renderProfileOverview = (profile: Profile) => {
-    console.log("renderProfileOverview", profile);
+    // console.log("renderProfileOverview", profile);
     return (
       <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
         <h3 className="text-2xl font-bold"><HighlightText>{profile.username}</HighlightText></h3>
@@ -60,7 +62,7 @@ const Home: NextPage = () => {
         <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
           <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
             <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-              Laddar <HighlightText>{profileid}</HighlightText>
+              Laddar <HighlightText>{pid}</HighlightText>
             </h1>
             <div className="flex">
               <div className="relative">
@@ -98,7 +100,7 @@ const Home: NextPage = () => {
   if (profile.isLoading || false) {
     return renderLoading(pid)
   }
-  console.log("before return", profile.data)
+  // console.log("before return", profile.data)
   if (!profile.data) {
     return renderNoProfileFound(pid)
   }
