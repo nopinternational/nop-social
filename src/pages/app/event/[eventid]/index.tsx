@@ -108,7 +108,7 @@ const Home: NextPage = () => {
                             <div className="p-2" >
                                 <Link href={router.asPath + "/attendes"}>
                                     <button
-                                        className="rounded-full bg-white/10 bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-[hsl(280,100%,70%)]">
+                                        className="rounded-full bg-white/10 bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
                                         Vilka kommer på träffen?
                                     </button>
                                 </Link>
@@ -117,7 +117,7 @@ const Home: NextPage = () => {
 
                                 <button
                                     onClick={() => attendToEventHandler()}
-                                    className="rounded-full bg-white/10 bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-[hsl(280,100%,70%)]">
+                                    className="rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-opacity-75">
                                     Anmäl er till träffen
                                 </button>
                             </div>

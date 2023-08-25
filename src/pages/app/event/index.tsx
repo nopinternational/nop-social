@@ -32,7 +32,14 @@ const Home: NextPage = () => {
           <div className="text-lg">
             {event.description}
           </div>
+          <div className="p-2">
 
+            <button
+              className="rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-opacity-75 hover:bg-white/20">
+              Läs mer och anmäl er
+            </button>
+
+          </div>
         </Link>
       </div>
     )
