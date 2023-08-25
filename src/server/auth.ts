@@ -15,7 +15,7 @@ import {
   setPersistence
 } from "firebase/auth";
 import { type FirebaseError } from "firebase/app";
-import { object } from "zod";
+
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -144,7 +144,7 @@ export const authOptions: NextAuthOptions = {
   },
   session: {
     strategy: "jwt",
-    maxAge: 2 * 60 * 60, // 2 hours
+    //maxAge: 2 * 60 * 60, // 2 hours
   },
   events: {
     signIn: (obj) => {
