@@ -1,6 +1,7 @@
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { getAllEventsFromFirestore, getEvent, getEventAttendes, signupToEvent } from "~/lib/firebase/events";
+import { createTRPCRouter, protectedProcedure } from "../../server/api/trpc";
+import { getAllEventsFromFirestore, getEvent, getEventAttendes, signupToEvent } from "~/module/events/eventsFirebase";
+import { type NopEvent } from "./components/types";
 
 export const eventRouter = createTRPCRouter({
     getAllEvents:

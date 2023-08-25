@@ -4,22 +4,14 @@ import Link from "next/link";
 import { api } from "~/utils/api";
 import HighlightText from "~/components/HighlightText";
 import SigninButton from "~/components/SigninButton";
-
-type Event = {
-  id: string
-  name: string,
-  title: string,
-  description: string
-}
-
-
+import { type NopEvent } from "~/module/events/components/types"
 
 const Home: NextPage = () => {
   //const hello = api.example.hello.useQuery({ text: "from tRPC" });
 
   const events = api.event.getAllEvents.useQuery()
 
-  const eventRender = (event: Event) => {
+  const eventRender = (event: NopEvent) => {
 
     return (
       <div className="col-span-2" key={event.id}>

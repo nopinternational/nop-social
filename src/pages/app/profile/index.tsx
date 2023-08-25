@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import HighlightText from "~/components/HighlightText";
 import SigninButton from "~/components/SigninButton";
 import { api } from "~/utils/api";
-import { type Profile } from "~/server/api/routers/profileRouter";
+import { type Profile } from "~/module/profile/profileRouter";
 import Link from "next/link";
 
 const Home: NextPage = () => {

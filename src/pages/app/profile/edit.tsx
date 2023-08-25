@@ -5,11 +5,11 @@ import { useSession } from "next-auth/react";
 import HighlightText from "~/components/HighlightText";
 import SigninButton from "~/components/SigninButton";
 import { api } from "~/utils/api";
-import { type Profile } from "~/server/api/routers/profileRouter";
+import { type Profile } from "~/module/profile/profileRouter";
 import Link from "next/link";
 import { type FC, useState } from "react";
-import { type Person } from "~/server/api/routers/profileRouter";
-import { type PartialProfile } from "~/lib/firebase/firebaseProfiles";
+import { type Person } from "~/module/profile/profileRouter";
+import { type PartialProfile } from "~/module/profile/firebaseProfiles";
 
 
 const Home: NextPage = () => {

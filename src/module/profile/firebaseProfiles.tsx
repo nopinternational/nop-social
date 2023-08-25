@@ -1,4 +1,4 @@
-import { firestoreFoo } from "./firebase";
+import { firestoreFoo } from "../../lib/firebase/firebase";
 import {
     type QueryDocumentSnapshot,
     type SnapshotOptions,
@@ -12,7 +12,7 @@ import {
 import {
     type Person,
     type Profile
-} from "~/server/api/routers/profileRouter";
+} from "~/module/profile/profileRouter";
 
 interface ProfileDbModel {
     username: string;
