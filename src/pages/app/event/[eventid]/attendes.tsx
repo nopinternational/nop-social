@@ -114,8 +114,9 @@ const EventAttendes: FC<{ eventid: string }> = ({ eventid }) => {
     return (
         <div className="text-white">
             <p>Vi säger välkomna till:</p>
-            {attendes.data.map((attende) => { return (<Attende key={attende.id} profilename={attende.name}></Attende>) })}
-
+            <div className="p-2 bg-white/10 rounded-md">
+                {attendes.data.map((attende) => { return (<Attende key={attende.id} profilename={attende.name}></Attende>) })}
+            </div>
         </div>
     )
 }
