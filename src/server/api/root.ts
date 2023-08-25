@@ -1,7 +1,7 @@
 import { exampleRouter } from "~/server/api/routers/example";
 import { createTRPCRouter } from "~/server/api/trpc";
 import { profileRouter } from "./routers/profileRouter";
-import { eventRouter } from "./routers/eventsRouter";
+import { eventRouter } from "../../module/events/eventsRouter";
 
 /**
  * This is the primary router for your server.

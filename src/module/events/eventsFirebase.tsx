@@ -1,4 +1,4 @@
-import { firestoreFoo } from "./firebase";
+import { firestoreFoo } from "../../lib/firebase/firebase";
 import {
     type QueryDocumentSnapshot,
     type SnapshotOptions,
@@ -8,10 +8,11 @@ import {
     getDocs,
     setDoc
 } from "firebase/firestore";
+import { type NopEvent, type ConfirmedUser, type EventFirestoreModel } from "./components/types"
 
-export const getAllEventsFromFirestore = async () => {
+export const getAllEventsFromFirestore = async (): Promise<NopEvent[]> => {
     const querySnapshot = await getDocs(collection(firestoreFoo, "events").withConverter(eventConverter));
-    const objects: Event[] = []
+    const objects: NopEvent[] = []
     querySnapshot.forEach((eventDoc) => {
         objects.push(eventDoc.data())
     });
@@ -19,8 +20,8 @@ export const getAllEventsFromFirestore = async () => {
     return objects;
 }
 
-export const getEvent = async (eventid: string) => {
-    const docRef = doc(firestoreFoo, "events", eventid);
+export const getEvent = async (eventid: string): Promise<NopEvent | null> => {
+    const docRef = doc(firestoreFoo, "events", eventid).withConverter(eventConverter);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
         return docSnap.data()
@@ -28,11 +29,7 @@ export const getEvent = async (eventid: string) => {
         // docSnap.data() will be undefined in this case
         console.log("No such document!", eventid);
     }
-}
-
-type ConfirmedUser = {
-    name: string,
-    id: string
+    return null
 }
 
 export const getEventAttendes = async (eventid: string) => {
@@ -62,26 +59,15 @@ export const signupToEvent = async (userid: string, eventId: string) => {
     await setDoc(doc(firestoreFoo, "events", eventId, "participants", userid), { when: new Date().toISOString() },)
 }
 
-export type Event = {
-    id: string
-    name: string,
-    title: string,
-    description: string
-}
 
-type EventFirestoreModel = {
-    name: string,
-    title: string,
-    description: string
-}
 const eventConverter = {
-    toFirestore: (event: Event): EventFirestoreModel => {
+    toFirestore: (event: NopEvent): EventFirestoreModel => {
         return { ...event };
     },
     fromFirestore: (
         snapshot: QueryDocumentSnapshot,
         options: SnapshotOptions
-    ): Event => {
+    ): NopEvent => {
         const data = snapshot.data(options) as EventFirestoreModel;
 
         return { id: snapshot.id, ...data }
