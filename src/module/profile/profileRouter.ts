@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { getAllProfilesFromFirestore, getProfileFromFirestore, mergeToProfile } from "~/lib/firebase/firebaseProfiles";
+import { createTRPCRouter, protectedProcedure } from "../../server/api/trpc";
+import { getAllProfilesFromFirestore, getProfileFromFirestore, mergeToProfile } from "~/module/profile/firebaseProfiles";
 
 export type Profile = {
   username: string,

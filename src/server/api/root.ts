@@ -1,6 +1,6 @@
 import { exampleRouter } from "~/server/api/routers/example";
 import { createTRPCRouter } from "~/server/api/trpc";
-import { profileRouter } from "./routers/profileRouter";
+import { profileRouter } from "../../module/profile/profileRouter";
 import { eventRouter } from "../../module/events/eventsRouter";
 
 /**
