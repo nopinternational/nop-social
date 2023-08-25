@@ -4,7 +4,9 @@ const NopEvent = z.object(
         id: z.string(),
         name: z.string(),
         title: z.string(),
-        description: z.string()
+        description: z.string(),
+        longDesc: z.string(),
+        when: z.string()
     })
 
 export type NopEvent = z.infer<typeof NopEvent>
@@ -17,7 +19,9 @@ export type ConfirmedUser = {
 export type EventFirestoreModel = {
     name: string,
     title: string,
-    description: string
+    description: string,
+    longDesc: string,
+    when: string
 }
 
 const Cat = z.object({

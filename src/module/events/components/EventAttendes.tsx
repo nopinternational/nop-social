@@ -1,4 +1,8 @@
-const EventAttendes: FC<{ eventid: string }> = ({ eventid }) => {
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import { type FC } from "react"
+import { api } from "~/utils/api"
+
+export const EventAttendes: FC<{ eventid: string }> = ({ eventid }) => {
     const attendes = api.event.getEventAttendes.useQuery(
         { eventId: eventid }
     )

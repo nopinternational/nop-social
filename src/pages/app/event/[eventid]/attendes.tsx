@@ -6,7 +6,7 @@ import SigninButton from "~/components/SigninButton";
 import { useRouter } from 'next/router'
 import { api } from "~/utils/api";
 import Link from "next/link";
-import EventAttendes from "~/module/events/components/EventAttendes"
+import {EventAttendes} from "~/module/events/components/EventAttendes"
 
 
 const Home: NextPage = () => {

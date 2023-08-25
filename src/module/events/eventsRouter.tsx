@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../../server/api/trpc";
 import { getAllEventsFromFirestore, getEvent, getEventAttendes, signupToEvent } from "~/module/events/eventsFirebase";
-import { type  NopEvent } from "./components/types";
+import { type NopEvent } from "./components/types";
 
 export const eventRouter = createTRPCRouter({
     getAllEvents:
@@ -12,7 +12,6 @@ export const eventRouter = createTRPCRouter({
     getEvent:
         protectedProcedure
             .input(z.object({ eventId: z.string() }))
-            .output(NopEvent)
             .query(async ({ input }) => {
                 return await getEvent(input.eventId)
             }),
