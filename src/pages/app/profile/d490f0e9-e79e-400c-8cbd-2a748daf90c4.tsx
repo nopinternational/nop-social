@@ -30,7 +30,8 @@ const Home: NextPage = () => {
 
 
   const renderProfile = (profile: Profile) => {
-    const profileSlug = `profile/${profile.username}`
+    // const profileSlug = `profile/${profile.username}`
+    const profileSlug = `${profile.username}`
     return (
       <div key={profile.username} className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
         <Link href={profileSlug}>
