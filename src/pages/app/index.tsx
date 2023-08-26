@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import HighlightText from "~/components/HighlightText";
-import SigninButton from "~/components/SigninButton";
+import Footer from "~/components/Footer";
 
 
 const Home: NextPage = () => {
@@ -54,7 +54,7 @@ const Home: NextPage = () => {
             </div>
           </div>
           <div className="flex flex-col items-center gap-2">
-            <SigninButton />
+            <Footer />
           </div>
         </div>
       </main>

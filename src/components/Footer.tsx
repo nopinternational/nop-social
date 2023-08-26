@@ -24,7 +24,7 @@ const BUTTONS: CTA_Button[] = [
     },
 ]
 
-const SigninButton: React.FC = () => {
+const Footer: React.FC = () => {
     const { data: sessionData } = useSession();
 
     const renderNotLoggedIn = () => {
@@ -79,4 +79,4 @@ const SigninButton: React.FC = () => {
     );
 };
 
-export default SigninButton
+export default Footer

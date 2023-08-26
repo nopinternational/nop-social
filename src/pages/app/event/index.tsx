@@ -3,7 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { api } from "~/utils/api";
 import HighlightText from "~/components/HighlightText";
-import SigninButton from "~/components/SigninButton";
+import Footer from "~/components/Footer";
 import { type NopEvent } from "~/module/events/components/types"
 
 const Home: NextPage = () => {
@@ -90,7 +90,7 @@ const Home: NextPage = () => {
             {events.data && events.data.length == 0 ? renderNoEvents() : null}
           </div>
           <div className="flex flex-col items-center gap-2">
-            <SigninButton />
+            <Footer />
           </div>
         </div>
       </main>

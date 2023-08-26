@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation'
 import Head from "next/head";
 import { useSession } from "next-auth/react";
 import HighlightText from "~/components/HighlightText";
-import SigninButton from "~/components/SigninButton";
+import Footer from "~/components/Footer";
 import { api } from "~/utils/api";
 import { type Profile } from "~/module/profile/profileRouter";
 import Link from "next/link";
@@ -146,7 +146,7 @@ const Home: NextPage = () => {
             </button>
           </Link>
           <div className="flex flex-col items-center gap-2">
-            <SigninButton />
+            <Footer />
           </div>
         </div>
       </main>
