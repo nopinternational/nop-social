@@ -4,7 +4,30 @@ export const EventMessages = () => {
 
     const a_message: EventMessageProps = {
         "profileName": "sthlmpar08",
-        "message": "Vi är så glada att få träffa alla igen"
+        "message": "Vi är så glada att få träffa alla igen\n\nHurra!"
+    }
+    const messages = [a_message, a_message, a_message]
+
+    const trpc_message_object = {
+        loading: false,
+        data: []
+    }
+    const renderMessages = (trpc_message_object) => {
+
+        if (trpc_message_object.loading) {
+            return "messages are loading..."
+        }
+
+        if (trpc_message_object.data) {
+            if (trpc_message_object.data.length == 0) {
+                return (
+                    <div className="text-lg italic whitespace-pre-wrap p-2 bg-white/10 rounded-md">
+                        inga meddelande har skrivits ännu, ni kan bli dom första
+                    </div>
+                )
+            }
+            return trpc_message_object.data.map((eventMessage) => <Message key={eventMessage.message} messageObject={eventMessage}></Message>)
+        }
     }
 
     return (
@@ -29,20 +52,7 @@ export const EventMessages = () => {
                             </button>
                         </div>
                     </div>
-
-                    <Message messageObject={a_message}></Message>
-                    <div>
-                        <div><HighlightText>sthlmpar08</HighlightText> säger:</div>
-                        <div className="text-lg whitespace-pre-wrap p-2 bg-white/10 rounded-md">
-                            Vi har så mycket kul att berätta om sommmarens äventyr
-                        </div>
-                    </div>
-                    <div>
-                        <div><HighlightText>foppi76</HighlightText> säger:</div>
-                        <div className="text-lg whitespace-pre-wrap p-2 bg-white/10 rounded-md">
-                            Äntligen är ni igång gång, längtar! Har ni haft det bra i sommar?
-                        </div>
-                    </div>
+                    {renderMessages(trpc_message_object)}
 
 
 
