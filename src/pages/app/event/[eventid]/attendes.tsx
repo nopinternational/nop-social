@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import { api } from "~/utils/api";
 import Link from "next/link";
 import { EventAttendes } from "~/module/events/components/EventAttendes"
+import { EventMessages } from "~/module/events/components/EventMessages";
 
 
 const Home: NextPage = () => {
@@ -60,6 +61,7 @@ const Home: NextPage = () => {
                             </div>
                         </div>
                     </div>
+                    <EventMessages></EventMessages>
 
                     <div className="flex flex-col items-center justify-center gap-4">
                         <div className="flex flex-wrap justify-center justify-self-center">
