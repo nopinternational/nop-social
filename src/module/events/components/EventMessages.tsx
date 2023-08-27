@@ -10,12 +10,28 @@ export const EventMessages = () => {
 
     const trpc_message_object = {
         loading: false,
-        data: []
+        data: messages
     }
     const renderMessages = (trpc_message_object) => {
 
         if (trpc_message_object.loading) {
-            return "messages are loading..."
+            return (
+                <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white">
+                    <h3 className="text-2xl font-bold"><HighlightText>Laddar meddelenden...</HighlightText></h3>
+
+
+                    <div className="h-12 w-12 mb-4">
+                        <div className="flex">
+                            <div className="relative">
+                                <div className="w-12 h-12 rounded-full absolute
+                            border-8 border-solid border-gray-200"></div>
+                                <div className="w-12 h-12 rounded-full animate-spin absolute
+                            border-8 border-solid border-[hsl(280,100%,70%)] border-t-transparent shadow-md"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )
         }
 
         if (trpc_message_object.data) {
