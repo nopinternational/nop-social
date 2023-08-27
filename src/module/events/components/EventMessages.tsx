@@ -2,6 +2,11 @@
 import HighlightText from "~/components/HighlightText";
 export const EventMessages = () => {
 
+    const a_message: EventMessageProps = {
+        "profileName": "sthlmpar08",
+        "message": "Vi är så glada att få träffa alla igen"
+    }
+
     return (
         <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
             <div className="col-span-2">
@@ -24,6 +29,8 @@ export const EventMessages = () => {
                             </button>
                         </div>
                     </div>
+
+                    <Message messageObject={a_message}></Message>
                     <div>
                         <div><HighlightText>sthlmpar08</HighlightText> säger:</div>
                         <div className="text-lg whitespace-pre-wrap p-2 bg-white/10 rounded-md">
@@ -36,12 +43,7 @@ export const EventMessages = () => {
                             Äntligen är ni igång gång, längtar! Har ni haft det bra i sommar?
                         </div>
                     </div>
-                    <div>
-                        <div><HighlightText>sthlmpar08</HighlightText> säger:</div>
-                        <div className="text-lg whitespace-pre-wrap p-2 bg-white/10 rounded-md">
-                            Vi är så glada att få träffa alla igen
-                        </div>
-                    </div>
+
 
 
 
@@ -49,5 +51,23 @@ export const EventMessages = () => {
             </div>
         </div>
 
+    )
+}
+
+interface EventMessageProps {
+    profileName: string,
+    message: string
+}
+
+
+const Message = ({ messageObject }: { messageObject: EventMessageProps }) => {
+    console.log("Message.messageObject", messageObject)
+    return (
+        <div>
+            <div><HighlightText>{messageObject.profileName}</HighlightText> säger:</div>
+            <div className="text-lg whitespace-pre-wrap p-2 bg-white/10 rounded-md">
+                {messageObject.message}
+            </div>
+        </div>
     )
 }
