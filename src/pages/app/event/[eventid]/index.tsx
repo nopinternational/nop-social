@@ -7,9 +7,8 @@ import { useRouter } from 'next/router'
 import { api } from "~/utils/api";
 import Link from "next/link";
 import { useState } from "react";
-import Image from 'next/image'
-import swishPic from './swish.png'
 import EventDescription from "~/module/events/components/EventDescription"
+import { SwishQR } from "~/components/SwishQR/SwishQR"
 
 
 const Home: NextPage = () => {
@@ -43,23 +42,20 @@ const Home: NextPage = () => {
                     >
                         <h3 className="text-2xl font-bold"><HighlightText>Välkommen på Cocktailträff 🎉🍸🍾</HighlightText></h3>
                         <div className="text-lg whitespace-pre-wrap">
-                            Kostnaden för träffen är 100:- som ni swishar till 0700066099, märk er betalning med era namn (XX & YY)
+                            Kostnaden för träffen är 100:- som ni swishar till 0700066099, märk er betalning med era namn (ex Jonas & Malin).
                             Eller så öppnar ni upp er swish app och skannar QR koden nedan.
                         </div>
                         <div>
-                            <Image
-                                className="m-auto"
-                                src={swishPic}
-                                alt="Swish QR för träffen"
-                                width={400}
-                                height={400}
-                            // blurDataURL="data:..." automatically provided
-                            // placeholder="blur" // Optional blur-up while loading
-                            />
+                            <SwishQR />
                         </div>
                         <div className="text-lg whitespace-pre-wrap">
-                            Efter betalningen så kommer vi lägga till er till träffen och ni kan då få se vilka andra som har anmält sig. Vi kommer att skicka ut mer info om träffen några dagar innan.
+                            Efter betalningen så kommer vi lägga till er till träffen och ni kan då se vilka andra som har anmält sig.
                         </div>
+
+                        <div className="text-lg whitespace-pre-wrap">
+                            Vi kommer att maila ut mer info några dagar innan träffen. Då berättar vi vilket ställe vi ska ses på. Håll utkik i er mailkorg.
+                        </div>
+
                     </div>
                 </div>
             </div>)
@@ -89,7 +85,7 @@ const Home: NextPage = () => {
                         Träff med <HighlightText>Night of Passion</HighlightText>
                     </h1>
 
-                    <EventDescription event={e}/>
+                    <EventDescription event={e} />
                     <div className="flex flex-col items-center justify-center gap-4">
                         <div className="flex flex-wrap justify-center justify-self-center">
                             <div className="p-2" >
