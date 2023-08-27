@@ -8,7 +8,7 @@ import {
     getDocs,
     setDoc
 } from "firebase/firestore";
-import { type NopEvent, type ConfirmedUser, type EventFirestoreModel } from "./components/types"
+import { type NopEvent, type ConfirmedUser, type EventFirestoreModel, type EventMessage } from "./components/types"
 
 export const getAllEventsFromFirestore = async (): Promise<NopEvent[]> => {
     const querySnapshot = await getDocs(collection(firestoreFoo, "events").withConverter(eventConverter));
@@ -53,6 +53,30 @@ export const getEventAttendes = async (eventid: string) => {
     }
     return []
 }
+
+export const getEventMessages = async (eventid: string) => {
+    //events / REdvBu1tM2iI5GHEur8F / signups / attendes
+    const docRef = doc(firestoreFoo, "events", eventid, "signups", "attendes");
+    //console.log("docRef", docRef.path)
+    try {
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            const data = docSnap.data()
+            //console.log("getEventAttendes ->data:", data)
+            //console.log("getEventAttendes ->data.confirmed:", data.confirmed)
+            return data.wallmessages as EventMessage[]
+        } else {
+            // docSnap.data() will be undefined in this case
+            console.log("No such document!", eventid);
+        }
+    } catch (err) {
+        console.error("err", err)
+
+    }
+    return []
+}
+
+
 
 export const signupToEvent = async (userid: string, eventId: string) => {
     //console.log("signupToEvent", userid, eventId)

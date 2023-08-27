@@ -24,6 +24,15 @@ export type EventFirestoreModel = {
     when: string
 }
 
+export interface EventMessage {
+    from: {
+        uid: string,
+        username: string
+    }
+    message: string,
+    when: string
+}
+
 const Cat = z.object({
     id: z.number(),
     name: z.string(),

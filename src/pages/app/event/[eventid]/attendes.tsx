@@ -61,7 +61,7 @@ const Home: NextPage = () => {
                             </div>
                         </div>
                     </div>
-                    <EventMessages></EventMessages>
+                    <EventMessages eventid={eventid as string}></EventMessages>
 
                     <div className="flex flex-col items-center justify-center gap-4">
                         <div className="flex flex-wrap justify-center justify-self-center">

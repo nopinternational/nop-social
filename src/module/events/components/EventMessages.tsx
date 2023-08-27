@@ -1,18 +1,25 @@
 
 import HighlightText from "~/components/HighlightText";
-export const EventMessages = () => {
+import { EventMessage } from "./types";
+import { api } from "~/utils/api";
 
-    const a_message: EventMessageProps = {
-        "profileName": "sthlmpar08",
-        "message": "Vi är så glada att få träffa alla igen\n\nHurra!"
-    }
-    const messages = [a_message, a_message, a_message]
 
-    const trpc_message_object = {
-        loading: false,
-        data: messages
-    }
+export const EventMessages = ({ eventid }) => {
+    console.log("EventMessages.eventid:", eventid)
+    const trpc_message_object = api.event.getEventMessages.useQuery(
+        { eventId: eventid }
+    )
+
+    // const messages = [a_message, a_message, a_message]
+
+    // const trpc_message_object = {
+    //     loading: false,
+    //     data: messages
+    // }
     const renderMessages = (trpc_message_object) => {
+        console.log("renderMessages -> isloading", trpc_message_object.isLoading)
+        console.log("renderMessages -> data", trpc_message_object.data)
+        console.log("renderMessages", trpc_message_object)
 
         if (trpc_message_object.loading) {
             return (
@@ -80,17 +87,14 @@ export const EventMessages = () => {
     )
 }
 
-interface EventMessageProps {
-    profileName: string,
-    message: string
-}
 
 
-const Message = ({ messageObject }: { messageObject: EventMessageProps }) => {
+
+const Message = ({ messageObject }: { messageObject: EventMessage }) => {
     console.log("Message.messageObject", messageObject)
     return (
         <div>
-            <div><HighlightText>{messageObject.profileName}</HighlightText> säger:</div>
+            <div><HighlightText>{messageObject.from.username}</HighlightText> säger:</div>
             <div className="text-lg whitespace-pre-wrap p-2 bg-white/10 rounded-md">
                 {messageObject.message}
             </div>
