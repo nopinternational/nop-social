@@ -10,6 +10,8 @@ import Link from "next/link";
 import { type FC, useState } from "react";
 import { type Person } from "~/module/profile/profileRouter";
 import { type PartialProfile } from "~/module/profile/firebaseProfiles";
+import TextEditForm from "~/components/TextEditForm";
+
 
 
 const Home: NextPage = () => {
@@ -174,7 +176,7 @@ const Home: NextPage = () => {
               < div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
                 <h3 className="text-2xl font-bold" >Ändra <HighlightText>beskrivning</HighlightText> <button onClick={(event) => closePanel3(event)} >→</button></h3>
                 <div className="text-lg">
-                  {editPanel3 ? <DescriptionEditForm description={p.description} onsubmitHandler={persistDescription} /> : <p>Klicka för att ändra er beskrivning</p>}
+                  {editPanel3 ? <TextEditForm description={p.description} onsubmitHandler={persistDescription} /> : <p>Klicka för att ändra er beskrivning</p>}
                 </div>
               </div>
             </div >
@@ -199,35 +201,6 @@ const Home: NextPage = () => {
 
 export default Home;
 
-const DescriptionEditForm: FC<{ description: string, onsubmitHandler: (description: { description: string }) => void }> = ({ description, onsubmitHandler }) => {
-
-  const [desc, setdescription] = useState(description);
-
-
-  const onChange = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    e.preventDefault()
-
-    //console.log("PersonEditForm.onChange.description", desc)
-    onsubmitHandler({ description: desc })
-    //this.setState({ text: e.currentTarget.value });
-  };
-  return (
-    <form className="p-2" >
-      <div className="m-2">Beskrivning</div>
-      <textarea
-        className="w-full px-3 py-3 rounded-lg text-black "
-        name="name"
-        value={desc}
-        onChange={event => setdescription(event.target.value)}
-        rows={4}
-      ></textarea><br />
-
-      <button
-        className="mt-4 mb-3 rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-        onClick={(event: React.MouseEvent<HTMLButtonElement>) => onChange(event)}>Ändra</button>
-    </form>
-  )
-}
 
 
 
