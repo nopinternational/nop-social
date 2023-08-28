@@ -1,7 +1,14 @@
-import { type FC, useState } from "react";
+import {
+    type FC,
+    type Component,
+    type ReactNode,
+    useState,
+} from "react";
 
 export interface TextEditFormOptions {
     buttontext?: string
+    headingText?: string | ReactNode
+    emptyOnSubmit?: boolean
 }
 
 const TextEditForm: FC<{ description?: string, onsubmitHandler?: (description: { description: string }) => void, options?: TextEditFormOptions }> = ({ description, onsubmitHandler, options }) => {
@@ -13,14 +20,24 @@ const TextEditForm: FC<{ description?: string, onsubmitHandler?: (description: {
 
     const onChange = (e: React.MouseEvent<HTMLButtonElement>): void => {
         e.preventDefault()
-
-
         onsubmitHandler && onsubmitHandler({ description: desc })
-
+        if (options?.emptyOnSubmit)
+            setdescription(() => "")
     };
+
+
+    function renderHeading(headingText: string | ReactNode | undefined): ReactNode {
+        if (!headingText)
+            return null;
+
+        return <div className="m-2">{headingText}</div>
+
+    }
+
     return (
         <form className="p-2" >
-            <div className="m-2">Beskrivning</div>
+            {renderHeading(options?.headingText)}
+
             <textarea
                 className="w-full px-3 py-3 rounded-lg text-black "
                 name="name"

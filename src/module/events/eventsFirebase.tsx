@@ -97,7 +97,7 @@ export const postEventMessage = async (eventId: string, message: string, from: s
         when: new Date().getUTCDate()
     }
     await updateDoc(docRef, {
-        wallmessage: arrayUnion(wallmessage)
+        wallmessages: arrayUnion(wallmessage)
     });
 }
 
