@@ -1,6 +1,13 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../../server/api/trpc";
-import { getAllEventsFromFirestore, getEvent, getEventAttendes, getEventMessages, signupToEvent } from "~/module/events/eventsFirebase";
+import {
+    getAllEventsFromFirestore,
+    getEvent,
+    getEventAttendes,
+    getEventMessages,
+    signupToEvent,
+    postEventMessage as postEventMessageFirebase
+} from "~/module/events/eventsFirebase";
 import { type NopEvent } from "./components/types";
 
 export const eventRouter = createTRPCRouter({
@@ -36,6 +43,19 @@ export const eventRouter = createTRPCRouter({
             .query(({ input }) => {
                 // console.log("------------getEventAttendes.input", input)
                 return getEventMessages(input.eventId)
+            }),
+
+    postEventMessage:
+        protectedProcedure
+            .input(z.object({
+                eventId: z.string(),
+                wallmessage: z.string(),
+                from: z.string()
+            }),
+            )
+            .mutation(({ input, ctx }) => {
+                console.log("------------postEventMessage.input", input)
+                return postEventMessageFirebase(input.eventId, input.wallmessage, input.from)
             }),
 
 

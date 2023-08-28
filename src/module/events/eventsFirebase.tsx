@@ -6,7 +6,9 @@ import {
     doc,
     getDoc,
     getDocs,
-    setDoc
+    setDoc,
+    updateDoc,
+    arrayUnion
 } from "firebase/firestore";
 import { type NopEvent, type ConfirmedUser, type EventFirestoreModel, type EventMessage } from "./components/types"
 
@@ -83,6 +85,21 @@ export const signupToEvent = async (userid: string, eventId: string) => {
     await setDoc(doc(firestoreFoo, "events", eventId, "participants", userid), { when: new Date().toISOString() },)
 }
 
+export const postEventMessage = async (eventId: string, message: string, from: string) => {
+    console.log("firebase.postEventMessage", eventId, message, from)
+    const docRef = doc(firestoreFoo, "events", eventId, "signups", "attendes");
+    const wallmessage = {
+        from: {
+            username: from,
+            uid: from
+        },
+        message: message,
+        when: new Date().getUTCDate()
+    }
+    await updateDoc(docRef, {
+        wallmessage: arrayUnion(wallmessage)
+    });
+}
 
 const eventConverter = {
     toFirestore: (event: NopEvent): EventFirestoreModel => {

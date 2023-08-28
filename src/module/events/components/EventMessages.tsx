@@ -7,9 +7,18 @@ import TextEditForm, { TextEditFormOptions } from "~/components/TextEditForm";
 
 export const EventMessages = ({ eventid }) => {
     console.log("EventMessages.eventid:", eventid)
+
     const trpc_message_object = api.event.getEventMessages.useQuery(
         { eventId: eventid }
     )
+    const { mutate: postEventMessage } = api.event.postEventMessage.useMutation()
+
+
+    const postMessageHandler = (e) => {
+        console.log("EventMessages.postMessageHandler->e", e)
+
+        postEventMessage({ eventId: eventid, wallmessage: e.description, from: "this is from Heavy" })
+    }
 
     // const messages = [a_message, a_message, a_message]
 
@@ -53,7 +62,7 @@ export const EventMessages = ({ eventid }) => {
             return trpc_message_object.data.map((eventMessage) => <Message key={eventMessage.message} messageObject={eventMessage}></Message>)
         }
     }
-    const textEditFormOptions: TextEditFormOptions= { buttontext: "skicka" }
+    const textEditFormOptions: TextEditFormOptions = { buttontext: "skicka" }
 
     return (
         <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
@@ -71,19 +80,19 @@ export const EventMessages = ({ eventid }) => {
                     <div>
                         <div><HighlightText>Skicka ett eget meddelande:</HighlightText></div>
                         <div>
-                            <TextEditForm description="desxcrop" options={textEditFormOptions}></TextEditForm>
+                            <TextEditForm onsubmitHandler={postMessageHandler} description="desxcrop" options={textEditFormOptions}></TextEditForm>
+                        </div>
+                    </div>
+                    <div className="text-black text-lg whitespace-pre-wrap p-2 bg-white/10 rounded-md">
+                        <input placeholder="lämna ert medelenade här"></input>
+                        <button className="rounded-full bg-white/10 bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-[hsl(280,100%,70%)]">
+                            Skicka
+                        </button>
                     </div>
                 </div>
-                <div className="text-black text-lg whitespace-pre-wrap p-2 bg-white/10 rounded-md">
-                    <input placeholder="lämna ert medelenade här"></input>
-                    <button className="rounded-full bg-white/10 bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-[hsl(280,100%,70%)]">
-                        Skicka
-                    </button>
-                </div>
-            </div>
-            {renderMessages(trpc_message_object)}
+                {renderMessages(trpc_message_object)}
 
-        </div>
+            </div>
         </div >
 
     )
