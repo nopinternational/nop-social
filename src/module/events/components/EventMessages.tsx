@@ -29,8 +29,10 @@ export const EventMessages = ({ eventid }: { eventid: string }) => {
 
     const postMessageHandler = (e: { description: string }) => {
         console.log("EventMessages.postMessageHandler->e", e)
-        const eventMessage: PostEventMessage = { eventId: eventid, wallmessage: e.description, from: "this is from Heavy" }
-        postEventMessage(eventMessage)
+        if (e.description && e.description.length > 0) {
+            const eventMessage: PostEventMessage = { eventId: eventid, wallmessage: e.description, from: "this is from Heavy" }
+            postEventMessage(eventMessage)
+        }
     }
 
     // const messages = [a_message, a_message, a_message]

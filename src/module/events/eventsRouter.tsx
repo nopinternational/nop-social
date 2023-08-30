@@ -51,8 +51,12 @@ export const eventRouter = createTRPCRouter({
         protectedProcedure
             .input(postEventMessage)
             .mutation(({ input, ctx }) => {
-                console.log("------------postEventMessage.input", input)
-                return postEventMessageFirebase(input.eventId, input.wallmessage, input.from)
+                //console.log("------------postEventMessage.input", input)
+                // console.log("ctx", ctx)
+                // console.log("ctx.session", ctx.session)
+                // console.log("ctx.session.user.", ctx.session.user)
+                // console.log("ctx.session.user.name", ctx.session.user.name)
+                return postEventMessageFirebase(input.eventId, input.wallmessage, ctx.session.user.name)
             }),
 
 
