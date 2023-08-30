@@ -14,10 +14,10 @@ export const EventMessages = ({ eventid }) => {
     const { mutate: postEventMessage } = api.event.postEventMessage.useMutation()
 
 
-    const postMessageHandler = (e) => {
+    const postMessageHandler = (e: { description: string }) => {
         console.log("EventMessages.postMessageHandler->e", e)
 
-        postEventMessage({ eventId: eventid, wallmessage: e.description, from: "this is from Heavy" })
+        postEventMessage({ eventId: eventid as string, wallmessage: e.description, from: "this is from Heavy" })
     }
 
     // const messages = [a_message, a_message, a_message]
@@ -84,7 +84,7 @@ export const EventMessages = ({ eventid }) => {
                     <div>
                         <div></div>
                         <div>
-                            <TextEditForm onsubmitHandler={postMessageHandler} description="desxcrop" options={textEditFormOptions}></TextEditForm>
+                            <TextEditForm onsubmitHandler={postMessageHandler} placeholder="" options={textEditFormOptions}></TextEditForm>
                         </div>
                     </div>
 
