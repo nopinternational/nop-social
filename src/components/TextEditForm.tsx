@@ -11,7 +11,7 @@ export interface TextEditFormOptions {
     emptyOnSubmit?: boolean
 }
 
-const TextEditForm: FC<{ placeholder?: string, onsubmitHandler?: (description: { description: string }) => void, options?: TextEditFormOptions }> = ({ placeholder, onsubmitHandler, options }) => {
+export const TextEditForm: FC<{ placeholder?: string, onsubmitHandler?: (description: { description: string }) => void, options?: TextEditFormOptions }> = ({ placeholder, onsubmitHandler, options }) => {
     console.log("TextEditForm.options:", options)
     const [desc, setdescription] = useState<string>("");
 
@@ -54,4 +54,3 @@ const TextEditForm: FC<{ placeholder?: string, onsubmitHandler?: (description: {
     )
 }
 
-export default TextEditForm

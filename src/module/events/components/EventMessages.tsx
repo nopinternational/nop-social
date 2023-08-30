@@ -1,11 +1,12 @@
 
 import HighlightText from "~/components/HighlightText";
-import { EventMessage } from "./types";
+import { type EventMessage } from "./types";
 import { api } from "~/utils/api";
-import TextEditForm, { TextEditFormOptions } from "~/components/TextEditForm";
+import { TextEditForm, type TextEditFormOptions } from "~/components/TextEditForm";
+import { type UseTRPCQueryResult } from "@trpc/react-query/shared";
 
 
-export const EventMessages = ({ eventid }) => {
+export const EventMessages = ({ eventid }: { eventid: string }) => {
     console.log("EventMessages.eventid:", eventid)
 
     const trpc_message_object = api.event.getEventMessages.useQuery(
@@ -17,7 +18,7 @@ export const EventMessages = ({ eventid }) => {
     const postMessageHandler = (e: { description: string }) => {
         console.log("EventMessages.postMessageHandler->e", e)
 
-        postEventMessage({ eventId: eventid as string, wallmessage: e.description, from: "this is from Heavy" })
+        postEventMessage({ eventId: eventid, wallmessage: e.description, from: "this is from Heavy" })
     }
 
     // const messages = [a_message, a_message, a_message]
@@ -26,12 +27,12 @@ export const EventMessages = ({ eventid }) => {
     //     loading: false,
     //     data: messages
     // }
-    const renderMessages = (trpc_message_object) => {
+    const renderMessages = (trpc_message_object: UseTRPCQueryResult<EventMessage[], unknown>) => {
         console.log("renderMessages -> isloading", trpc_message_object.isLoading)
         console.log("renderMessages -> data", trpc_message_object.data)
         console.log("renderMessages", trpc_message_object)
 
-        if (trpc_message_object.loading) {
+        if (trpc_message_object.isLoading) {
             return (
                 <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white">
                     <h3 className="text-2xl font-bold"><HighlightText>Laddar meddelenden...</HighlightText></h3>
