@@ -1,6 +1,5 @@
 import {
     type FC,
-    type Component,
     type ReactNode,
     useState,
 } from "react";
@@ -11,8 +10,8 @@ export interface TextEditFormOptions {
     emptyOnSubmit?: boolean
 }
 
-export const TextEditForm: FC<{ placeholder?: string, onsubmitHandler?: (description: { description: string }) => void, options?: TextEditFormOptions }> = ({ placeholder, onsubmitHandler, options }) => {
-    const [desc, setdescription] = useState<string>("");
+export const TextEditForm: FC<{ placeholder?: string, value?: string, onsubmitHandler?: (description: { description: string }) => void, options?: TextEditFormOptions }> = ({ placeholder, value, onsubmitHandler, options }) => {
+    const [desc, setdescription] = useState<string>(value || "");
 
     const btText = options?.buttontext || "Ändra"
 

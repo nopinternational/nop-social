@@ -10,7 +10,7 @@ import Link from "next/link";
 import { type FC, useState } from "react";
 import { type Person } from "~/module/profile/profileRouter";
 import { type PartialProfile } from "~/module/profile/firebaseProfiles";
-import TextEditForm, { TextEditFormOptions } from "~/components/TextEditForm";
+import { TextEditForm, type TextEditFormOptions } from "~/components/TextEditForm";
 
 
 
@@ -182,7 +182,7 @@ const Home: NextPage = () => {
               < div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
                 <h3 className="text-2xl font-bold" >Ändra <HighlightText>beskrivning</HighlightText> <button onClick={(event) => closePanel3(event)} >→</button></h3>
                 <div className="text-lg">
-                  {editPanel3 ? <TextEditForm options={textEditFormOptions} description={p.description} onsubmitHandler={persistDescription} /> : <p>Klicka för att ändra er beskrivning</p>}
+                  {editPanel3 ? <TextEditForm options={textEditFormOptions} value={p.description} onsubmitHandler={persistDescription} /> : <p>Klicka för att ändra er beskrivning</p>}
                 </div>
               </div>
             </div >

@@ -56,7 +56,7 @@ export const eventRouter = createTRPCRouter({
                 // console.log("ctx.session", ctx.session)
                 // console.log("ctx.session.user.", ctx.session.user)
                 // console.log("ctx.session.user.name", ctx.session.user.name)
-                return postEventMessageFirebase(input.eventId, input.wallmessage, ctx.session.user.name)
+                return postEventMessageFirebase(input.eventId, input.wallmessage, ctx.session.user.name as string)
             }),
 
 
