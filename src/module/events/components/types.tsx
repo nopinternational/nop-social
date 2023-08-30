@@ -1,5 +1,5 @@
 import { z } from "zod";
-const NopEvent = z.object(
+const nopEvent = z.object(
     {
         id: z.string(),
         name: z.string(),
@@ -9,7 +9,7 @@ const NopEvent = z.object(
         when: z.string()
     })
 
-export type NopEvent = z.infer<typeof NopEvent>
+export type NopEvent = z.infer<typeof nopEvent>
 
 export type ConfirmedUser = {
     name: string,
@@ -30,6 +30,14 @@ export interface EventMessage {
         username: string
     }
     message: string,
-    when: string
+    when: number
 }
+
+export const postEventMessage = z.object({
+    eventId: z.string(),
+    wallmessage: z.string(),
+    from: z.string()
+})
+
+export type PostEventMessage = z.infer<typeof postEventMessage>
 

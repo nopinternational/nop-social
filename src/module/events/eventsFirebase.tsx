@@ -66,7 +66,7 @@ export const getEventMessages = async (eventid: string) => {
             const data = docSnap.data()
             //console.log("getEventAttendes ->data:", data)
             //console.log("getEventAttendes ->data.confirmed:", data.confirmed)
-            return data.wallmessages as EventMessage[]
+            return (data.wallmessages as EventMessage[]).reverse()
         } else {
             // docSnap.data() will be undefined in this case
             console.log("No such document!", eventid);
@@ -88,7 +88,7 @@ export const signupToEvent = async (userid: string, eventId: string) => {
 export const postEventMessage = async (eventId: string, message: string, from: string) => {
     console.log("firebase.postEventMessage", eventId, message, from)
     const docRef = doc(firestoreFoo, "events", eventId, "signups", "attendes");
-    const wallmessage = {
+    const wallmessage: EventMessage = {
         from: {
             username: from,
             uid: from

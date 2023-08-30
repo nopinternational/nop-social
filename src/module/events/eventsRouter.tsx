@@ -8,7 +8,9 @@ import {
     signupToEvent,
     postEventMessage as postEventMessageFirebase
 } from "~/module/events/eventsFirebase";
-import { type NopEvent } from "./components/types";
+import { postEventMessage, type NopEvent } from "./components/types";
+
+
 
 export const eventRouter = createTRPCRouter({
     getAllEvents:
@@ -47,12 +49,7 @@ export const eventRouter = createTRPCRouter({
 
     postEventMessage:
         protectedProcedure
-            .input(z.object({
-                eventId: z.string(),
-                wallmessage: z.string(),
-                from: z.string()
-            }),
-            )
+            .input(postEventMessage)
             .mutation(({ input, ctx }) => {
                 console.log("------------postEventMessage.input", input)
                 return postEventMessageFirebase(input.eventId, input.wallmessage, input.from)

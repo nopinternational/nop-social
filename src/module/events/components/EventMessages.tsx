@@ -1,6 +1,6 @@
 
 import HighlightText from "~/components/HighlightText";
-import { type EventMessage } from "./types";
+import { type EventMessage, type PostEventMessage } from "./types";
 import { api } from "~/utils/api";
 import { TextEditForm, type TextEditFormOptions } from "~/components/TextEditForm";
 import { type UseTRPCQueryResult } from "@trpc/react-query/shared";
@@ -10,16 +10,27 @@ import { type UseTRPCQueryResult } from "@trpc/react-query/shared";
 export const EventMessages = ({ eventid }: { eventid: string }) => {
     console.log("EventMessages.eventid:", eventid)
 
+    const utils = api.useContext();
+
     const trpc_message_object = api.event.getEventMessages.useQuery(
         { eventId: eventid }
     )
-    const { mutate: postEventMessage } = api.event.postEventMessage.useMutation()
+
+    const { mutate: postEventMessage } = api.event.postEventMessage.useMutation(
+        {
+            async onSuccess() {
+                await utils.event.getEventMessages.invalidate()
+            },
+        }
+    )
+
+
 
 
     const postMessageHandler = (e: { description: string }) => {
         console.log("EventMessages.postMessageHandler->e", e)
-
-        postEventMessage({ eventId: eventid, wallmessage: e.description, from: "this is from Heavy" })
+        const eventMessage: PostEventMessage = { eventId: eventid, wallmessage: e.description, from: "this is from Heavy" }
+        postEventMessage(eventMessage)
     }
 
     // const messages = [a_message, a_message, a_message]
@@ -67,7 +78,7 @@ export const EventMessages = ({ eventid }: { eventid: string }) => {
     const textEditFormOptions: TextEditFormOptions = {
         buttontext: "skicka",
         headingText: <HighlightText>Skicka ett eget meddelande:</HighlightText>,
-        emptyOnSubmit: false
+        emptyOnSubmit: true
     }
 
     return (
@@ -103,7 +114,7 @@ export const EventMessages = ({ eventid }: { eventid: string }) => {
 
 
 const Message = ({ messageObject }: { messageObject: EventMessage }) => {
-    console.log("Message.messageObject", messageObject)
+    // console.log("Message.messageObject", messageObject)
     return (
         <div>
             <div><HighlightText>{messageObject.from.username}</HighlightText> säger:</div>
