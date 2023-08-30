@@ -79,7 +79,7 @@ export const EventMessages = ({ eventid }: { eventid: string }) => {
     }
     const textEditFormOptions: TextEditFormOptions = {
         buttontext: "skicka",
-        headingText: <HighlightText>Skicka ett eget meddelande:</HighlightText>,
+        headingText: <>Skicka ett <HighlightText>meddelande:</HighlightText></>,
         emptyOnSubmit: true
     }
 
