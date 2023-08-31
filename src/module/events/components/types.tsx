@@ -31,7 +31,7 @@ export interface EventMessage {
         username: string
     }
     message: string,
-    when: number
+    when: string
 }
 
 export const postEventMessage = z.object({
