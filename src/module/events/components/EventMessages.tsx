@@ -8,7 +8,7 @@ import { type UseTRPCQueryResult } from "@trpc/react-query/shared";
 
 
 export const EventMessages = ({ eventid }: { eventid: string }) => {
-    console.log("EventMessages.eventid:", eventid)
+    //console.log("EventMessages.eventid:", eventid)
 
     const utils = api.useContext();
 
@@ -28,7 +28,7 @@ export const EventMessages = ({ eventid }: { eventid: string }) => {
 
 
     const postMessageHandler = (e: { description: string }) => {
-        console.log("EventMessages.postMessageHandler->e", e)
+        //console.log("EventMessages.postMessageHandler->e", e)
         if (e.description && e.description.length > 0) {
             const eventMessage: PostEventMessage = { eventId: eventid, wallmessage: e.description, from: "this is from Heavy" }
             postEventMessage(eventMessage)
@@ -42,9 +42,9 @@ export const EventMessages = ({ eventid }: { eventid: string }) => {
     //     data: messages
     // }
     const renderMessages = (trpc_message_object: UseTRPCQueryResult<EventMessage[], unknown>) => {
-        console.log("renderMessages -> isloading", trpc_message_object.isLoading)
-        console.log("renderMessages -> data", trpc_message_object.data)
-        console.log("renderMessages", trpc_message_object)
+        // console.log("renderMessages -> isloading", trpc_message_object.isLoading)
+        // console.log("renderMessages -> data", trpc_message_object.data)
+        // console.log("renderMessages", trpc_message_object)
 
         if (trpc_message_object.isLoading) {
             return (

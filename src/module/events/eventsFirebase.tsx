@@ -86,7 +86,7 @@ export const signupToEvent = async (userid: string, eventId: string) => {
 }
 
 export const postEventMessage = async (eventId: string, message: string, from: string) => {
-    console.log("firebase.postEventMessage", eventId, message, from)
+    //console.log("firebase.postEventMessage", eventId, message, from)
     const docRef = doc(firestoreFoo, "events", eventId, "signups", "attendes");
     const wallmessage: EventMessage = {
         from: {

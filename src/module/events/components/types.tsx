@@ -14,6 +14,7 @@ export type NopEvent = z.infer<typeof nopEvent>
 export type ConfirmedUser = {
     name: string,
     id: string
+    username?: string
 }
 
 export type EventFirestoreModel = {
