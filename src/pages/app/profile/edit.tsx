@@ -21,13 +21,8 @@ const Home: NextPage = () => {
   const [editPanel3, setEditPanel3] = useState(false)
 
   const trpcCtx = api.useContext()
-  //const hello = api.example.hello.useQuery({ text: "from tRPC" });
-
+  
   const { data: sessionData } = useSession();
-  // const sess = useSession();
-  // console.log("profile.edit.session", sess)
-  // console.log("profile.edit.session.data", sessionData)
-
 
   const profile = api.profile.getMyProfile.useQuery(
     undefined,
@@ -38,22 +33,7 @@ const Home: NextPage = () => {
 
   const pid = profile.data?.username || '';
 
-
   const YEAR = new Date().getFullYear()
-
-  // if (profileQuery.isLoading) {
-  //   return <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">Loading...</div>
-  // }
-
-  // if (!profileQuery.data) {
-  //   return <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">Loading...</div>
-  // }
-
-  const toggleEditpanel = () => {
-    //console.log("toggleEditpanel, current: ", editPanel1)
-    setEditPanel1(!editPanel1)
-    return true
-  }
 
   const closePanel1 = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation()
@@ -67,8 +47,6 @@ const Home: NextPage = () => {
     event.stopPropagation()
     setEditPanel3(false)
   }
-
-
 
   const renderLoading = (profileid: string) => {
     return (
