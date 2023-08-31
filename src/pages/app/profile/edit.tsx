@@ -10,6 +10,8 @@ import Link from "next/link";
 import { type FC, useState } from "react";
 import { type Person } from "~/module/profile/profileRouter";
 import { type PartialProfile } from "~/module/profile/firebaseProfiles";
+import { TextEditForm, type TextEditFormOptions } from "~/components/TextEditForm";
+
 
 
 const Home: NextPage = () => {
@@ -19,13 +21,8 @@ const Home: NextPage = () => {
   const [editPanel3, setEditPanel3] = useState(false)
 
   const trpcCtx = api.useContext()
-  //const hello = api.example.hello.useQuery({ text: "from tRPC" });
-
+  
   const { data: sessionData } = useSession();
-  // const sess = useSession();
-  // console.log("profile.edit.session", sess)
-  // console.log("profile.edit.session.data", sessionData)
-
 
   const profile = api.profile.getMyProfile.useQuery(
     undefined,
@@ -36,22 +33,7 @@ const Home: NextPage = () => {
 
   const pid = profile.data?.username || '';
 
-
   const YEAR = new Date().getFullYear()
-
-  // if (profileQuery.isLoading) {
-  //   return <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">Loading...</div>
-  // }
-
-  // if (!profileQuery.data) {
-  //   return <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">Loading...</div>
-  // }
-
-  const toggleEditpanel = () => {
-    //console.log("toggleEditpanel, current: ", editPanel1)
-    setEditPanel1(!editPanel1)
-    return true
-  }
 
   const closePanel1 = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation()
@@ -65,8 +47,6 @@ const Home: NextPage = () => {
     event.stopPropagation()
     setEditPanel3(false)
   }
-
-
 
   const renderLoading = (profileid: string) => {
     return (
@@ -131,6 +111,12 @@ const Home: NextPage = () => {
   //console.log("profile.edit.p", p)
   const p1 = p.person1
   const p2 = p.person2
+
+  const textEditFormOptions: TextEditFormOptions = {
+    buttontext: "Ändra",
+    headingText: "Beskrivning"
+  }
+
   return (
     <>
       <Head>
@@ -174,7 +160,7 @@ const Home: NextPage = () => {
               < div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
                 <h3 className="text-2xl font-bold" >Ändra <HighlightText>beskrivning</HighlightText> <button onClick={(event) => closePanel3(event)} >→</button></h3>
                 <div className="text-lg">
-                  {editPanel3 ? <DescriptionEditForm description={p.description} onsubmitHandler={persistDescription} /> : <p>Klicka för att ändra er beskrivning</p>}
+                  {editPanel3 ? <TextEditForm options={textEditFormOptions} value={p.description} onsubmitHandler={persistDescription} /> : <p>Klicka för att ändra er beskrivning</p>}
                 </div>
               </div>
             </div >
@@ -199,35 +185,6 @@ const Home: NextPage = () => {
 
 export default Home;
 
-const DescriptionEditForm: FC<{ description: string, onsubmitHandler: (description: { description: string }) => void }> = ({ description, onsubmitHandler }) => {
-
-  const [desc, setdescription] = useState(description);
-
-
-  const onChange = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    e.preventDefault()
-
-    //console.log("PersonEditForm.onChange.description", desc)
-    onsubmitHandler({ description: desc })
-    //this.setState({ text: e.currentTarget.value });
-  };
-  return (
-    <form className="p-2" >
-      <div className="m-2">Beskrivning</div>
-      <textarea
-        className="w-full px-3 py-3 rounded-lg text-black "
-        name="name"
-        value={desc}
-        onChange={event => setdescription(event.target.value)}
-        rows={4}
-      ></textarea><br />
-
-      <button
-        className="mt-4 mb-3 rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-        onClick={(event: React.MouseEvent<HTMLButtonElement>) => onChange(event)}>Ändra</button>
-    </form>
-  )
-}
 
 
 

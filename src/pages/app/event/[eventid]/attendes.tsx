@@ -13,12 +13,13 @@ import { EventMessages } from "~/module/events/components/EventMessages";
 const Home: NextPage = () => {
     //const hello = api.example.hello.useQuery({ text: "from tRPC" });
     const router = useRouter();
-    const { eventid } = router.query;
+    let { eventid } = router.query;
+    eventid = eventid as string;
     const { data: sessionData } = useSession();
     //console.log("session: ", sessionData)
     //sessionData?.user?.append("name1") = "jw"
 
-    const queryInput = { eventId: eventid as string }
+    const queryInput = { eventId: eventid }
     const event = api.event.getEvent.useQuery(queryInput,
         { enabled: sessionData?.user !== undefined })
 
@@ -56,12 +57,12 @@ const Home: NextPage = () => {
                                     {e.when}
                                 </div>
                                 <div className="text-lg whitespace-pre-wrap">
-                                    <EventAttendes eventid={eventid as string} />
+                                    <EventAttendes eventid={eventid} />
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <EventMessages></EventMessages>
+                    <EventMessages eventid={eventid}></EventMessages>
 
                     <div className="flex flex-col items-center justify-center gap-4">
                         <div className="flex flex-wrap justify-center justify-self-center">

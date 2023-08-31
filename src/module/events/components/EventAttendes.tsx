@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { type FC } from "react"
+import HighlightText from "~/components/HighlightText"
 import { api } from "~/utils/api"
 
 export const EventAttendes: FC<{ eventid: string }> = ({ eventid }) => {
@@ -29,13 +30,18 @@ export const EventAttendes: FC<{ eventid: string }> = ({ eventid }) => {
         <div className="text-white">
             <p>Vi säger välkomna till:</p>
             <div className="p-2 bg-white/10 rounded-md">
-                {attendes.data.map((attende) => { return (<Attende key={attende.id} profilename={attende.name}></Attende>) })}
+                {attendes.data.map((attende) => {
+                    return (<Attende key={attende.id} profilename={attende.name} username={attende.username}></Attende>)
+                })}
             </div>
         </div>
     )
 }
 
-const Attende: FC<{ profilename: string }> = ({ profilename }) => {
+const Attende: FC<{ profilename: string, username?: string }> = ({ profilename, username }) => {
     // console.log("Attende.profilename", profilename)
+    if (username) {
+        return (<p >{profilename} (<HighlightText>{username}</HighlightText>)</p>)
+    }
     return (<p >{profilename}</p>)
 }

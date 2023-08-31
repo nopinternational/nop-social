@@ -1,5 +1,5 @@
 import { z } from "zod";
-const NopEvent = z.object(
+const nopEvent = z.object(
     {
         id: z.string(),
         name: z.string(),
@@ -9,11 +9,12 @@ const NopEvent = z.object(
         when: z.string()
     })
 
-export type NopEvent = z.infer<typeof NopEvent>
+export type NopEvent = z.infer<typeof nopEvent>
 
 export type ConfirmedUser = {
     name: string,
     id: string
+    username?: string
 }
 
 export type EventFirestoreModel = {
@@ -24,13 +25,20 @@ export type EventFirestoreModel = {
     when: string
 }
 
-const Cat = z.object({
-    id: z.number(),
-    name: z.string(),
-});
-const Cats = z.array(Cat);
+export interface EventMessage {
+    from: {
+        uid: string,
+        username: string
+    }
+    message: string,
+    when: number
+}
 
+export const postEventMessage = z.object({
+    eventId: z.string(),
+    wallmessage: z.string(),
+    from: z.string()
+})
 
+export type PostEventMessage = z.infer<typeof postEventMessage>
 
-export type Cat = z.infer<typeof Cat>;
-export type Cats = z.infer<typeof Cats>;
