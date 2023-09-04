@@ -1,6 +1,6 @@
-import {type FirebaseOptions } from "firebase/app";
+import { type FirebaseOptions } from "firebase/app";
 
-export const firebaseConfig : FirebaseOptions = {
+export const firebaseConfig: FirebaseOptions = {
   apiKey: process.env.NEXT_PUBLIC_APIKEY,
   authDomain: process.env.NEXT_PUBLIC_AUTHDOMAIN,
   databaseURL: process.env.NEXT_PUBLIC_DATABASEURL,
@@ -10,3 +10,4 @@ export const firebaseConfig : FirebaseOptions = {
   appId: process.env.NEXT_PUBLIC_APPID,
   measurementId: process.env.NEXT_PUBLIC_MEASUREMENTID,
 };
+

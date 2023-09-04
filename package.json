@@ -28,6 +28,7 @@
     "dayjs": "^1.11.7",
     "dotenv": "^16.0.3",
     "firebase": "^9.17.2",
+    "firebase-admin": "^11.10.1",
     "next": "^13.4.2",
     "next-auth": "^4.22.1",
     "node-fetch": "^3.3.1",
