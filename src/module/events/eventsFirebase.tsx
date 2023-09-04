@@ -28,6 +28,11 @@ export const getEvent = async (eventid: string): Promise<NopEvent | null> => {
     const db = new FirbaseAdminClient(firestore)
     return await db.getEvent(eventid);
 }
+
+export const getEventAttendes = async (eventid: string) => {
+    const db = new FirbaseAdminClient(firestore)
+    return await db.getEventAttendes(eventid);
+}
 class FirbaseAdminClient {
 
     firestore: FirebaseFirestore.Firestore;
@@ -59,7 +64,10 @@ class FirbaseAdminClient {
 
     getEvent = async (eventid: string): Promise<NopEvent | null> => {
         console.log("FirbaseAdminClient.getEvent for id", eventid)
-        const eventRef: CollectionReference = this.firestore.collection("events").doc(eventid).withConverter(eventConverter);
+        const eventRef: CollectionReference = this.firestore
+            .collection("events")
+            .doc(eventid)
+            .withConverter(eventConverter);
         const snapshot = await eventRef.get();
         if (!snapshot.empty) {
             return snapshot.data()
@@ -78,6 +86,45 @@ class FirbaseAdminClient {
         //     console.log("No such document!", eventid);
         // }
         // return null
+    }
+    getEventAttendes = async (eventid: string) => {
+
+        //events / REdvBu1tM2iI5GHEur8F / signups / attendes
+        console.log("FirbaseAdminClient.getEvent for id", eventid)
+        const eventsRef: CollectionReference = this.firestore.collection("events")
+        const eventRef = eventsRef.doc(eventid)
+        const signupsCollectionRef = eventRef.collection("signups")
+        const attendesRef = signupsCollectionRef.doc("attendes")
+        attendesRef.withConverter(eventConverter);
+        const snapshot = await attendesRef.get();
+        if (!snapshot.empty) {
+            console.log("getEventAttendes", snapshot.data())
+            return snapshot.data().confirmed as ConfirmedUser[]
+        } else {
+            // docSnap.data() will be undefined in this case
+            console.log("No such document!", eventid);
+        }
+        return []
+
+
+        // const docRef = doc(firestore, "events", eventid, "signups", "attendes");
+        // //console.log("docRef", docRef.path)
+        // try {
+        //     const docSnap = await getDoc(docRef);
+        //     if (docSnap.exists()) {
+        //         const data = docSnap.data()
+        //         //console.log("getEventAttendes ->data:", data)
+        //         //console.log("getEventAttendes ->data.confirmed:", data.confirmed)
+        //         return data.confirmed as ConfirmedUser[]
+        //     } else {
+        //         // docSnap.data() will be undefined in this case
+        //         console.log("No such document!", eventid);
+        //     }
+        // } catch (err) {
+        //     console.error("err", err)
+
+        // }
+        // return []
     }
 }
 
@@ -108,27 +155,28 @@ class FirbaseClient {
         return null
     }
 
-}
-export const getEventAttendes = async (eventid: string) => {
-    //events / REdvBu1tM2iI5GHEur8F / signups / attendes
-    const docRef = doc(firestore, "events", eventid, "signups", "attendes");
-    //console.log("docRef", docRef.path)
-    try {
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-            const data = docSnap.data()
-            //console.log("getEventAttendes ->data:", data)
-            //console.log("getEventAttendes ->data.confirmed:", data.confirmed)
-            return data.confirmed as ConfirmedUser[]
-        } else {
-            // docSnap.data() will be undefined in this case
-            console.log("No such document!", eventid);
-        }
-    } catch (err) {
-        console.error("err", err)
 
+    getEventAttendes = async (eventid: string) => {
+        //events / REdvBu1tM2iI5GHEur8F / signups / attendes
+        const docRef = doc(firestore, "events", eventid, "signups", "attendes");
+        //console.log("docRef", docRef.path)
+        try {
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                const data = docSnap.data()
+                //console.log("getEventAttendes ->data:", data)
+                //console.log("getEventAttendes ->data.confirmed:", data.confirmed)
+                return data.confirmed as ConfirmedUser[]
+            } else {
+                // docSnap.data() will be undefined in this case
+                console.log("No such document!", eventid);
+            }
+        } catch (err) {
+            console.error("err", err)
+
+        }
+        return []
     }
-    return []
 }
 
 export const getEventMessages = async (eventid: string) => {
