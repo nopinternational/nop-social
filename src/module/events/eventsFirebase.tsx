@@ -2,7 +2,6 @@ import { firestoreFoo } from "../../lib/firebase/firebase";
 import { firestoreAdmin } from "~/server/api/firebaseAdmin";
 import {
     type QueryDocumentSnapshot,
-    type SnapshotOptions,
     collection,
     doc,
     getDoc,
@@ -163,13 +162,13 @@ class FirbaseAdminClient {
         // return []
     }
 
-    signupToEvent = async (eventId: string, userid: string) => {
+    signupToEvent = async (eventId: string, userId: string) => {
         //console.log("signupToEvent", userid, eventId)
-        console.log("FirbaseAdminClient.signupToEvent for id", eventid, userid)
+        console.log("FirbaseAdminClient.signupToEvent for id", eventId, userId)
         const eventsRef: CollectionReference = this.firestore.collection("events")
-        const eventRef = eventsRef.doc(eventid)
+        const eventRef = eventsRef.doc(eventId)
         const participantsCollectionRef = eventRef.collection("participants")
-        await participantsCollectionRef.doc(userid).set({ when: new Date().toISOString() })
+        await participantsCollectionRef.doc(userId).set({ when: new Date().toISOString() })
 
         //await setDoc(doc(firestore, "events", eventId, "participants", userid), { when: new Date().toISOString() },)
     }

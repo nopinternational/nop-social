@@ -28,7 +28,7 @@ export const eventRouter = createTRPCRouter({
         protectedProcedure
             .input(z.object({ eventId: z.string() }))
             .mutation(({ input, ctx }) => {
-                // console.log("------------signupForEvent.input", input)
+                console.log("------------signupForEvent.input", input)
                 return signupToEvent(input.eventId, ctx.session.user.id)
             }),
     getEventAttendes:
