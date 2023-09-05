@@ -12,7 +12,7 @@ import {
     arrayUnion
 } from "firebase-admin/firestore";
 import { type NopEvent, type ConfirmedUser, type EventFirestoreModel, type EventMessage } from "./components/types"
-import { CollectionReference } from "firebase/firestore";
+import { CollectionReference, FieldValue } from "firebase/firestore";
 
 
 
@@ -33,6 +33,22 @@ export const getEventAttendes = async (eventid: string) => {
     const db = new FirbaseAdminClient(firestore)
     return await db.getEventAttendes(eventid);
 }
+
+export const getEventMessages = async (eventid: string) => {
+    const db = new FirbaseAdminClient(firestore)
+    return db.getEventMessages(eventid)
+}
+export const postEventMessage = async (eventId: string, message: string, from: string) => {
+    const db = new FirbaseAdminClient(firestore)
+    console.log("postEventMessage", eventId, message, from)
+    return db.postEventMessage(eventId, message, from)
+}
+
+export const signupToEvent = async (eventId: string, userid: string) => {
+    const db = new FirbaseAdminClient(firestore)
+    return db.signupToEvent(eventId, userid)
+}
+
 class FirbaseAdminClient {
 
     firestore: FirebaseFirestore.Firestore;
@@ -105,6 +121,25 @@ class FirbaseAdminClient {
             console.log("No such document!", eventid);
         }
         return []
+    }
+
+    getEventMessages = async (eventid: string) => {
+        //events / REdvBu1tM2iI5GHEur8F / signups / attendes
+        console.log("FirbaseAdminClient.getEventMessages for id", eventid)
+        const eventsRef: CollectionReference = this.firestore.collection("events")
+        const eventRef = eventsRef.doc(eventid)
+        const signupsCollectionRef = eventRef.collection("signups")
+        const attendesRef = signupsCollectionRef.doc("attendes")
+
+        const snapshot = await attendesRef.get();
+        if (!snapshot.empty) {
+            console.log("getEventMessages", snapshot.data())
+            return (snapshot.data().wallmessages as EventMessage[]).reverse()
+        } else {
+            // docSnap.data() will be undefined in this case
+            console.log("No such document!", eventid);
+        }
+        return []
 
 
         // const docRef = doc(firestore, "events", eventid, "signups", "attendes");
@@ -115,7 +150,7 @@ class FirbaseAdminClient {
         //         const data = docSnap.data()
         //         //console.log("getEventAttendes ->data:", data)
         //         //console.log("getEventAttendes ->data.confirmed:", data.confirmed)
-        //         return data.confirmed as ConfirmedUser[]
+        //         return (data.wallmessages as EventMessage[]).reverse()
         //     } else {
         //         // docSnap.data() will be undefined in this case
         //         console.log("No such document!", eventid);
@@ -125,6 +160,53 @@ class FirbaseAdminClient {
 
         // }
         // return []
+    }
+
+    signupToEvent = async (eventId: string, userid: string) => {
+        //console.log("signupToEvent", userid, eventId)
+        console.log("FirbaseAdminClient.signupToEvent for id", eventid, userid)
+        const eventsRef: CollectionReference = this.firestore.collection("events")
+        const eventRef = eventsRef.doc(eventid)
+        const participantsCollectionRef = eventRef.collection("participants")
+        await participantsCollectionRef.doc(userid).set({ when: new Date().toISOString() })
+
+        //await setDoc(doc(firestore, "events", eventId, "participants", userid), { when: new Date().toISOString() },)
+    }
+
+    postEventMessage = async (eventId: string, message: string, from: string) => {
+        //console.log("firebase.postEventMessage", eventId, message, from)
+        console.log("FirbaseAdminClient.postEventMessage for id", eventid, userid)
+        const eventsRef: CollectionReference = this.firestore.collection("events")
+        const eventRef = eventsRef.doc(eventId)
+        const signupsCollectionRef = eventRef.collection("signups")
+        const attendesRef = signupsCollectionRef.doc("attendes")
+
+        const wallmessage: EventMessage = {
+            from: {
+                username: from,
+                uid: from
+            },
+            message: message,
+            when: new Date().toISOString()
+        }
+        const korv = await attendesRef.update({
+            wallmessages: FieldValue.arrayUnion(wallmessage)
+        })
+
+        console.log("korv:", korv)
+
+        // const docRef = doc(firestore, "events", eventId, "signups", "attendes");
+        // const wallmessage: EventMessage = {
+        //     from: {
+        //         username: from,
+        //         uid: from
+        //     },
+        //     message: message,
+        //     when: new Date().toISOString()
+        // }
+        // await updateDoc(docRef, {
+        //     wallmessages: arrayUnion(wallmessage)
+        // });
     }
 }
 
@@ -177,52 +259,51 @@ class FirbaseClient {
         }
         return []
     }
-}
 
-export const getEventMessages = async (eventid: string) => {
-    //events / REdvBu1tM2iI5GHEur8F / signups / attendes
-    const docRef = doc(firestore, "events", eventid, "signups", "attendes");
-    //console.log("docRef", docRef.path)
-    try {
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-            const data = docSnap.data()
-            //console.log("getEventAttendes ->data:", data)
-            //console.log("getEventAttendes ->data.confirmed:", data.confirmed)
-            return (data.wallmessages as EventMessage[]).reverse()
-        } else {
-            // docSnap.data() will be undefined in this case
-            console.log("No such document!", eventid);
+    getEventMessages = async (eventid: string) => {
+        //events / REdvBu1tM2iI5GHEur8F / signups / attendes
+        const docRef = doc(firestore, "events", eventid, "signups", "attendes");
+        //console.log("docRef", docRef.path)
+        try {
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                const data = docSnap.data()
+                //console.log("getEventAttendes ->data:", data)
+                //console.log("getEventAttendes ->data.confirmed:", data.confirmed)
+                return (data.wallmessages as EventMessage[]).reverse()
+            } else {
+                // docSnap.data() will be undefined in this case
+                console.log("No such document!", eventid);
+            }
+        } catch (err) {
+            console.error("err", err)
+
         }
-    } catch (err) {
-        console.error("err", err)
-
+        return []
     }
-    return []
-}
 
-
-
-export const signupToEvent = async (userid: string, eventId: string) => {
-    //console.log("signupToEvent", userid, eventId)
-    await setDoc(doc(firestore, "events", eventId, "participants", userid), { when: new Date().toISOString() },)
-}
-
-export const postEventMessage = async (eventId: string, message: string, from: string) => {
-    //console.log("firebase.postEventMessage", eventId, message, from)
-    const docRef = doc(firestore, "events", eventId, "signups", "attendes");
-    const wallmessage: EventMessage = {
-        from: {
-            username: from,
-            uid: from
-        },
-        message: message,
-        when: new Date().toISOString()
+    signupToEvent = async (eventId: string, userid: string) => {
+        //console.log("signupToEvent", userid, eventId)
+        await setDoc(doc(firestore, "events", eventId, "participants", userid), { when: new Date().toISOString() },)
     }
-    await updateDoc(docRef, {
-        wallmessages: arrayUnion(wallmessage)
-    });
+
+    postEventMessage = async (eventId: string, message: string, from: string) => {
+        //console.log("firebase.postEventMessage", eventId, message, from)
+        const docRef = doc(firestore, "events", eventId, "signups", "attendes");
+        const wallmessage: EventMessage = {
+            from: {
+                username: from,
+                uid: from
+            },
+            message: message,
+            when: new Date().toISOString()
+        }
+        await updateDoc(docRef, {
+            wallmessages: arrayUnion(wallmessage)
+        });
+    }
 }
+
 
 const eventConverter = {
     toFirestore: (event: NopEvent): EventFirestoreModel => {

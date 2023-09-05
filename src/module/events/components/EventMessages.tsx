@@ -8,7 +8,7 @@ import { type UseTRPCQueryResult } from "@trpc/react-query/shared";
 
 
 export const EventMessages = ({ eventid }: { eventid: string }) => {
-    //console.log("EventMessages.eventid:", eventid)
+    console.log("EventMessages.eventid:", eventid)
 
     const utils = api.useContext();
 
