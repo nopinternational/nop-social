@@ -8,7 +8,7 @@ import {
     signupToEvent,
     postEventMessage as postEventMessageFirebase
 } from "~/module/events/eventsFirebase";
-import { postEventMessage, type NopEvent } from "./components/types";
+import { postEventMessage } from "./components/types";
 
 
 
@@ -28,7 +28,7 @@ export const eventRouter = createTRPCRouter({
         protectedProcedure
             .input(z.object({ eventId: z.string() }))
             .mutation(({ input, ctx }) => {
-                console.log("------------signupForEvent.input", input)
+                // console.log("------------signupForEvent.input", input)
                 return signupToEvent(input.eventId, ctx.session.user.id)
             }),
     getEventAttendes:
@@ -51,7 +51,7 @@ export const eventRouter = createTRPCRouter({
         protectedProcedure
             .input(postEventMessage)
             .mutation(({ input, ctx }) => {
-                console.log("------------postEventMessage.input", input)
+                // console.log("------------postEventMessage.input", input)
                 // console.log("ctx", ctx)
                 // console.log("ctx.session", ctx.session)
                 // console.log("ctx.session.user.", ctx.session.user)
