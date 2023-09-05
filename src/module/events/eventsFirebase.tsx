@@ -9,10 +9,11 @@ import {
     getDocs,
     setDoc,
     updateDoc,
-    arrayUnion
+    arrayUnion,
+    FieldValue
 } from "firebase-admin/firestore";
 import { type NopEvent, type ConfirmedUser, type EventFirestoreModel, type EventMessage } from "./components/types"
-import { CollectionReference, FieldValue } from "firebase/firestore";
+import { type CollectionReference } from "firebase/firestore";
 
 
 
@@ -175,7 +176,7 @@ class FirbaseAdminClient {
 
     postEventMessage = async (eventId: string, message: string, from: string) => {
         //console.log("firebase.postEventMessage", eventId, message, from)
-        console.log("FirbaseAdminClient.postEventMessage for id", eventid, userid)
+        console.log("FirbaseAdminClient.postEventMessage for id", eventId, from)
         const eventsRef: CollectionReference = this.firestore.collection("events")
         const eventRef = eventsRef.doc(eventId)
         const signupsCollectionRef = eventRef.collection("signups")
