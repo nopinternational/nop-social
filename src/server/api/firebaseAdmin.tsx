@@ -32,7 +32,7 @@ if (admin.apps?.length == 0) {
     adminApp = admin.initializeApp(
         {
             credential: cert(adminServiceAccount),
-            databaseURL: `https://${adminServiceAccount.project_id}.firebaseio.com`,
+            databaseURL: `https://${adminServiceAccount.projectId || ""}.firebaseio.com`,
         },
         ADMIN_APP_NAME
     );
