@@ -27,7 +27,7 @@ let adminApp;
 // adminApp = firebase.initializeApp({
 //     credential: firebase.credential.cert(adminServiceAccount),
 // })
-console.log("firebaseAdmin: ", admin.apps.length)
+//console.log("firebaseAdmin: ", admin.apps.length)
 if (admin.apps?.length == 0) {
     adminApp = admin.initializeApp(
         {
@@ -42,5 +42,5 @@ if (admin.apps?.length == 0) {
     adminApp = admin.app(ADMIN_APP_NAME);
 }
 
-console.log("getFirestore from adminapp", adminApp)
+// console.log("getFirestore from adminapp", adminApp)
 export const firestoreAdmin: Firestore = adminApp.firestore()

@@ -47,7 +47,6 @@ export const getEventMessages = async (eventid: string) => {
 }
 export const postEventMessage = async (eventId: string, message: string, from: string) => {
     const db = new FirbaseAdminClient(firestore)
-    console.log("postEventMessage", eventId, message, from)
     return db.postEventMessage(eventId, message, from)
 }
 
@@ -68,12 +67,12 @@ class FirbaseAdminClient {
         const snapshot = await eventRef.get();
 
         if (snapshot.empty) {
-            console.log('No matching documents.');
+            console.log('No events found');
             return [];
         }
         const objects: NopEvent[] = []
         snapshot.forEach(doc => {
-            console.log("doc.data()", doc.data())
+
             objects.push({ ...doc.data() })
         });
         //const querySnapshot = await getDocs(collection(this.firestore, "events").withConverter(eventConverter));
@@ -82,22 +81,24 @@ class FirbaseAdminClient {
         //     console.log("getAllEventsFromFirestore", eventDoc)
         //     objects.push(eventDoc.data())
         // });
-        console.log("FirbaseAdminClient.getAllEventsFromFirestore:", objects)
+        // console.log("FirbaseAdminClient.getAllEventsFromFirestore:", objects)
         return objects;
     }
 
     getEvent = async (eventid: string): Promise<NopEvent | null> => {
-        // console.log("FirbaseAdminClient.getEvent for id", eventid)
+        //console.log("FirbaseAdminClient.getEvent for id", eventid)
         const eventRef = this.firestore
             .collection("events")
             .doc(eventid)
             .withConverter(eventConverter);
         const snapshot = await eventRef.get();
-        if (!snapshot.exists) {
+        //console.log("FirbaseAdminClient.getEvent -> snapshot", snapshot)
+        if (snapshot.exists) {
+            //console.log("FirbaseAdminClient.getEvent -> snapshot.data()", snapshot.data())
             return snapshot.data() as NopEvent
         } else {
             // docSnap.data() will be undefined in this case
-            console.log("No such document!", eventid);
+            // console.log("No such event!", eventid);
         }
         return null
     }
@@ -113,13 +114,13 @@ class FirbaseAdminClient {
         type FirebaseDocType = {
             confirmed: object[]
         }
-        if (!snapshot.exists) {
-            console.log("getEventAttendes", snapshot.data())
+        if (snapshot.exists) {
+            //console.log("getEventAttendes", snapshot.data())
             const dta = snapshot.data() as FirebaseDocType
             return dta.confirmed as ConfirmedUser[]
         } else {
             // docSnap.data() will be undefined in this case
-            console.log("No such document!", eventid);
+            console.log("No event attendes for id ", eventid);
         }
         return []
     }
@@ -133,13 +134,13 @@ class FirbaseAdminClient {
         const attendesRef = signupsCollectionRef.doc("attendes")
 
         const snapshot = await attendesRef.get();
-        if (!snapshot.exists) {
-            console.log("getEventMessages", snapshot.data())
+        if (snapshot.exists) {
+            // console.log("getEventMessages", snapshot.data())
             const dta = snapshot.data() as { wallmessages: object[] }
             return (dta.wallmessages as EventMessage[]).reverse()
         } else {
             // docSnap.data() will be undefined in this case
-            console.log("No such document!", eventid);
+            console.log("No event messages for", eventid);
         }
         return []
     }
