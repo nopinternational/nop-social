@@ -1,6 +1,7 @@
 import { firestoreFoo } from "../../lib/firebase/firebase";
+import { firestoreAdmin } from "~/server/api/firebaseAdmin";
 import {
-    type QueryDocumentSnapshot,
+
     type SnapshotOptions,
     collection,
     getDocs,
@@ -13,14 +14,21 @@ import {
     type Person,
     type Profile
 } from "~/module/profile/profileRouter";
+import {
+    type CollectionReference,
+    type FirestoreDataConverter,
+    type QueryDocumentSnapshot,
+    FieldValue,
+    DocumentData
+} from "firebase-admin/firestore";
 
-interface ProfileDbModel {
+interface ProfileDbModel extends DocumentData {
     username: string;
     person1: PersonDbModel
     person2: PersonDbModel
     description: string
 }
-interface PersonDbModel {
+interface PersonDbModel extends DocumentData {
     name: string;
     born: number;
 }
@@ -59,13 +67,13 @@ export const mergeToProfile = async (id: string, partialProfile: PartialProfile)
 }
 
 export const getProfileFromFirestore = async (profileid: string): Promise<Profile | null> => {
-    // console.log("getProfileFromFirestore.profileid", profileid);
-    // const query = await getDocs(collection(firestoreFoo, "profiles").withConverter(profileConverter));
-    // query = query.where('username', '==', profileid);
+    const profilesRef = firestoreAdmin
+        .collection("profiles")
+        .withConverter(profileConverter);
 
-    const q = query(collection(firestoreFoo, "profiles").withConverter(profileConverter), where("username", "==", profileid));
+    const queryRef = profilesRef.where("username", "==", profileid);
 
-    const querySnapshot = await getDocs(q);
+    const querySnapshot = await queryRef.get()
 
     if (querySnapshot.docs.length > 0) {
         const profile = querySnapshot.docs[0]?.data()
@@ -73,17 +81,36 @@ export const getProfileFromFirestore = async (profileid: string): Promise<Profil
         return Promise.resolve(profile as Profile);
     }
 
-
-
     console.error("getProfileFromFirestore, found nothing for profileid", profileid);
     return null
 }
+
+// export const getProfileFromFirestore = async (profileid: string): Promise<Profile | null> => {
+//     // console.log("getProfileFromFirestore.profileid", profileid);
+//     // const query = await getDocs(collection(firestoreFoo, "profiles").withConverter(profileConverter));
+//     // query = query.where('username', '==', profileid);
+
+//     const q = query(collection(firestoreFoo, "profiles").withConverter(profileConverter), where("username", "==", profileid));
+
+//     const querySnapshot = await getDocs(q);
+
+//     if (querySnapshot.docs.length > 0) {
+//         const profile = querySnapshot.docs[0]?.data()
+//         //console.log("getProfileFromFirestore", profile);
+//         return Promise.resolve(profile as Profile);
+//     }
+
+
+
+//     console.error("getProfileFromFirestore, found nothing for profileid", profileid);
+//     return null
+// }
 
 
 
 
 // Firestore data converter
-const profileConverter = {
+const profileConverter: FirestoreDataConverter<Profile> = {
     toFirestore: (profile: Profile): ProfileDbModel => {
         return {
             "username": profile.username,
@@ -99,10 +126,11 @@ const profileConverter = {
         };
     },
     fromFirestore: (
-        snapshot: QueryDocumentSnapshot,
-        options: SnapshotOptions
+        snapshot: QueryDocumentSnapshot<ProfileDbModel>,
+        //options: SnapshotOptions
     ): Profile => {
-        const data = snapshot.data(options) as ProfileDbModel;
+        // const data = snapshot.data(options) as ProfileDbModel;
+        const data = snapshot.data();
         return {
             "username": data.username,
             "person1": {
