@@ -1,3 +1,4 @@
+import { DocumentData } from "firebase/firestore";
 import { z } from "zod";
 const nopEvent = z.object(
     {
@@ -17,7 +18,7 @@ export type ConfirmedUser = {
     username?: string
 }
 
-export type EventFirestoreModel = {
+export interface EventFirestoreModel extends DocumentData  {
     name: string,
     title: string,
     description: string,
