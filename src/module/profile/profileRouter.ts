@@ -34,6 +34,11 @@ export const profileRouter = createTRPCRouter({
   getMyProfile:
     protectedProcedure
       .query(async ({ ctx }) => {
+        //console.log("------------getMyProfile.input", input)
+        // console.log("getMyProfile.ctx", ctx)
+        // console.log("getMyProfile.ctx.session", ctx.session)
+        //console.log("getMyProfile.ctx.session.user.", ctx.session.user)
+        // console.log("getMyProfilectx.session.user.name", ctx.session.user.name)
         return await getProfileFromFirestore(ctx.session.user.name || "")
       }),
 

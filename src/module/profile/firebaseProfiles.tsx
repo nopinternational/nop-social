@@ -49,23 +49,10 @@ export const getAllProfilesFromFirestore = async (): Promise<Profile[]> => {
 
     const query = await profilesRef.get()
     query.docs.forEach((snapshot) => objects.push(snapshot.data()))
-    
+
     return objects;
 
 };
-
-export const setPersonToProfile = async (id: string, person: Person) => {
-    //console.log("setPersonToProfile.person", id, person);
-    await setDoc(doc(firestoreFoo, "profiles", id), person, { merge: true })
-}
-
-
-export const mergeToProfile = async (id: string, partialProfile: PartialProfile) => {
-    //console.log("mergeToProfile.partialProfile", id, partialProfile)
-
-    await setDoc(doc(firestoreFoo, "profiles", id), partialProfile, { merge: true })
-}
-
 export const getProfileFromFirestore = async (profileid: string): Promise<Profile | null> => {
     const profilesRef = firestoreAdmin
         .collection("profiles")
@@ -84,6 +71,31 @@ export const getProfileFromFirestore = async (profileid: string): Promise<Profil
     console.error("getProfileFromFirestore, found nothing for profileid", profileid);
     return null
 }
+
+
+export const mergeToProfile = async (id: string, partialProfile: PartialProfile) => {
+    //console.log("mergeToProfile.partialProfile", id, partialProfile)
+    const profileRef = firestoreAdmin
+        .collection("profiles")
+        .doc(id);
+
+    await profileRef.set(partialProfile, { merge: true })
+    //---    
+    //await setDoc(doc(firestoreFoo, "profiles", id), partialProfile, { merge: true })
+}
+
+
+// export const mergeToProfile = async (id: string, partialProfile: PartialProfile) => {
+//     //console.log("mergeToProfile.partialProfile", id, partialProfile)
+
+//     await setDoc(doc(firestoreFoo, "profiles", id), partialProfile, { merge: true })
+// }
+
+
+// export const setPersonToProfile = async (id: string, person: Person) => {
+//     //console.log("setPersonToProfile.person", id, person);
+//     await setDoc(doc(firestoreFoo, "profiles", id), person, { merge: true })
+// }
 
 // export const getAllProfilesFromFirestore = async () => {
 
