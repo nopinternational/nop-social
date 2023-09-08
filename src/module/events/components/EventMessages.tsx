@@ -65,7 +65,7 @@ export const EventMessages = ({ eventid }: { eventid: string }) => {
                 </div>
             )
         }
-
+        console.log("renderMessages.trpc_message_object.data", trpc_message_object.data)
         if (trpc_message_object.data) {
             if (trpc_message_object.data.length == 0) {
                 return (
@@ -83,7 +83,7 @@ export const EventMessages = ({ eventid }: { eventid: string }) => {
         emptyOnSubmit: true
     }
 
-    return (
+    return trpc_message_object.data ? (
         <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
             <div className="col-span-2">
                 <div
@@ -109,7 +109,7 @@ export const EventMessages = ({ eventid }: { eventid: string }) => {
             </div>
         </div >
 
-    )
+    ) : null
 }
 
 

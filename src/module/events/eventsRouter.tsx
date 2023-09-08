@@ -44,9 +44,9 @@ export const eventRouter = createTRPCRouter({
     getEventMessages:
         protectedProcedure
             .input(z.object({ eventId: z.string() }))
-            .query(({ input }) => {
+            .query(({ input, ctx }) => {
                 // console.log("------------getEventAttendes.input", input)
-                return getEventMessages(input.eventId)
+                return getEventMessages(ctx.session.user.id, input.eventId)
             }),
 
     postEventMessage:

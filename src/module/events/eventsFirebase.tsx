@@ -41,9 +41,9 @@ export const getEventAttendes = async (iam_userid: string, eventid: string) => {
     return await db.getEventAttendes(iam_userid, eventid);
 }
 
-export const getEventMessages = async (eventid: string) => {
+export const getEventMessages = async (iam_userid: string, eventid: string) => {
     const db = new FirbaseAdminClient(firestore)
-    return db.getEventMessages(eventid)
+    return db.getEventMessages(iam_userid, eventid)
 }
 export const postEventMessage = async (eventId: string, message: string, from: string) => {
     const db = new FirbaseAdminClient(firestore)
@@ -120,7 +120,7 @@ class FirbaseAdminClient {
             const dta = snapshot.data() as FirebaseDocType
             const allowed: string[] = dta.allowed
 
-            console.log("getEventAttendes.allowed:", allowed)
+            // console.log("getEventAttendes.allowed:", allowed)
             if (allowed.includes(iam_userid)) {
                 return dta.confirmed as ConfirmedUser[]
             } else {
@@ -133,7 +133,7 @@ class FirbaseAdminClient {
         return []
     }
 
-    getEventMessages = async (eventid: string) => {
+    getEventMessages = async (iam_userid: string, eventid: string) => {
         //events / REdvBu1tM2iI5GHEur8F / signups / attendes
         // console.log("FirbaseAdminClient.getEventMessages for id", eventid)
         const eventsRef = this.firestore.collection("events")
@@ -144,8 +144,16 @@ class FirbaseAdminClient {
         const snapshot = await attendesRef.get();
         if (snapshot.exists) {
             // console.log("getEventMessages", snapshot.data())
-            const dta = snapshot.data() as { wallmessages: object[] }
-            return (dta.wallmessages as EventMessage[]).reverse()
+            const dta = snapshot.data() as {
+                wallmessages: object[],
+                allowed: string[]
+            }
+
+            if (dta.allowed.includes(iam_userid)) {
+                return (dta.wallmessages as EventMessage[]).reverse()
+            } else {
+                return null
+            }
         } else {
             // docSnap.data() will be undefined in this case
             console.log("No event messages for", eventid);
