@@ -22,13 +22,16 @@ const Home: NextPage = () => {
 
           <h3 className="text-2xl font-bold"><HighlightText>{event.title}</HighlightText></h3>
           <div className="text-lg">
+            {event.when}
+          </div>
+          <div className="text-lg">
             {event.description}
           </div>
           <div className="p-2">
 
             <button
               className="rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-opacity-75 hover:bg-white/20">
-              Läs mer och anmäl er
+              {event.signupOpen ? "Läs mer och anmäl er" : "Läs mer" }
             </button>
 
           </div>
@@ -42,7 +45,7 @@ const Home: NextPage = () => {
       <div className="flex flex-col col-span-2 gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
         <h3 className="text-2xl font-bold"><HighlightText>Inga träffar planerade...</HighlightText></h3>
         <div className="text-lg">
-          <p>Just nu har vi inga träffar planeradde, men återkom snart så har vi säkerligen något kul på gång 😘 </p>
+          <p>Just nu har vi inga träffar planerade, men återkom snart så har vi säkerligen något kul på gång 😘 </p>
         </div>
       </div>
     )

@@ -1,4 +1,4 @@
-import { DocumentData } from "firebase/firestore";
+import { type DocumentData } from "firebase/firestore";
 import { z } from "zod";
 const nopEvent = z.object(
     {
@@ -7,7 +7,8 @@ const nopEvent = z.object(
         title: z.string(),
         description: z.string(),
         longDesc: z.string(),
-        when: z.string()
+        when: z.string(),
+        signupOpen: z.boolean()
     })
 
 export type NopEvent = z.infer<typeof nopEvent>
@@ -23,7 +24,8 @@ export interface EventFirestoreModel extends DocumentData  {
     title: string,
     description: string,
     longDesc: string,
-    when: string
+    when: string,
+    signupOpen: boolean
 }
 
 export interface EventMessage {
