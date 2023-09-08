@@ -36,9 +36,9 @@ export const getEvent = async (eventid: string): Promise<NopEvent | null> => {
     return await db.getEvent(eventid);
 }
 
-export const getEventAttendes = async (eventid: string) => {
+export const getEventAttendes = async (iam_userid: string, eventid: string) => {
     const db = new FirbaseAdminClient(firestore)
-    return await db.getEventAttendes(eventid);
+    return await db.getEventAttendes(iam_userid, eventid);
 }
 
 export const getEventMessages = async (eventid: string) => {
@@ -103,7 +103,7 @@ class FirbaseAdminClient {
         return null
     }
 
-    getEventAttendes = async (eventid: string) => {
+    getEventAttendes = async (iam_userid: string, eventid: string) => {
         //events / REdvBu1tM2iI5GHEur8F / signups / attendes
         // console.log("FirbaseAdminClient.getEvent for id", eventid)
         const eventsRef = this.firestore.collection("events")
@@ -113,11 +113,19 @@ class FirbaseAdminClient {
         const snapshot = await attendesRef.get();
         type FirebaseDocType = {
             confirmed: object[]
+            allowed: string[]
         }
         if (snapshot.exists) {
             //console.log("getEventAttendes", snapshot.data())
             const dta = snapshot.data() as FirebaseDocType
-            return dta.confirmed as ConfirmedUser[]
+            const allowed: string[] = dta.allowed
+
+            console.log("getEventAttendes.allowed:", allowed)
+            if (allowed.includes(iam_userid)) {
+                return dta.confirmed as ConfirmedUser[]
+            } else {
+                return []
+            }
         } else {
             // docSnap.data() will be undefined in this case
             console.log("No event attendes for id ", eventid);
