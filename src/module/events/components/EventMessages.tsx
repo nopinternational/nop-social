@@ -41,7 +41,7 @@ export const EventMessages = ({ eventid }: { eventid: string }) => {
     //     loading: false,
     //     data: messages
     // }
-    const renderMessages = (trpc_message_object: UseTRPCQueryResult<EventMessage[], unknown>) => {
+    const renderMessages = (trpc_message_object: UseTRPCQueryResult<EventMessage[] | null, unknown>) => {
         // console.log("renderMessages -> isloading", trpc_message_object.isLoading)
         // console.log("renderMessages -> data", trpc_message_object.data)
         // console.log("renderMessages", trpc_message_object)
@@ -65,7 +65,7 @@ export const EventMessages = ({ eventid }: { eventid: string }) => {
                 </div>
             )
         }
-        console.log("renderMessages.trpc_message_object.data", trpc_message_object.data)
+        
         if (trpc_message_object.data) {
             if (trpc_message_object.data.length == 0) {
                 return (
