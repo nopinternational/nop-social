@@ -33,18 +33,20 @@ export const eventRouter = createTRPCRouter({
             }),
     getEventAttendes:
         protectedProcedure
-            .input(z.object({ eventId: z.string() }))
-            .query(({ input }) => {
+            .input(z.object({
+                eventId: z.string()
+            }))
+            .query(({ input, ctx }) => {
                 // console.log("------------getEventAttendes.input", input)
-                return getEventAttendes(input.eventId)
+                return getEventAttendes(ctx.session.user.id, input.eventId)
             }),
 
     getEventMessages:
         protectedProcedure
             .input(z.object({ eventId: z.string() }))
-            .query(({ input }) => {
+            .query(({ input, ctx }) => {
                 // console.log("------------getEventAttendes.input", input)
-                return getEventMessages(input.eventId)
+                return getEventMessages(ctx.session.user.id, input.eventId)
             }),
 
     postEventMessage:

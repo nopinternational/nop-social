@@ -38,7 +38,7 @@ if (admin.apps?.length == 0) {
     );
     console.log("initialize adminApp: ", ADMIN_APP_NAME);
 } else {
-    console.log("get existing adminApp: ");
+    //console.log("get existing adminApp: ");
     adminApp = admin.app(ADMIN_APP_NAME);
 }
 
