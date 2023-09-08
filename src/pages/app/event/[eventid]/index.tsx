@@ -61,6 +61,21 @@ const Home: NextPage = () => {
             </div>)
     }
 
+    const renderEventClosedForSignup = () => {
+        return (
+            <div className="flex flex-col items-center justify-center gap-4">
+                <div className="flex flex-wrap justify-center justify-self-center">
+                    <div className="p-2" >
+                        <button
+                            className="rounded-sm bg-pink-600 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
+                             Träffen stängd för anmälan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
     if (event.isLoading || false) {
 
         return (
@@ -111,27 +126,30 @@ const Home: NextPage = () => {
                     </h1>
 
                     <EventDescription event={e} />
-                    <div className="flex flex-col items-center justify-center gap-4">
-                        <div className="flex flex-wrap justify-center justify-self-center">
-                            <div className="p-2" >
-                                <Link href={router.asPath + "/attendes"}>
-                                    <button
-                                        className="rounded-full bg-white/10 bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
-                                        Vilka kommer på träffen?
-                                    </button>
-                                </Link>
-                            </div>
-                            <div className="p-2" >
+                    {e.signupOpen ?
+                        (
+                            <div className="flex flex-col items-center justify-center gap-4">
+                                <div className="flex flex-wrap justify-center justify-self-center">
+                                    <div className="p-2" >
+                                        <Link href={router.asPath + "/attendes"}>
+                                            <button
+                                                className="rounded-full bg-white/10 bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
+                                                Vilka kommer på träffen?
+                                            </button>
+                                        </Link>
+                                    </div>
+                                    <div className="p-2" >
 
-                                <button
-                                    onClick={() => attendToEventHandler()}
-                                    className="rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-opacity-75">
-                                    Anmäl er till träffen
-                                </button>
+                                        <button
+                                            onClick={() => attendToEventHandler()}
+                                            className="rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-opacity-75">
+                                            Anmäl er till träffen
+                                        </button>
+                                    </div>
+                                    {/* {BUTTONS.map(button => renderButton(button))} */}
+                                </div>
                             </div>
-                            {/* {BUTTONS.map(button => renderButton(button))} */}
-                        </div>
-                    </div>
+                        ) : renderEventClosedForSignup()}
                     {attendingToEvent ? renderAttending() : null}
                     <div className="flex flex-col items-center gap-2">
                         <Footer />
