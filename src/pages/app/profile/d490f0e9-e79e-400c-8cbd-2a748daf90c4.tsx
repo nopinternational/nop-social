@@ -40,7 +40,7 @@ const Home: NextPage = () => {
           <div className="">
             <div className="">
               <Image
-                className="w-32 h-32  bg-yellow-50  rounded-full shadow rounded-full max-w-full h-auto align-middle border-4 border-[hsl(280,100%,70%)]"
+                className="w-32 h-32 bg-yellow-50 rounded-full shadow  max-w-full align-middle border-4 border-[hsl(280,100%,70%)]"
                 src={couplePic}
                 alt="John Doe" />
             </div>
@@ -59,7 +59,7 @@ const Home: NextPage = () => {
 
   const renderLoading = () => {
     return (
-      <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
+      <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20 col-span-2" >
         <h3 className="text-2xl font-bold"><HighlightText>Laddar...</HighlightText></h3>
         <div className="text-lg">
           <p>Den som väntar på något gott 😘 </p>
