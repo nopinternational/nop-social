@@ -2,13 +2,17 @@
 import { type NextPage } from "next";
 import { useRouter } from 'next/router';
 import { useParams } from 'next/navigation'
+import Link from "next/link";
+import Image from 'next/image'
 import Head from "next/head";
 import { useSession } from "next-auth/react";
+
 import HighlightText from "~/components/HighlightText";
 import Footer from "~/components/Footer";
 import { api } from "~/utils/api";
 import { type Profile } from "~/module/profile/profileRouter";
-import Link from "next/link";
+
+import couplePic from "./couple_icon_square.png"
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -61,7 +65,7 @@ const Home: NextPage = () => {
         </Head>
         <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
           <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-            <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
+            <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem] text-center">
               Laddar <HighlightText>{pid}</HighlightText>
             </h1>
             <div className="flex">
@@ -87,7 +91,7 @@ const Home: NextPage = () => {
         </Head>
         <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
           <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-            <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
+            <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem] text-center">
               Vi hittar inte <HighlightText>{profileid}</HighlightText>
             </h1>
 
@@ -120,9 +124,25 @@ const Home: NextPage = () => {
             Här är <HighlightText>{pid}</HighlightText>
           </h1>
           <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
+
             <div className="col-span-2">
+              <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/10 items-center">
+                <Image
+                  className="w-32 h-32 bg-yellow-50 rounded-full shadow max-w-full align-middle border-4 border-[hsl(280,100%,70%)]"
+                  src={couplePic}
+                  alt="John Doe" />
+                <h3 className="text-2xl font-bold text-center"><HighlightText>{p.username}</HighlightText></h3>
+                <div className="text-lg">
+                  <p>{p.username} är ett par som heter <HighlightText>{p.person1?.name}</HighlightText> & <HighlightText>{p.person2.name}</HighlightText>,
+                    dom är {YEAR - p.person1?.born} och {YEAR - p.person2?.born}år.</p>
+
+                </div>
+              </div>
+            </div>
+
+            {/* <div className="col-span-2">
               {renderProfileOverview(p)}
-            </div >
+            </div > */}
 
             <div className="col-span-2">
               <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/10">
