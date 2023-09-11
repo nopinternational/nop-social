@@ -7,6 +7,8 @@ import Footer from "~/components/Footer";
 import { api } from "~/utils/api";
 import { type Profile } from "~/module/profile/profileRouter";
 import Link from "next/link";
+import couplePic from "./noun-couple-1014.png"
+import Image from 'next/image'
 
 const Home: NextPage = () => {
   //const hello = api.example.hello.useQuery({ text: "from tRPC" });
@@ -30,19 +32,56 @@ const Home: NextPage = () => {
 
 
   const renderProfile = (profile: Profile) => {
-    // const profileSlug = `profile/${profile.username}`
+    return renderProfileNew(profile)
+  }
+  const renderProfileNew = (profile: Profile) => {
+    return (
+      <div key={profile.username} className="flex flex-col gap-4 col-span-2 md:col-span-1 items-center w-full justify-cente rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
+        {/* <div className="max-w-xs"> */}
+        <div className="bg-white shadow-xl rounded-lg py-3">
+          <div className="photo-wrapper rounded-full  p-2">
+            <Image
+              className="w-32 h-32 mx-auto bg-yellow-50"
+              src={couplePic}
+              alt="John Doe" />
+          </div>
+        </div>
+        <div className="p-2">
+          <div className="p-2">
+            <h3 className="text-2xl font-bold "><HighlightText>{profile.username}</HighlightText></h3>
+            <div className="text-lg ">
+              <p>{profile.username} är ett par som heter <HighlightText>{profile.person1?.name}</HighlightText> & <HighlightText>{profile.person2.name}</HighlightText>,
+                dom är {YEAR - profile.person1?.born} och {YEAR - profile.person2?.born}år.</p>
+            </div>
+
+
+          </div>
+        </div>
+        {/* </div> */}
+
+      </div>)
+  }
+
+  const renderProfileOld = (profile: Profile) => {
+    // const profileSlug = `profile/${profile.username}`  
     const profileSlug = `${profile.username}`
     return (
-      <div key={profile.username} className="flex flex-col gap-4 col-span-2 md:col-span-1 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
+
+
+      <div key={profile.username} className="flex flex-col gap-4 col-span-2 md:col-span-1 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20 " >
         <Link href={profileSlug}>
-          <h3 className="text-2xl font-bold"><HighlightText>{profile.username}</HighlightText></h3>
+          <div className="">
+            <Image className="h-16 w-16 rounded-full bg-white border-cyan-600 items-center" src={couplePic} alt="" />
+          </div>
+          <h3 className="text-2xl font-bold "><HighlightText>{profile.username}</HighlightText></h3>
           <div className="text-lg ">
             <p>{profile.username} är ett par som heter <HighlightText>{profile.person1?.name}</HighlightText> & <HighlightText>{profile.person2.name}</HighlightText>,
               dom är {YEAR - profile.person1?.born} och {YEAR - profile.person2?.born}år.</p>
 
           </div>
         </Link>
-      </div>
+      </div >
+
     )
   }
   const renderLoading = () => {
