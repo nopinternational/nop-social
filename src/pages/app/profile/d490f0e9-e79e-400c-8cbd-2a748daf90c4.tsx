@@ -32,12 +32,10 @@ const Home: NextPage = () => {
 
 
   const renderProfile = (profile: Profile) => {
-    return renderProfileNew(profile)
-  }
-  const renderProfileNew = (profile: Profile) => {
+
     const profileSlug = `${profile.username}`
     return (
-      <Link href={profileSlug}>
+      <Link href={profileSlug} className="col-span-2 md:col-span-1">
         <div key={profile.username} className="flex flex-col gap-4 col-span-2 md:col-span-1 items-center w-full justify-cente rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
           <div className="">
             <div className="">
@@ -59,28 +57,6 @@ const Home: NextPage = () => {
     )
   }
 
-  const renderProfileOld = (profile: Profile) => {
-    // const profileSlug = `profile/${profile.username}`  
-    const profileSlug = `${profile.username}`
-    return (
-
-
-      <div key={profile.username} className="flex flex-col gap-4 col-span-2 md:col-span-1 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20 " >
-        <Link href={profileSlug}>
-          <div className="">
-            <Image className="h-16 w-16 rounded-full bg-white border-cyan-600 items-center" src={couplePic} alt="" />
-          </div>
-          <h3 className="text-2xl font-bold "><HighlightText>{profile.username}</HighlightText></h3>
-          <div className="text-lg ">
-            <p>{profile.username} är ett par som heter <HighlightText>{profile.person1?.name}</HighlightText> & <HighlightText>{profile.person2.name}</HighlightText>,
-              dom är {YEAR - profile.person1?.born} och {YEAR - profile.person2?.born}år.</p>
-
-          </div>
-        </Link>
-      </div >
-
-    )
-  }
   const renderLoading = () => {
     return (
       <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
