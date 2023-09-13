@@ -34,6 +34,44 @@ const Home: NextPage = () => {
     }
 
     const renderAttending = () => {
+        return renderAttendingToSkargardsParty()
+    }
+
+    const renderAttendingToSkargardsParty = () => {
+        return (
+            <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
+                <div className="col-span-2">
+                    <div
+                        className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
+                    >
+                        <h3 className="text-2xl font-bold"><HighlightText>Snart klart...</HighlightText></h3>
+                        <div className="text-lg whitespace-pre-wrap">
+                            Vad kul att ni vill hänga med på skärgårdsfest 🎉🍸🍾
+
+                        </div>
+                        <div className="text-lg whitespace-pre-wrap">
+                            Ännu går det inte riktigt att anmäla sig på vår site.
+                            Istället så får skicka ett mail till <HighlightText><a href="mailto:fest@nightofpassion.se">fest@nightofpassion.se</a></HighlightText> och anmäla er 😀
+                        </div>
+                        <div className="text-lg whitespace-pre-wrap">
+                            Vänta inte med att skicka in er anmälan.
+                            Det är inte först till kvarn, vi försöker hitta en bra blandning på paren som gör att alla ska trivas ihop på festen.
+                            Det gör att det kan dröja innan vi bekräftar er plats.
+                        </div>
+
+                        <div className="text-lg whitespace-pre-wrap">
+                            Kram på er så länge 😘
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>)
+
+
+    }
+
+    const renderAttendingToCocktailMeet = () => {
         return (
             <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
                 <div className="col-span-2">
@@ -68,7 +106,7 @@ const Home: NextPage = () => {
                     <div className="p-2" >
                         <button
                             className="rounded-sm bg-pink-600 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
-                             Träffen stängd för anmälan
+                            Träffen stängd för anmälan
                         </button>
                     </div>
                 </div>
@@ -126,18 +164,20 @@ const Home: NextPage = () => {
                     </h1>
 
                     <EventDescription event={e} />
-                    {e.signupOpen ?
+                    {e.options.signupOpen ?
                         (
                             <div className="flex flex-col items-center justify-center gap-4">
                                 <div className="flex flex-wrap justify-center justify-self-center">
-                                    <div className="p-2" >
-                                        <Link href={router.asPath + "/attendes"}>
-                                            <button
-                                                className="rounded-full bg-white/10 bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
-                                                Vilka kommer på träffen?
-                                            </button>
-                                        </Link>
-                                    </div>
+                                    {e.options.showParticipants ?
+                                        (<div className="p-2" >
+                                            <Link href={router.asPath + "/attendes"}>
+                                                <button
+                                                    className="rounded-full bg-white/10 bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
+                                                    Vilka kommer på träffen?
+                                                </button>
+                                            </Link>
+                                        </div>) : null}
+
                                     <div className="p-2" >
 
                                         <button

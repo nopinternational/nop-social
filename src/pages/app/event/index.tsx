@@ -31,7 +31,7 @@ const Home: NextPage = () => {
 
             <button
               className="rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-opacity-75 hover:bg-white/20">
-              {event.signupOpen ? "Läs mer och anmäl er" : "Läs mer" }
+              {event.options.signupOpen ? "Läs mer och anmäl er" : "Läs mer" }
             </button>
 
           </div>
