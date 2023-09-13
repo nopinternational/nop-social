@@ -72,8 +72,13 @@ class FirbaseAdminClient {
         }
         const objects: NopEvent[] = []
         snapshot.forEach(doc => {
+            const eventDoc = doc.data()
+            const options = eventDoc.options
 
-            objects.push({ ...doc.data() })
+            console.log("doc.options", options)
+            if (options.active) {
+                objects.push({ ...eventDoc })
+            }
         });
         //const querySnapshot = await getDocs(collection(this.firestore, "events").withConverter(eventConverter));
 
