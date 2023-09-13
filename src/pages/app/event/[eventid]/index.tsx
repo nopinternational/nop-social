@@ -51,7 +51,7 @@ const Home: NextPage = () => {
                         </div>
                         <div className="text-lg whitespace-pre-wrap">
                             Ännu går det inte riktigt att anmäla sig på vår site.
-                            Istället så får skicka ett mail till <HighlightText><a href="mailto:fest@nightofpassion.se">fest@nightofpassion.se</a></HighlightText> och anmäla er 😀
+                            Istället så får skicka ett mail till <a className="text-[hsl(280,100%,70%)]" href="mailto:fest@nightofpassion.se">fest@nightofpassion.se</a> och anmäla er 😀
                         </div>
                         <div className="text-lg whitespace-pre-wrap">
                             Vänta inte med att skicka in er anmälan.
