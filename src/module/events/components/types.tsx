@@ -8,7 +8,12 @@ const nopEvent = z.object(
         description: z.string(),
         longDesc: z.string(),
         when: z.string(),
-        signupOpen: z.boolean()
+        signupOpen: z.boolean(),
+        options: z.object({
+            signupOpen: z.boolean(),
+            active: z.boolean(),
+            showParticipants: z.boolean(),
+        })
     })
 
 export type NopEvent = z.infer<typeof nopEvent>
@@ -19,13 +24,18 @@ export type ConfirmedUser = {
     username?: string
 }
 
-export interface EventFirestoreModel extends DocumentData  {
+export interface EventFirestoreModel extends DocumentData {
     name: string,
     title: string,
     description: string,
     longDesc: string,
     when: string,
     signupOpen: boolean
+    options: {
+        signupOpen: boolean,
+        active: boolean,
+        showParticipants: boolean
+    }
 }
 
 export interface EventMessage {
