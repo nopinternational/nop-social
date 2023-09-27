@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { useRef } from "react"
 import { type GetServerSidePropsContext } from "next";
-import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from 'next/router';
 // import { providers, signIn, getSession, csrfToken } from "next-auth/client/";
@@ -13,6 +12,7 @@ import type {
     Provider
 } from "next-auth/providers"
 import HighlightText from "~/components/HighlightText";
+import Layout from "~/components/Layout";
 
 type SigninPageProps = {
     providers: Provider[]
@@ -66,12 +66,7 @@ const Signin = ({ providers }: SigninPageProps) => {
     }
 
     return (
-        <>
-            <Head>
-                <title>Night of Passion</title>
-                <meta name="description" content="Night of Passion" />
-                <link rel="icon" href="/favicon.ico" />
-            </Head>
+        <Layout>
             <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
                 <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
                     <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem] text-center">
@@ -98,7 +93,7 @@ const Signin = ({ providers }: SigninPageProps) => {
                     </div>
                 </div>
             </main>
-        </>
+        </Layout>
     );
 }
 
