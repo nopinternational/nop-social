@@ -2,7 +2,7 @@
 import { type NextPage } from "next";
 import { useSession } from "next-auth/react";
 import HighlightText from "~/components/HighlightText";
-import Footer from "~/components/Footer";
+
 import { api } from "~/utils/api";
 import { type Profile } from "~/module/profile/profileRouter";
 import Link from "next/link";
@@ -50,7 +50,7 @@ const Home: NextPage = () => {
 
   const renderLoading = (profileid: string) => {
     return (
-      <Layout>
+      <Layout headingText={<></>}>
         <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
           <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
             <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem] text-center" >
@@ -113,62 +113,54 @@ const Home: NextPage = () => {
   }
 
   return (
-    <Layout>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem] text-center">
-            Ändra er profil <HighlightText>{pid}</HighlightText>
-          </h1>
-          <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
-            <div className="col-span-2">
-              < div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
-                <h3 className="text-2xl font-bold"><HighlightText>{p.username}</HighlightText></h3>
-                <div className="text-lg">
-                  <p>{p.username} är ett par som heter <HighlightText>{p1?.name}</HighlightText> & <HighlightText>{p2.name}</HighlightText>,
-                    dom är {YEAR - p1?.born} och {YEAR - p2?.born}år.</p>
-                </div>
-              </div>
-            </div >
-            <div className="col-span-2" onClick={() => setEditPanel1(true)} >
-              < div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
-                <h3 className="text-2xl font-bold" >Ändra <HighlightText>{p1.name}</HighlightText> <button onClick={(event) => closePanel1(event)} >→</button></h3>
-                <div className="text-lg">
-                  {editPanel1 ? <PersonEditForm person={p1} onsubmitHandler={persistPerson_p1} /> : <p>Klicka för att ändra person</p>}
-                </div>
-              </div>
-            </div >
-            <div className="col-span-2" onClick={() => setEditPanel2(true)} >
-              < div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
-                <h3 className="text-2xl font-bold" >Ändra <HighlightText>{p2.name}</HighlightText> <button onClick={(event) => closePanel2(event)} >→</button></h3>
-                <div className="text-lg">
-                  {editPanel2 ? <PersonEditForm person={p2} onsubmitHandler={persistPerson_p2} /> : <p>Klicka för att ändra person</p>}
-                </div>
-              </div>
-            </div >
+    <Layout headingText={<>Ändra er profil <HighlightText>{pid}</HighlightText></>}>
 
-            <div className="col-span-2" onClick={() => setEditPanel3(true)} >
-              < div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
-                <h3 className="text-2xl font-bold" >Ändra <HighlightText>beskrivning</HighlightText> <button onClick={(event) => closePanel3(event)} >→</button></h3>
-                <div className="text-lg">
-                  {editPanel3 ? <TextEditForm options={textEditFormOptions} value={p.description} onsubmitHandler={persistDescription} /> : <p>Klicka för att ändra er beskrivning</p>}
-                </div>
-              </div>
-            </div >
-
-
-
+      <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
+        <div className="col-span-2">
+          < div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
+            <h3 className="text-2xl font-bold"><HighlightText>{p.username}</HighlightText></h3>
+            <div className="text-lg">
+              <p>{p.username} är ett par som heter <HighlightText>{p1?.name}</HighlightText> & <HighlightText>{p2.name}</HighlightText>,
+                dom är {YEAR - p1?.born} och {YEAR - p2?.born}år.</p>
+            </div>
           </div>
-          <Link href="/app/profile">
-            <button
-              className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
-              Tillbaka till profiler
-            </button>
-          </Link>
-          <div className="flex flex-col items-center gap-2">
-            <Footer />
+        </div >
+        <div className="col-span-2" onClick={() => setEditPanel1(true)} >
+          < div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
+            <h3 className="text-2xl font-bold" >Ändra <HighlightText>{p1.name}</HighlightText> <button onClick={(event) => closePanel1(event)} >→</button></h3>
+            <div className="text-lg">
+              {editPanel1 ? <PersonEditForm person={p1} onsubmitHandler={persistPerson_p1} /> : <p>Klicka för att ändra person</p>}
+            </div>
           </div>
-        </div>
-      </main>
+        </div >
+        <div className="col-span-2" onClick={() => setEditPanel2(true)} >
+          < div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
+            <h3 className="text-2xl font-bold" >Ändra <HighlightText>{p2.name}</HighlightText> <button onClick={(event) => closePanel2(event)} >→</button></h3>
+            <div className="text-lg">
+              {editPanel2 ? <PersonEditForm person={p2} onsubmitHandler={persistPerson_p2} /> : <p>Klicka för att ändra person</p>}
+            </div>
+          </div>
+        </div >
+
+        <div className="col-span-2" onClick={() => setEditPanel3(true)} >
+          < div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
+            <h3 className="text-2xl font-bold" >Ändra <HighlightText>beskrivning</HighlightText> <button onClick={(event) => closePanel3(event)} >→</button></h3>
+            <div className="text-lg">
+              {editPanel3 ? <TextEditForm options={textEditFormOptions} value={p.description} onsubmitHandler={persistDescription} /> : <p>Klicka för att ändra er beskrivning</p>}
+            </div>
+          </div>
+        </div >
+
+
+
+      </div>
+      <Link href="/app/profile">
+        <button
+          className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
+          Tillbaka till profiler
+        </button>
+      </Link>
+
     </Layout>
   )
 };
