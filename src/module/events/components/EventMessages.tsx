@@ -4,6 +4,7 @@ import { type EventMessage, type PostEventMessage } from "./types";
 import { api } from "~/utils/api";
 import { TextEditForm, type TextEditFormOptions } from "~/components/TextEditForm";
 import { type UseTRPCQueryResult } from "@trpc/react-query/shared";
+import { Spinner } from "~/components/Spinner";
 
 
 
@@ -53,19 +54,12 @@ export const EventMessages = ({ eventid }: { eventid: string }) => {
 
 
                     <div className="h-12 w-12 mb-4">
-                        <div className="flex">
-                            <div className="relative">
-                                <div className="w-12 h-12 rounded-full absolute
-                            border-8 border-solid border-gray-200"></div>
-                                <div className="w-12 h-12 rounded-full animate-spin absolute
-                            border-8 border-solid border-[hsl(280,100%,70%)] border-t-transparent shadow-md"></div>
-                            </div>
-                        </div>
+                        <Spinner />
                     </div>
                 </div>
             )
         }
-        
+
         if (trpc_message_object.data) {
             if (trpc_message_object.data.length == 0) {
                 return (

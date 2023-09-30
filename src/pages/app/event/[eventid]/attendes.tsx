@@ -8,6 +8,8 @@ import Link from "next/link";
 import { EventAttendes } from "~/module/events/components/EventAttendes"
 import { EventMessages } from "~/module/events/components/EventMessages";
 import Layout from "~/components/Layout";
+import { Spinner } from "~/components/Spinner";
+
 
 
 const Home: NextPage = () => {
@@ -25,15 +27,8 @@ const Home: NextPage = () => {
 
     if (event.isLoading || false) {
         return (
-            <Layout headingText={<>Laddar <HighlightText>träff</HighlightText>...</>}>
-                <div className="flex">
-                    <div className="relative">
-                        <div className="w-12 h-12 rounded-full absolute
-                            border-8 border-solid border-gray-200"></div>
-                        <div className="w-12 h-12 rounded-full animate-spin absolute
-                            border-8 border-solid border-[hsl(280,100%,70%)] border-t-transparent shadow-md"></div>
-                    </div>
-                </div>
+            <Layout headingText={<>Laddar <HighlightText>träff...</HighlightText></>}>
+                <Spinner />
             </Layout>
         )
     }
