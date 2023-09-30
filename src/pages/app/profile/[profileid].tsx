@@ -27,32 +27,8 @@ const Home: NextPage = () => {
     { enabled: sessionData?.user !== undefined }
   );
 
-
   const YEAR = new Date().getFullYear()
 
-  // if (profileQuery.isLoading) {
-  //   return <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">Loading...</div>
-  // }
-
-  // if (!profileQuery.data) {
-  //   return <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">Loading...</div>
-  // }
-
-
-
-  const renderProfileOverview = (profile: Profile) => {
-    // console.log("renderProfileOverview", profile);
-    return (
-      <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
-        <h3 className="text-2xl font-bold"><HighlightText>{profile.username}</HighlightText></h3>
-        <div className="text-lg">
-          <p>{profile.username} är ett par som heter <HighlightText>{profile.person1?.name}</HighlightText> & <HighlightText>{profile.person2.name}</HighlightText>,
-            dom är {YEAR - profile.person1?.born} och {YEAR - profile.person2?.born}år.</p>
-
-        </div>
-      </div>
-    )
-  }
   const renderLoading = (profileid: string) => {
     return (
       <Layout headingText={<>Laddar <HighlightText>{profileid}</HighlightText></>}>

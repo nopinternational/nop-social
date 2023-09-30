@@ -21,17 +21,6 @@ const Home: NextPage = () => {
     { enabled: sessionData?.user !== undefined }
   );
 
-  const YEAR = new Date().getFullYear()
-
-  // if (profileQuery.isLoading) {
-  //   return <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">Loading...</div>
-  // }
-
-  // if (!profileQuery.data) {
-  //   return <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">Loading...</div>
-  // }
-
-
   const renderProfile = (profile: Profile) => {
 
     const profileSlug = `profile/${profile.username}`
@@ -81,13 +70,8 @@ const Home: NextPage = () => {
 
         </div >
         {profiles.isLoading ? renderLoading() : null}
-
-
         {profiles.data?.map((profile) => renderProfile(profile))}
-
-
       </div>
-
     </Layout>
   )
 };

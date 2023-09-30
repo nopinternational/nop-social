@@ -21,8 +21,6 @@ const Home: NextPage = () => {
   const [editPanel2, setEditPanel2] = useState(false)
   const [editPanel3, setEditPanel3] = useState(false)
 
-  const trpcCtx = api.useContext()
-
   const { data: sessionData } = useSession();
 
   const profile = api.profile.getMyProfile.useQuery(
