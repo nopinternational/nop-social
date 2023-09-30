@@ -11,6 +11,7 @@ import { type Person } from "~/module/profile/profileRouter";
 import { type PartialProfile } from "~/module/profile/firebaseProfiles";
 import { TextEditForm, type TextEditFormOptions } from "~/components/TextEditForm";
 import Layout from "~/components/Layout";
+import { Spinner } from "~/components/Spinner";
 
 
 
@@ -50,22 +51,8 @@ const Home: NextPage = () => {
 
   const renderLoading = (profileid: string) => {
     return (
-      <Layout headingText={<></>}>
-        <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-          <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-            <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem] text-center" >
-              Laddar <HighlightText>{profileid}</HighlightText>
-            </h1>
-            <div className="flex">
-              <div className="relative">
-                <div className="w-12 h-12 rounded-full absolute
-                            border-8 border-solid border-gray-200"></div>
-                <div className="w-12 h-12 rounded-full animate-spin absolute
-                            border-8 border-solid border-[hsl(280,100%,70%)] border-t-transparent shadow-md"></div>
-              </div>
-            </div>
-          </div>
-        </main>
+      <Layout headingText={<>Laddar <HighlightText>{profileid}</HighlightText></>}>
+        <Spinner />
       </Layout>
     )
   }

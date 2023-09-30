@@ -10,6 +10,7 @@ import { api } from "~/utils/api";
 import { type Profile } from "~/module/profile/profileRouter";
 import couplePic from "./couple_icon_square.png"
 import Layout from "~/components/Layout";
+import { Spinner } from "~/components/Spinner";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -54,15 +55,8 @@ const Home: NextPage = () => {
   }
   const renderLoading = (profileid: string) => {
     return (
-      <Layout headingText={<>Laddar <HighlightText>{pid}</HighlightText></>}>
-        <div className="flex">
-          <div className="relative">
-            <div className="w-12 h-12 rounded-full absolute
-                            border-8 border-solid border-gray-200"></div>
-            <div className="w-12 h-12 rounded-full animate-spin absolute
-                            border-8 border-solid border-[hsl(280,100%,70%)] border-t-transparent shadow-md"></div>
-          </div>
-        </div>
+      <Layout headingText={<>Laddar <HighlightText>{profileid}</HighlightText></>}>
+        <Spinner />
       </Layout>
     )
   }

@@ -9,6 +9,7 @@ import Link from "next/link";
 import couplePic from "./couple_icon_square.png"
 import Image from 'next/image'
 import Layout from "~/components/Layout";
+import { Spinner } from "~/components/Spinner";
 
 const Home: NextPage = () => {
   //const hello = api.example.hello.useQuery({ text: "from tRPC" });
@@ -62,17 +63,7 @@ const Home: NextPage = () => {
         <div className="text-lg">
           <p>Den som väntar på något gott 😘 </p>
         </div>
-
-        <div className="h-12 w-12 mb-4">
-          <div className="flex">
-            <div className="relative">
-              <div className="w-12 h-12 rounded-full absolute
-                            border-8 border-solid border-gray-200"></div>
-              <div className="w-12 h-12 rounded-full animate-spin absolute
-                            border-8 border-solid border-[hsl(280,100%,70%)] border-t-transparent shadow-md"></div>
-            </div>
-          </div>
-        </div>
+        <Spinner />
       </div>
 
     )

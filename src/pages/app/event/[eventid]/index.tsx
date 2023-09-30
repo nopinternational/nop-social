@@ -9,6 +9,7 @@ import { useState } from "react";
 import EventDescription from "~/module/events/components/EventDescription"
 import { SwishQR } from "~/components/SwishQR/SwishQR"
 import Layout from "~/components/Layout";
+import { Spinner } from "~/components/Spinner";
 
 
 const Home: NextPage = () => {
@@ -119,14 +120,7 @@ const Home: NextPage = () => {
         return (
             <Layout headingText={<>Laddar <HighlightText>träff</HighlightText>...</>}>
 
-                <div className="flex pb-8">
-                    <div className="relative ">
-                        <div className="w-12 h-12 rounded-full absolute
-                            border-8 border-solid border-gray-200"></div>
-                        <div className="w-12 h-12 rounded-full animate-spin absolute
-                            border-8 border-solid border-[hsl(280,100%,70%)] border-t-transparent shadow-md"></div>
-                    </div>
-                </div>
+                <Spinner />
 
             </Layout>
         )
