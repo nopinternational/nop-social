@@ -1,16 +1,17 @@
 import Head from "next/head";
 import {
+    type FC,
     type PropsWithChildren,
     type ReactNode,
 } from "react";
 import HighlightText from "./HighlightText";
 import Footer from "./Footer";
 
-type LayootProps = {
+type LayoutProps = {
     headingText?: string | ReactNode
 }
 
-const Layout = ({ children, headingText }: PropsWithChildren<LayootProps>) => {
+const Layout: FC = ({ children, headingText }: PropsWithChildren<LayoutProps>) => {
     return (
         <>
             <Head>

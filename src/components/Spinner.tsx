@@ -1,5 +1,6 @@
+import { type FC } from "react"
 
-export const Spinner = () => {
+export const Spinner: FC = () => {
     return (
         <div className="flex h-12">
             <div className="relative">
