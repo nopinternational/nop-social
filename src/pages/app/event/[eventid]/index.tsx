@@ -35,7 +35,7 @@ const Home: NextPage = () => {
     }
 
     const renderAttending = () => {
-        return renderAttendingToSkargardsParty()
+        return renderAttendingToCocktailMeet()
     }
 
     const renderAttendingToSkargardsParty = () => {
