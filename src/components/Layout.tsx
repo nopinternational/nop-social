@@ -8,10 +8,11 @@ import HighlightText from "./HighlightText";
 import Footer from "./Footer";
 
 type LayoutProps = {
+    children: ReactNode
     headingText?: string | ReactNode
 }
 
-const Layout: FC = ({ children, headingText }: PropsWithChildren<LayoutProps>) => {
+const Layout: FC<LayoutProps> = ({ children, headingText }: LayoutProps) => {
     return (
         <>
             <Head>
