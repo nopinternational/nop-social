@@ -153,9 +153,10 @@ class FirbaseAdminClient {
                 wallmessages: object[],
                 allowed: string[]
             }
-
             if (dta.allowed.includes(iam_userid)) {
-                return (dta.wallmessages as EventMessage[]).reverse()
+                if (dta.wallmessages)
+                    return (dta.wallmessages as EventMessage[]).reverse()
+                return []
             } else {
                 return null
             }
