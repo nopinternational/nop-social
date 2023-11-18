@@ -10,6 +10,7 @@ import EventDescription from "~/module/events/components/EventDescription"
 import { SwishQR } from "~/components/SwishQR/SwishQR"
 import Layout from "~/components/Layout";
 import { Spinner } from "~/components/Spinner";
+import { Card } from "~/components/Card";
 
 
 const Home: NextPage = () => {
@@ -128,7 +129,15 @@ const Home: NextPage = () => {
     }
 
     if (!event.data) {
-        return <p>hittar ingen träff...</p>
+        return <Layout headingText={<>Ingen <span className="text-[hsl(280,100%,70%)]">träff</span> här</>}>
+            <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
+                <div className="col-span-2 p-2">
+                    <Card header="Det finns ingen träff här...">
+                        Vi är ledsna men vi hittar inte träffen du söker 😔
+                    </Card>
+                </div>
+            </div>
+        </Layout>
     }
 
     const e = event.data
