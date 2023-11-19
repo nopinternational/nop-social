@@ -33,7 +33,7 @@ type EventFormType = {
     when: string
     shortDesc: string
     longDesc: string
-    options: EventOptions
+    //options?: EventOptions
 }
 
 type EventOptions = {
@@ -47,11 +47,11 @@ const DEFAULT_EVENT: EventFormType = {
     when: "närsomhelst",
     shortDesc: "detta är en kort beskrivning",
     longDesc: "##markdown",
-    options: {
-        active: false,
-        showParticipants: false,
-        signupOpen: false
-    }
+    // options: {
+    //     active: false,
+    //     showParticipants: false,
+    //     signupOpen: false
+    // }
 }
 const EventForm = ({ event }: { event?: EventFormType }) => {
     console.log("EventForm.event", event)
@@ -71,7 +71,10 @@ const EventForm = ({ event }: { event?: EventFormType }) => {
             console.log("e:", e)
             const newEvnt = { ...e }
             console.log("newEvnt:", e)
-            newEvnt[event.target.name] = event.target.value
+            const keyName: string = event.target.name;
+            const eventVal: string = event.target.value
+
+            newEvnt[keyName as keyof EventFormType] = eventVal
             console.log("newEvnt:", e)
             return newEvnt
         })
@@ -82,10 +85,6 @@ const EventForm = ({ event }: { event?: EventFormType }) => {
     }
 
     console.log("evnt", evnt)
-
-    function desco(event: ChangeEvent<HTMLTextAreaElement>): void {
-        throw new Error("Function not implemented.");
-    }
 
     return (
         <form className="p-2" >
