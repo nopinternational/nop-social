@@ -4,14 +4,15 @@ import HighlightText from "~/components/HighlightText";
 import Layout from "~/components/Layout";
 import { type EventFormType, NoPEventForm } from "~/module/events/components/NoPEventForm";
 import { api } from "~/utils/api";
+import { useRouter } from 'next/navigation'
 
 const Home: NextPage = () => {
+    const router = useRouter()
+    const { mutateAsync: persistEvent } = api.event.createEvent.useMutation()
 
-    const { mutate: persistEvent } = api.event.createEvent.useMutation()
-
-    const saveNewEvent = (nopEvent: EventFormType) => {
-        console.log("lets save new event", nopEvent, nopEvent.title)
-        persistEvent(nopEvent)
+    const saveNewEvent = async (nopEvent: EventFormType) => {
+        const id = await persistEvent(nopEvent)
+        router.push(`/app/event/${id}`)
     }
 
     return (

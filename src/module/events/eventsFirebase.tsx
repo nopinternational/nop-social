@@ -83,7 +83,7 @@ class FirbaseAdminClient {
             const eventDoc = doc.data()
             const options = eventDoc.options
 
-            console.log("doc.options", options)
+            //console.log("doc.options", options)
             if (options.active) {
                 objects.push({ ...eventDoc })
             }
@@ -206,11 +206,12 @@ class FirbaseAdminClient {
 
 
     }
-    persistEvent = async (uid: string, nopEvent: EventFormType) => {
+    persistEvent = async (uid: string, nopEvent: EventFormType): Promise<string> => {
         console.log("persist event", uid, nopEvent)
         const eventsRef = this.firestore.collection(EVENTS_COLLECTION)
         const nopEventDoc = await eventsRef.add({ ...nopEvent, owner: uid })
         console.log("nop event persited at ", nopEventDoc.id)
+        return nopEventDoc.id
     }
 }
 
