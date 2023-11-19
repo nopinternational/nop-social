@@ -6,8 +6,10 @@ import {
     getEventAttendes,
     getEventMessages,
     signupToEvent,
-    postEventMessage as postEventMessageFirebase
+    postEventMessage as postEventMessageFirebase,
+    persistEvent
 } from "~/module/events/eventsFirebase";
+import { type EventFormType } from "~/module/events/components/NoPEventForm";
 import { postEventMessage } from "./components/types";
 
 
@@ -24,6 +26,16 @@ export const eventRouter = createTRPCRouter({
             .query(async ({ input }) => {
                 return await getEvent(input.eventId)
             }),
+
+    createEvent:
+        protectedProcedure
+            //.input(z.object({ eventTitle: z.string() }))
+            .input(z.custom<EventFormType>())
+            .mutation(({ input, ctx }) => {
+                console.log("createEvent.mutation", input)
+                return persistEvent(input, ctx.session.user.id)
+            }),
+
     signupForEvent:
         protectedProcedure
             .input(z.object({ eventId: z.string() }))

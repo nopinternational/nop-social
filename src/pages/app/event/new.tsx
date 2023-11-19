@@ -3,13 +3,15 @@ import { Card } from "~/components/Card";
 import HighlightText from "~/components/HighlightText";
 import Layout from "~/components/Layout";
 import { type EventFormType, NoPEventForm } from "~/module/events/components/NoPEventForm";
-
+import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
 
+    const { mutate: persistEvent } = api.event.createEvent.useMutation()
+
     const saveNewEvent = (nopEvent: EventFormType) => {
         console.log("lets save new event", nopEvent, nopEvent.title)
-        
+        persistEvent(nopEvent)
     }
 
     return (
