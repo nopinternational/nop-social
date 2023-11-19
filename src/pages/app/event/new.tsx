@@ -9,7 +9,6 @@ const Home: NextPage = () => {
 
 
 
-
     return (
         <Layout headingText={<>Ordna en <HighlightText>träff</HighlightText></>}>
             <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
@@ -34,12 +33,25 @@ type EventFormType = {
     when: string
     shortDesc: string
     longDesc: string
+    options: EventOptions
 }
+
+type EventOptions = {
+    active: boolean
+    showParticipants: boolean
+    signupOpen: boolean
+}
+
 const DEFAULT_EVENT: EventFormType = {
     title: "title",
     when: "närsomhelst",
     shortDesc: "detta är en kort beskrivning",
     longDesc: "##markdown",
+    options: {
+        active: false,
+        showParticipants: false,
+        signupOpen: false
+    }
 }
 const EventForm = ({ event }: { event?: EventFormType }) => {
     console.log("EventForm.event", event)
