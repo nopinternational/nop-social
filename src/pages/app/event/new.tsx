@@ -2,7 +2,7 @@ import { type NextPage } from "next";
 import { Card } from "~/components/Card";
 import HighlightText from "~/components/HighlightText";
 import Layout from "~/components/Layout";
-import { type EventFormType, NoPEventForm } from "~/components/event/NoPEventForm";
+import { type EventFormType, NoPEventForm } from "~/module/events/components/NoPEventForm";
 
 
 const Home: NextPage = () => {
