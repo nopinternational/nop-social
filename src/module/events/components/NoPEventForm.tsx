@@ -82,7 +82,7 @@ export const NoPEventForm = ({ event, onCreateHandler }: { event?: EventFormType
     }
 
 
-    const toggleOption = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
+    const toggleOption = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
         const name: string = e.target.name
         console.log("toggleOption:", e)
         console.log("toggleOption.target:", e.target)
@@ -91,9 +91,9 @@ export const NoPEventForm = ({ event, onCreateHandler }: { event?: EventFormType
         console.log("current value for ", name, currentVal)
         setEventOptions((options) => {
             const newOptions = { ...options }
-            const newVal = !options[name]
+            const newVal = !options[name as keyof EventOptions]
             console.log("new value for ", name, newVal)
-            newOptions[name] = newVal
+            newOptions[name as keyof EventOptions] = newVal
             return newOptions
         })
     }
@@ -173,7 +173,7 @@ export const NoPEventForm = ({ event, onCreateHandler }: { event?: EventFormType
     )
 }
 
-const Toggle = ({ name, optionText, checked, onClick }: { name: string, optionText: string, checked: boolean, onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void }) => {
+const Toggle = ({ name, optionText, checked, onClick }: { name: string, optionText: string, checked: boolean, onClick: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void }) => {
     return (
         <label className="inline-flex relative items-center mr-5 cursor-pointer">
             <input
