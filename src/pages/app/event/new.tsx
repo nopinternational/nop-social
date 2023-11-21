@@ -24,7 +24,7 @@ const Home: NextPage = () => {
                     </Card>
 
                     <Card header="Detaljer">
-                        <NoPEventForm onCreateHandler={saveNewEvent}></NoPEventForm>
+                        <NoPEventForm onCreateHandler={(nopEvent) => { async () => await saveNewEvent(nopEvent) }}></NoPEventForm>
                     </Card>
 
                 </div>
