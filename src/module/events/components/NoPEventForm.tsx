@@ -1,10 +1,9 @@
 import React, { type ChangeEvent, useState } from "react"
-import { boolean } from "zod"
 
 export type EventFormType = {
     title: string
     when: string
-    shortDesc: string
+    description: string
     longDesc: string
     options: EventOptions
 }
@@ -12,7 +11,7 @@ export type EventFormType = {
 export type EventInformation = {
     title: string
     when: string
-    shortDesc: string
+    description: string
     longDesc: string
 }
 
@@ -25,7 +24,7 @@ export type EventOptions = {
 const DEFAULT_EVENT: EventFormType = {
     title: "title",
     when: "närsomhelst",
-    shortDesc: "detta är en kort beskrivning",
+    description: "detta är en kort beskrivning",
     longDesc: "##markdown",
     options: {
         active: true,
@@ -38,14 +37,14 @@ const getInitialEventInformation = (event?: EventFormType): EventInformation => 
         return {
             title: event.title,
             when: event.when,
-            shortDesc: event.shortDesc,
+            description: event.description,
             longDesc: event.longDesc
         }
     }
     return {
         title: DEFAULT_EVENT.title,
         when: DEFAULT_EVENT.when,
-        shortDesc: DEFAULT_EVENT.shortDesc,
+        description: DEFAULT_EVENT.description,
         longDesc: DEFAULT_EVENT.longDesc
     }
 
@@ -117,7 +116,7 @@ export const NoPEventForm = ({ event, onCreateHandler }: { event?: EventFormType
             <div className="m-2">Kort beskrivning</div>
             <textarea className="w-full px-3 py-3 rounded-lg text-black"
                 rows={5}
-                name="shortDesc" value={eventInformation.shortDesc}
+                name="description" value={eventInformation.description}
                 onChange={updateEventInformation}  ></textarea>
 
             <div className="m-2">Lång beskrivning</div>
