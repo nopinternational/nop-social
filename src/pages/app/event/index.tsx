@@ -25,7 +25,7 @@ const Home: NextPage = () => {
           <div className="text-lg">
             {event.when}
           </div>
-          <div className="text-lg">
+          <div className="text-lg whitespace-pre-wrap">
             {event.description}
           </div>
           <div className="p-2">
