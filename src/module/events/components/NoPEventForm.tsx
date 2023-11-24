@@ -73,9 +73,6 @@ export const NoPEventForm = ({ event, onCreateHandler }: { event?: EventFormType
             const keyName: string = event.target.name;
             const eventVal: string = event.target.value
 
-            console.log("updateEvent.newEvnt old value", newEvnt[keyName as keyof typeof e])
-
-
             newEvnt[keyName as keyof typeof e] = eventVal
             return newEvnt
         })
@@ -84,21 +81,15 @@ export const NoPEventForm = ({ event, onCreateHandler }: { event?: EventFormType
 
     const toggleOption = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
         const name: string = e.target.name
-        console.log("toggleOption:", e)
-        console.log("toggleOption.target:", e.target)
-        console.log("toggleOption.target name/value:", name, e.target.value)
         const currentVal = eventOptions[name as keyof EventOptions]
-        console.log("current value for ", name, currentVal)
         setEventOptions((options) => {
             const newOptions = { ...options }
             const newVal = !options[name as keyof EventOptions]
-            console.log("new value for ", name, newVal)
             newOptions[name as keyof EventOptions] = newVal
             return newOptions
         })
     }
 
-    console.log("render options", eventOptions)
 
     return (
         <form className="p-2" >
