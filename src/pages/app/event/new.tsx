@@ -5,14 +5,30 @@ import Layout from "~/components/Layout";
 import { type EventFormType, NoPEventForm } from "~/module/events/components/NoPEventForm";
 import { api } from "~/utils/api";
 import { useRouter } from 'next/navigation'
+import { useEffect, useState } from "react";
+
 
 const Home: NextPage = () => {
     const router = useRouter()
     const { mutateAsync: persistEvent } = api.event.createEvent.useMutation()
+    const [savedId, setSavedId] = useState<string>("")
 
-    const saveNewEvent = async (nopEvent: EventFormType) => {
-        const id = await persistEvent(nopEvent)
-        router.push(`/app/event/${id}`)
+    useEffect(() => {
+        console.log("useEfffect with id", savedId)
+        //router.push(`/app/event/${savedId}`)
+    }, [savedId])
+
+    const saveNewEvent = (nopEvent: EventFormType): void => {
+
+        persistEvent(nopEvent).then((id: string) => {
+            router.push(`/app/event/${id}`)
+        }).catch((error) => {
+            console.error("saveNewEvent ended with an error", error)
+        });
+
+
+        //setSavedId((old) => { return id })
+
     }
 
     return (
@@ -24,7 +40,7 @@ const Home: NextPage = () => {
                     </Card>
 
                     <Card header="Detaljer">
-                        <NoPEventForm onCreateHandler={(nopEvent) => { async () => await saveNewEvent(nopEvent) }}></NoPEventForm>
+                        <NoPEventForm onCreateHandler={saveNewEvent}></NoPEventForm>
                     </Card>
 
                 </div>

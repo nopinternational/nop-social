@@ -182,7 +182,7 @@ const Toggle = ({ name, optionText, checked, onClick }: { name: string, optionTe
                 checked={checked}
                 readOnly
                 name={name}
-                onClick={onClick}
+                onChange={onClick}
             />
             <div
                 className="w-11
