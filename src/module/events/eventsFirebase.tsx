@@ -47,9 +47,9 @@ export const getEventMessages = async (iam_userid: string, eventid: string) => {
     return db.getEventMessages(iam_userid, eventid)
 }
 
-export const persistEvent = async (nopEvent: EventFormType, uid: string) => {
+export const persistEvent = async ({ nopEvent, uid, eventId }: { nopEvent: EventFormType, uid: string, eventId?: string }) => {
     const db = new FirbaseAdminClient(firestore)
-    return db.persistEvent(uid, nopEvent)
+    return db.persistEvent(uid, nopEvent, eventId)
 }
 
 export const postEventMessage = async (eventId: string, message: string, from: string) => {
@@ -206,14 +206,27 @@ class FirbaseAdminClient {
 
 
     }
-    persistEvent = async (uid: string, nopEvent: EventFormType): Promise<string> => {
+
+    getEventDocRef(eventsCollection: CollectionReference<FirebaseFirestore.DocumentData>, eventId?: string) {
+        if (eventId) {
+            return eventsCollection.doc(eventId)
+        }
+        return eventsCollection.doc()
+    }
+
+    persistEvent = async (uid: string, nopEvent: EventFormType, eventId: string): Promise<string> => {
         console.log("persist event", uid, nopEvent)
         const eventsRef = this.firestore.collection(EVENTS_COLLECTION)
-        const nopEventDoc = await eventsRef.add({ ...nopEvent, owner: uid })
-        console.log("nop event persited at ", nopEventDoc.id)
-        return nopEventDoc.id
+
+        const docRef = this.getEventDocRef(eventsRef, eventId)
+
+        await docRef.set({ ...nopEvent, owner: uid }, { merge: true })
+
+
+        return docRef.id
     }
 }
+
 
 
 const eventConverter: FirestoreDataConverter<NopEvent> = {

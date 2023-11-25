@@ -1,0 +1,90 @@
+import { useEffect, useState } from "react";
+import { type NextPage } from "next";
+import { useSession } from "next-auth/react";
+import { useRouter } from 'next/router'
+
+import { api } from "~/utils/api";
+import Layout from "~/components/Layout";
+import HighlightText from "~/components/HighlightText";
+import { Spinner } from "~/components/Spinner";
+import { Card } from "~/components/Card";
+import { type EventFormType, NoPEventForm } from "~/module/events/components/NoPEventForm";
+
+
+const Home: NextPage = () => {
+    const router = useRouter()
+    const { data: sessionData } = useSession();
+    const { eventid } = router.query;
+    const queryInput = { eventId: eventid as string }
+
+    const { mutateAsync: persistEvent } = api.event.createEvent.useMutation()
+
+    const event = api.event.getEvent.useQuery(queryInput,
+        { enabled: sessionData?.user !== undefined })
+
+    const [savedId, setSavedId] = useState<string>("")
+
+    useEffect(() => {
+        console.log("useEfffect with id", savedId)
+        //router.push(`/app/event/${savedId}`)
+    }, [savedId])
+
+    const saveNewEvent = (nopEvent: EventFormType): void => {
+        console.log(nopEvent)
+        // persistEvent(nopEvent).then((id: string) => {
+        //     router.push(`/app/event/${id}`)
+        // }).catch((error) => {
+        //     console.error("saveNewEvent ended with an error", error)
+        // });
+        persistEvent({ nopEvent, eventId: eventid })
+
+
+        //setSavedId((old) => { return id })
+
+    }
+    if (event.isLoading || false) {
+
+        return (
+            <Layout headingText={<>Laddar <HighlightText>träff</HighlightText>...</>}>
+                <Spinner />
+            </Layout>
+        )
+
+    }
+
+    if (!event.data) {
+        return <Layout headingText={<>Ingen <span className="text-[hsl(280,100%,70%)]">träff</span> här</>}>
+            <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
+                <div className="col-span-2 p-2">
+                    <Card header="Det finns ingen träff här...">
+                        Vi är ledsna men vi hittar inte träffen du söker 😔
+                    </Card>
+                </div>
+            </div>
+        </Layout>
+    }
+
+    const e = event.data
+    console.log("edit event", e)
+
+    return (
+        <Layout headingText={<>Ändra en <HighlightText>träff</HighlightText></>}>
+            <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
+                <div className="col-span-2">
+                    <Card header={<>Ändra <HighlightText>träff</HighlightText></>}>
+                        Ändra en träff och samla alla sexiga par i <HighlightText>Night of Passion</HighlightText>
+                    </Card>
+
+                    <Card header="Detaljer">
+                        <NoPEventForm event={e} onCreateHandler={saveNewEvent}></NoPEventForm>
+                    </Card>
+
+                </div>
+            </div>
+        </Layout>
+    );
+};
+
+
+export default Home;
+
