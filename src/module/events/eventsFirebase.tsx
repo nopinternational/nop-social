@@ -2,20 +2,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { firestoreFoo } from "../../lib/firebase/firebase";
-import { firestoreAdmin } from "~/server/api/firebaseAdmin";
-import {
-    collection,
-    doc,
-    getDoc,
-    getDocs,
-    setDoc,
-    updateDoc,
-    arrayUnion,
-    where,
-    and,
 
-} from "firebase/firestore";
+import { firestoreAdmin } from "~/server/api/firebaseAdmin";
 import {
     type QueryDocumentSnapshot,
 } from "firebase-admin/firestore";
@@ -23,7 +11,6 @@ import {
 import { type NopEvent, type ConfirmedUser, type EventFirestoreModel, type EventMessage } from "./components/types"
 import { type CollectionReference, type FirestoreDataConverter, FieldValue } from "firebase-admin/firestore";
 import { type EventFormType } from "./components/NoPEventForm";
-
 
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unnecessary-type-assertion
@@ -210,8 +197,6 @@ class FirbaseAdminClient {
         await attendesRef.update({
             wallmessages: FieldValue.arrayUnion(wallmessage)
         })
-
-
     }
 
     getEventDocRef(eventsCollection: CollectionReference<FirebaseFirestore.DocumentData>, eventId?: string) {
@@ -236,20 +221,15 @@ class FirbaseAdminClient {
         const eventsRef = this.firestore.collection(EVENTS_COLLECTION)
         const docRef = eventsRef.doc(eventId)
 
-        docRef.get()
-            .then(async (documentSnapshot) => {
-                const event = documentSnapshot.data() as EventFirestoreModel
-                if (event.owner === uid) {
-                    await docRef.set({ ...nopEvent, owner: uid }, { merge: true })
-                    return docRef.id
-                }
-            })
-            .catch(error => console.error("cannot update, no event found at ", docRef.path, error))
+        const documentSnapshot = await docRef.get()
+        const event = documentSnapshot.data() as EventFirestoreModel
+
+        if (event.owner === uid) {
+            await docRef.set({ ...nopEvent, owner: uid }, { merge: true })
+            return docRef.id
+        }
 
         return null
-
-
-
     }
 }
 
