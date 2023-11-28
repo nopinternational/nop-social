@@ -12,16 +12,19 @@ const BUTTONS: CTA_Button[] = [
         text: "Visa alla profiler",
         url: "/app/profile"
     },
-
     {
         text: "Ändra er profil",
         url: "/app/profile/edit"
     },
-
     {
         text: "Visa alla träffar",
         url: "/app/event"
     },
+    {
+        text: "Meddelanden",
+        url: "/app/message"
+    },
+
 ]
 
 const Footer: React.FC = () => {
