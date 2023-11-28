@@ -51,7 +51,7 @@ const getInitialEventInformation = (event?: EventFormType): EventInformation => 
 }
 
 export const NoPEventForm = ({ event, onCreateHandler }: { event?: EventFormType, onCreateHandler?: (e: EventFormType) => void }) => {
-    console.log("EventForm.event", event)
+
     const [eventInformation, setEventInformation] = useState<EventInformation>(getInitialEventInformation(event))
     const [eventOptions, setEventOptions] = useState<EventOptions>(event?.options || DEFAULT_EVENT.options)
     const [isSaving, setIsSaving] = useState(false)

@@ -232,17 +232,13 @@ class FirbaseAdminClient {
     }
 
     updateEvent = async (uid: string, nopEvent: EventFormType, eventId: string): Promise<string | null> => {
-        console.log("update event", uid, nopEvent)
+
         const eventsRef = this.firestore.collection(EVENTS_COLLECTION)
-
-
         const docRef = eventsRef.doc(eventId)
 
         docRef.get()
             .then(async (documentSnapshot) => {
                 const event = documentSnapshot.data() as EventFirestoreModel
-                console.log("update event", event)
-                console.log("update event, user and owner is the same?", event.owner === uid)
                 if (event.owner === uid) {
                     await docRef.set({ ...nopEvent, owner: uid }, { merge: true })
                     return docRef.id

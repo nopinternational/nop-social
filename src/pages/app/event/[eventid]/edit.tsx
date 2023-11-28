@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { type NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from 'next/router'
@@ -9,7 +8,7 @@ import HighlightText from "~/components/HighlightText";
 import { Spinner } from "~/components/Spinner";
 import { Card } from "~/components/Card";
 import { type EventFormType, NoPEventForm } from "~/module/events/components/NoPEventForm";
-import { error } from "console";
+
 
 
 const Home: NextPage = () => {
@@ -23,15 +22,8 @@ const Home: NextPage = () => {
     const event = api.event.getEvent.useQuery(queryInput,
         { enabled: sessionData?.user !== undefined })
 
-    const [savedId, setSavedId] = useState<string>("")
-
-    useEffect(() => {
-        console.log("useEfffect with id", savedId)
-        //router.push(`/app/event/${savedId}`)
-    }, [savedId])
-
     const saveNewEvent = (nopEvent: EventFormType): void => {
-        console.log(nopEvent)
+        // console.log(nopEvent)
         // persistEvent(nopEvent).then((id: string) => {
         //     router.push(`/app/event/${id}`)
         // }).catch((error) => {
@@ -68,7 +60,7 @@ const Home: NextPage = () => {
     }
 
     const e = event.data
-    console.log("edit event", e)
+
 
     return (
         <Layout headingText={<>Ändra en <HighlightText>träff</HighlightText></>}>
