@@ -2,18 +2,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { firestoreFoo } from "../../lib/firebase/firebase";
-import { firestoreAdmin } from "~/server/api/firebaseAdmin";
-import {
-    collection,
-    doc,
-    getDoc,
-    getDocs,
-    setDoc,
-    updateDoc,
-    arrayUnion,
 
-} from "firebase/firestore";
+import { firestoreAdmin } from "~/server/api/firebaseAdmin";
 import {
     type QueryDocumentSnapshot,
 } from "firebase-admin/firestore";
@@ -21,7 +11,6 @@ import {
 import { type NopEvent, type ConfirmedUser, type EventFirestoreModel, type EventMessage } from "./components/types"
 import { type CollectionReference, type FirestoreDataConverter, FieldValue } from "firebase-admin/firestore";
 import { type EventFormType } from "./components/NoPEventForm";
-
 
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unnecessary-type-assertion
@@ -47,9 +36,14 @@ export const getEventMessages = async (iam_userid: string, eventid: string) => {
     return db.getEventMessages(iam_userid, eventid)
 }
 
-export const persistEvent = async (nopEvent: EventFormType, uid: string) => {
+export const persistEvent = async ({ nopEvent, uid }: { nopEvent: EventFormType, uid: string }) => {
     const db = new FirbaseAdminClient(firestore)
     return db.persistEvent(uid, nopEvent)
+}
+
+export const updateEvent = async ({ nopEvent, uid, eventId }: { nopEvent: EventFormType, uid: string, eventId: string }) => {
+    const db = new FirbaseAdminClient(firestore)
+    return db.updateEvent(uid, nopEvent, eventId)
 }
 
 export const postEventMessage = async (eventId: string, message: string, from: string) => {
@@ -203,17 +197,42 @@ class FirbaseAdminClient {
         await attendesRef.update({
             wallmessages: FieldValue.arrayUnion(wallmessage)
         })
-
-
     }
+
+    getEventDocRef(eventsCollection: CollectionReference<FirebaseFirestore.DocumentData>, eventId?: string) {
+        if (eventId) {
+            return eventsCollection.doc(eventId)
+        }
+        return eventsCollection.doc()
+    }
+
     persistEvent = async (uid: string, nopEvent: EventFormType): Promise<string> => {
         console.log("persist event", uid, nopEvent)
         const eventsRef = this.firestore.collection(EVENTS_COLLECTION)
-        const nopEventDoc = await eventsRef.add({ ...nopEvent, owner: uid })
-        console.log("nop event persited at ", nopEventDoc.id)
-        return nopEventDoc.id
+
+        const docRef = eventsRef.doc()
+        await docRef.set({ ...nopEvent, owner: uid }, { merge: true })
+
+        return docRef.id
+    }
+
+    updateEvent = async (uid: string, nopEvent: EventFormType, eventId: string): Promise<string | null> => {
+
+        const eventsRef = this.firestore.collection(EVENTS_COLLECTION)
+        const docRef = eventsRef.doc(eventId)
+
+        const documentSnapshot = await docRef.get()
+        const event = documentSnapshot.data() as EventFirestoreModel
+
+        if (event.owner === uid) {
+            await docRef.set({ ...nopEvent, owner: uid }, { merge: true })
+            return docRef.id
+        }
+
+        return null
     }
 }
+
 
 
 const eventConverter: FirestoreDataConverter<NopEvent> = {

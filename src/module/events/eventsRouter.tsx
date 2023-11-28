@@ -7,10 +7,12 @@ import {
     getEventMessages,
     signupToEvent,
     postEventMessage as postEventMessageFirebase,
-    persistEvent
+    persistEvent,
+    updateEvent
 } from "~/module/events/eventsFirebase";
 import { type EventFormType } from "~/module/events/components/NoPEventForm";
 import { postEventMessage } from "./components/types";
+import { TRPCError } from "@trpc/server";
 
 
 
@@ -30,9 +32,35 @@ export const eventRouter = createTRPCRouter({
     createEvent:
         protectedProcedure
             //.input(z.object({ eventTitle: z.string() }))
-            .input(z.custom<EventFormType>())
+            .input(z.object({
+                nopEvent: z.custom<EventFormType>()
+            }))
             .mutation(async ({ input, ctx }) => {
-                return await persistEvent(input, ctx.session.user.id)
+
+                const persistNopEvent = {
+                    nopEvent: input.nopEvent,
+                    uid: ctx.session.user.id,
+                }
+                return await persistEvent(persistNopEvent)
+            }),
+
+    updateEvent:
+        protectedProcedure
+            //.input(z.object({ eventTitle: z.string() }))
+            .input(z.object({
+                eventId: z.string(),
+                nopEvent: z.custom<EventFormType>()
+            }))
+            .mutation(async ({ input, ctx }) => {
+
+                const persistNopEvent = {
+                    nopEvent: input.nopEvent,
+                    uid: ctx.session.user.id,
+                    eventId: input.eventId
+                }
+                const updatedDocId = await updateEvent(persistNopEvent)
+                if (updatedDocId) return updatedDocId
+                throw new TRPCError({ code: "FORBIDDEN", message: "Not owner of event" })
             }),
 
     signupForEvent:
