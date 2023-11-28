@@ -9,6 +9,7 @@ import HighlightText from "~/components/HighlightText";
 import { Spinner } from "~/components/Spinner";
 import { Card } from "~/components/Card";
 import { type EventFormType, NoPEventForm } from "~/module/events/components/NoPEventForm";
+import { error } from "console";
 
 
 const Home: NextPage = () => {
@@ -17,7 +18,7 @@ const Home: NextPage = () => {
     const { eventid } = router.query;
     const queryInput = { eventId: eventid as string }
 
-    const { mutateAsync: persistEvent } = api.event.createEvent.useMutation()
+    const { mutateAsync: updateEvent } = api.event.updateEvent.useMutation()
 
     const event = api.event.getEvent.useQuery(queryInput,
         { enabled: sessionData?.user !== undefined })
@@ -36,7 +37,9 @@ const Home: NextPage = () => {
         // }).catch((error) => {
         //     console.error("saveNewEvent ended with an error", error)
         // });
-        persistEvent({ nopEvent, eventId: eventid })
+        updateEvent({ nopEvent, eventId: eventid as string })
+            .then(() => { return })
+            .catch((error) => { console.error("error while updating event", error) })
 
 
         //setSavedId((old) => { return id })

@@ -12,6 +12,8 @@ import {
     setDoc,
     updateDoc,
     arrayUnion,
+    where,
+    and,
 
 } from "firebase/firestore";
 import {
@@ -47,9 +49,14 @@ export const getEventMessages = async (iam_userid: string, eventid: string) => {
     return db.getEventMessages(iam_userid, eventid)
 }
 
-export const persistEvent = async ({ nopEvent, uid, eventId }: { nopEvent: EventFormType, uid: string, eventId?: string }) => {
+export const persistEvent = async ({ nopEvent, uid }: { nopEvent: EventFormType, uid: string }) => {
     const db = new FirbaseAdminClient(firestore)
-    return db.persistEvent(uid, nopEvent, eventId)
+    return db.persistEvent(uid, nopEvent)
+}
+
+export const updateEvent = async ({ nopEvent, uid, eventId }: { nopEvent: EventFormType, uid: string, eventId: string }) => {
+    const db = new FirbaseAdminClient(firestore)
+    return db.updateEvent(uid, nopEvent, eventId)
 }
 
 export const postEventMessage = async (eventId: string, message: string, from: string) => {
@@ -214,16 +221,39 @@ class FirbaseAdminClient {
         return eventsCollection.doc()
     }
 
-    persistEvent = async (uid: string, nopEvent: EventFormType, eventId: string): Promise<string> => {
+    persistEvent = async (uid: string, nopEvent: EventFormType): Promise<string> => {
         console.log("persist event", uid, nopEvent)
         const eventsRef = this.firestore.collection(EVENTS_COLLECTION)
 
-        const docRef = this.getEventDocRef(eventsRef, eventId)
-
+        const docRef = eventsRef.doc()
         await docRef.set({ ...nopEvent, owner: uid }, { merge: true })
 
-
         return docRef.id
+    }
+
+    updateEvent = async (uid: string, nopEvent: EventFormType, eventId: string): Promise<string | null> => {
+        console.log("update event", uid, nopEvent)
+        const eventsRef = this.firestore.collection(EVENTS_COLLECTION)
+
+
+        const docRef = eventsRef.doc(eventId)
+
+        docRef.get()
+            .then(async (documentSnapshot) => {
+                const event = documentSnapshot.data() as EventFirestoreModel
+                console.log("update event", event)
+                console.log("update event, user and owner is the same?", event.owner === uid)
+                if (event.owner === uid) {
+                    await docRef.set({ ...nopEvent, owner: uid }, { merge: true })
+                    return docRef.id
+                }
+            })
+            .catch(error => console.error("cannot update, no event found at ", docRef.path, error))
+
+        return null
+
+
+
     }
 }
 

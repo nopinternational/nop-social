@@ -20,11 +20,12 @@ const Home: NextPage = () => {
 
     const saveNewEvent = (nopEvent: EventFormType): void => {
 
-        persistEvent({ nopEvent }).then((id: string) => {
-            router.push(`/app/event/${id}`)
-        }).catch((error) => {
-            console.error("saveNewEvent ended with an error", error)
-        });
+        persistEvent({ nopEvent })
+            .then((id: string) => {
+                router.push(`/app/event/${id}`)
+            }).catch((error) => {
+                console.error("saveNewEvent ended with an error", error)
+            });
 
 
         //setSavedId((old) => { return id })
