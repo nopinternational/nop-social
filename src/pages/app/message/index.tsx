@@ -15,10 +15,10 @@ const Home: NextPage = () => {
                             Tjoho! Just nu arbetar vi med att göra det möjligt att skicka meddelande till varandra. Bra va 😃
                         </div>
                         <div className="text-lg">
-                            Som ni märker är vi inte riktigt klara...
+                            Som ni märker är vi inte riktigt klara... Men nedan kan ni se hur vi tänkt oss. Prova klicka!
                         </div></Card>
 
-                    <Card header="card1">
+                    <Card header="Pågående konversationer">
                         pvfkm</Card>
 
                 </div>
