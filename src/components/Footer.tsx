@@ -5,6 +5,7 @@ import Link from "next/link";
 type CTA_Button = {
     text: string
     url: string
+    isnew?: boolean
 }
 
 const BUTTONS: CTA_Button[] = [
@@ -22,7 +23,8 @@ const BUTTONS: CTA_Button[] = [
     },
     {
         text: "Meddelanden",
-        url: "/app/message"
+        url: "/app/message",
+        isnew: true
     },
 
 ]
@@ -52,14 +54,7 @@ const Footer: React.FC = () => {
     const renderButton = (button: CTA_Button) => {
 
         return (
-            <div className="p-2" key={button.url}>
-                <Link href={button.url}>
-                    <button
-                        className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
-                        {button.text}
-                    </button>
-                </Link>
-            </div>
+            <CTAButton button={button} />
         )
     }
     return (
@@ -68,7 +63,7 @@ const Footer: React.FC = () => {
                 <span>Ni är inloggade som <HighlightText>{sessionData.user?.name}</HighlightText></span>
             </p>
             <div className="flex flex-wrap justify-center justify-self-center">
-                {BUTTONS.map(button => renderButton(button))}
+                {BUTTONS.map(button => <CTAButton key={button.url} button={button} />)}
             </div>
 
             <button
@@ -83,3 +78,23 @@ const Footer: React.FC = () => {
 };
 
 export default Footer
+
+const CTAButton = ({ button }: { button: CTA_Button }) => {
+
+    return (
+        <div className="p-2" >
+            <Link href={button.url}>
+                <button
+                    className="relative rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
+                    {button.text}
+
+                    {button.isnew ?
+                        <div className="absolute p-2 inline-flex items-center justify-center h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">Nytt</div>
+                        : null}
+
+
+                </button>
+            </Link>
+        </div>
+    )
+}
