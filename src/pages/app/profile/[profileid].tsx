@@ -11,6 +11,7 @@ import { type Profile } from "~/module/profile/profileRouter";
 import couplePic from "./couple_icon_square.png"
 import Layout from "~/components/Layout";
 import { Spinner } from "~/components/Spinner";
+import { ProfileHeader } from "~/module/profile/components/ProfileHeader";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -59,11 +60,7 @@ const Home: NextPage = () => {
 
         <div className="col-span-2">
           <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/10 items-center">
-            <Image
-              className="w-32 h-32 bg-yellow-50 rounded-full shadow max-w-full align-middle border-4 border-[hsl(280,100%,70%)]"
-              src={couplePic}
-              alt="John Doe" />
-            <h3 className="text-2xl font-bold text-center"><HighlightText>{p.username}</HighlightText></h3>
+            <ProfileHeader profileName={p.username}></ProfileHeader>
             <div className="text-lg">
               <p>{p.username} är ett par som heter <HighlightText>{p.person1?.name}</HighlightText> & <HighlightText>{p.person2.name}</HighlightText>,
                 dom är {YEAR - p.person1?.born} och {YEAR - p.person2?.born}år.</p>
