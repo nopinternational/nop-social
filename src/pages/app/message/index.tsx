@@ -39,8 +39,8 @@ const Home: NextPage = () => {
                         </div>
                         <div className="text-lg">
                             Som ni märker är vi inte riktigt klara... Men nedan kan ni se hur vi tänkt oss.
-                        </div>
-                    </Card>
+                        </div >
+                    </Card >
 
                     <Card header="Pågående konversationer">
                         <div className="grid grid-cols-4 gap-y-8">
@@ -52,9 +52,9 @@ const Home: NextPage = () => {
                         </div>
                     </Card>
 
-                </div>
-            </div>
-        </Layout>
+                </div >
+            </div >
+        </Layout >
     )
 };
 
@@ -62,19 +62,14 @@ export default Home;
 
 const Conversation = ({ convo }: { convo: Conversation }) => {
     return (
-
         <>
             <div className="col-span-1">
-
                 <ProfilePic />
             </div>
             <div className="col-span-3">
                 <h3 className="text-2xl font-bold"><HighlightText>{convo.username}</HighlightText></h3>
                 <p className=" p-2 rounded-xl bg-white/10 whitespace-pre-wrap italic" >{convo.lastMessage}</p>
             </div>
-
-
-
         </ >
     )
 }
