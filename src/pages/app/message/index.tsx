@@ -39,7 +39,8 @@ const Home: NextPage = () => {
                         </div>
                         <div className="text-lg">
                             Som ni märker är vi inte riktigt klara... Men nedan kan ni se hur vi tänkt oss.
-                        </div></Card>
+                        </div>
+                    </Card>
 
                     <Card header="Pågående konversationer">
                         <div className="grid grid-cols-4 gap-y-8">
