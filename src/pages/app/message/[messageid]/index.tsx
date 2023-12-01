@@ -3,31 +3,50 @@ import Link from "next/link";
 import { Card } from "~/components/Card";
 import HighlightText from "~/components/HighlightText";
 import Layout from "~/components/Layout";
-import { ProfileHeader } from "~/module/profile/components/ProfileHeader";
+import { TextEditForm, type TextEditFormOptions } from "~/components/TextEditForm";
 import { ProfilePic } from "~/module/profile/components/ProfilePic";
 
 
-type Conversation = {
-    username: string
-    lastMessage: string
+type Message = {
+    id: string
+    from: string
+    message: string
 }
 
 const Home: NextPage = () => {
 
-    const CONVERSATION: Conversation[] = [
+    const MESSAGES: Message[] = [
         {
-            username: "sthlmpar08",
-            lastMessage: "Så roligt att höra! Vi ses på lördag för en middag"
+            id: "jscfdn",
+            from: "sthlmpar08",
+            message: "Hej på er. Tack för ett ni kom cocktailträffen. Vi tycker det var väldigt kul att få träffa er och lära känna er."
         },
         {
-            username: "Sexy-couple",
-            lastMessage: "Det var många härliga par på förra träffen och ni är ett par som vi särskilt gillar 😉"
+            id: "awergzx",
+            from: "Sexy-couple",
+            message: "Tack själva! Vilket härligt gäng det var, supertrevligt. Ni är ett par vi kände vi klickade med... "
         },
         {
-            username: "Latin-Language-Lovers",
-            lastMessage: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-        }
+            id: "lkojmn",
+            from: "Sexy-couple",
+            message: "Vi ska ha en middags-träff på lördag med ett annat par, vi tror ni skulle gilla dom också. Det vore kul och spännande om ni vill joina oss."
+        },
+        {
+            id: "nccarp",
+            from: "sthlmpar08",
+            message: "Så roligt att höra. Vi ses gärna på lördag för en middag, kul!"
+        },
     ]
+
+    function postMessageHandler(description: { description: string; }): void {
+        alert("tack för att du vill testa att skicka ett meddelande, men det är inget som fungerar ännu 😟");
+    }
+
+    const OPTIONS: TextEditFormOptions = {
+        buttontext: "Skicka",
+        headingText: <>Skriv ett meddelande till <HighlightText>Sexy-couple</HighlightText></>,
+        emptyOnSubmit: true
+    }
 
     return (
         <Layout headingText={<><HighlightText>Meddelanden</HighlightText></>}>
@@ -43,12 +62,15 @@ const Home: NextPage = () => {
                         </div >
                     </Card >
 
-                    <Card header="Pågående konversationer">
-                        <p className=" p-2 rounded-xl bg-white/10 whitespace-pre-wrap italic" >
-                            Så roligt att höra! Vi ses på lördag för en middag
-                        </p>
-                        {/* <div className="grid grid-cols-4 gap-y-8">
-                        </div> */}
+                    <Card header={<>Konversation med <HighlightText>Sexy-couple</HighlightText>:</>}>
+                        {MESSAGES.map(message => {
+                            return (
+
+                                <ChatMessage key={message.id} message={message} fromMe={message.from === "sthlmpar08"} />
+                            )
+                        })}
+
+                        <TextEditForm onsubmitHandler={postMessageHandler} placeholder="" options={OPTIONS} ></TextEditForm>
                     </Card>
 
                 </div >
@@ -65,16 +87,27 @@ const Home: NextPage = () => {
 
 export default Home;
 
-const Conversation = ({ convo }: { convo: Conversation }) => {
+const ChatMessage = ({ message, fromMe }: { message: Message, fromMe: boolean }) => {
+
     return (
         <>
-            <div className="flex col-span-1 items-center justify-center pt-2">
+            {fromMe ?
+                <div className="pl-10">
+
+                    <p className="p-2  rounded-xl bg-white/10 whitespace-pre-wrap italic" >{message.message}</p>
+                </div> :
+                <div className="pr-10">
+                    <p><HighlightText>{message.from}</HighlightText> säger:</p>
+                    <p className="p-2 rounded-xl bg-white/10 whitespace-pre-wrap italic" >{message.message}</p>
+                </div>
+            }
+            {/* <div className="flex col-span-1 items-center justify-center pt-2">
                 <ProfilePic />
             </div>
             <div className="col-span-3">
                 <h3 className="text-2xl font-bold"><HighlightText>{convo.username}</HighlightText></h3>
                 <p className=" p-2 rounded-xl bg-white/10 whitespace-pre-wrap italic" >{convo.lastMessage}</p>
-            </div>
+            </div> */}
         </ >
     )
 }
