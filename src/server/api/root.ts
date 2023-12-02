@@ -2,6 +2,7 @@ import { exampleRouter } from "~/server/api/routers/example";
 import { createTRPCRouter } from "~/server/api/trpc";
 import { profileRouter } from "../../module/profile/profileRouter";
 import { eventRouter } from "../../module/events/eventsRouter";
+import { chatRouter } from "~/module/message/chatRouter";
 
 /**
  * This is the primary router for your server.
@@ -11,7 +12,8 @@ import { eventRouter } from "../../module/events/eventsRouter";
 export const appRouter = createTRPCRouter({
   example: exampleRouter,
   profile: profileRouter,
-  event: eventRouter
+  event: eventRouter,
+  chat: chatRouter
 });
 
 // export type definition of API
