@@ -56,7 +56,8 @@ const Home: NextPage = () => {
                         {CONVERSATION.map(convo => (
                             <>
                                 <Link
-                                    className="grid grid-cols-4 "
+                                    key={convo.conversationId}
+                                    className="grid grid-cols-4 gap-2"
                                     href={`/app/message/${convo.conversationId}`}>
                                     <Conversation convo={convo} />
                                 </Link >
@@ -77,11 +78,11 @@ const Conversation = ({ convo }: { convo: Conversation }) => {
     return (
         <>
             <div className="flex col-span-1 items-center justify-center pt-2">
-                <ProfilePic />
+                <ProfilePic variant="small" />
             </div>
             <div className="col-span-3">
                 <h3 className="text-2xl font-bold"><HighlightText>{convo.username}</HighlightText></h3>
-                <p className=" p-2 rounded-xl bg-white/10 whitespace-pre-wrap italic" >{convo.lastMessage}</p>
+                <p className="pb-1 p-2  rounded-xl bg-white/10 whitespace-pre-wrap italic line-clamp-3 truncate" >{convo.lastMessage}</p>
             </div>
         </ >
     )
