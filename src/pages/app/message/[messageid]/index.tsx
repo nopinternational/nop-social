@@ -4,6 +4,7 @@ import { Card } from "~/components/Card";
 import HighlightText from "~/components/HighlightText";
 import Layout from "~/components/Layout";
 import { TextEditForm, type TextEditFormOptions } from "~/components/TextEditForm";
+import SendAMessageForm from "~/module/message/SendAMessage";
 import { ProfilePic } from "~/module/profile/components/ProfilePic";
 
 
@@ -38,16 +39,6 @@ const Home: NextPage = () => {
         },
     ]
 
-    function postMessageHandler(description: { description: string; }): void {
-        alert("tack för att du vill testa att skicka ett meddelande, men det är inget som fungerar ännu 😟");
-    }
-
-    const OPTIONS: TextEditFormOptions = {
-        buttontext: "Skicka",
-        headingText: <>Skriv ett meddelande till <HighlightText>Sexy-couple</HighlightText></>,
-        emptyOnSubmit: true
-    }
-
     return (
         <Layout headingText={<><HighlightText>Meddelanden</HighlightText></>}>
             <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
@@ -69,10 +60,8 @@ const Home: NextPage = () => {
                                 <ChatMessage key={message.id} message={message} fromMe={message.from === "sthlmpar08"} />
                             )
                         })}
-
-                        <TextEditForm onsubmitHandler={postMessageHandler} placeholder="" options={OPTIONS} ></TextEditForm>
+                        <SendAMessageForm profileId="profileId" username="Sexy-couple"></SendAMessageForm>
                     </Card>
-
                 </div >
             </div >
             <Link href="/app/message">
@@ -86,6 +75,8 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+
 
 const ChatMessage = ({ message, fromMe }: { message: Message, fromMe: boolean }) => {
 
