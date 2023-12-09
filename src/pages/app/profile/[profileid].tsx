@@ -12,6 +12,8 @@ import couplePic from "./couple_icon_square.png"
 import Layout from "~/components/Layout";
 import { Spinner } from "~/components/Spinner";
 import { ProfileHeader } from "~/module/profile/components/ProfileHeader";
+import { Card } from "~/components/Card";
+import SendAMessageForm from "~/module/message/SendAMessage";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -74,15 +76,18 @@ const Home: NextPage = () => {
             </div > */}
 
         <div className="col-span-2">
-          <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/10">
-            <h3 className="text-2xl font-bold">Så här <HighlightText>beskriver</HighlightText> dom sig</h3>
-            <div className="text-lg">
-              {p.description ?
-                <p className="p-2 rounded-xl bg-white/10 whitespace-pre-wrap italic" >{p.description}</p> :
-                <p className="p-2 rounded-xl bg-white/10 whitespace-pre-wrap text-center" ><span className="italic">Här var det tomt</span> 🙁</p>
-              }
-            </div>
-          </div>
+
+          <Card header={<>Så här <HighlightText>beskriver</HighlightText> dom sig</>} >
+            {p.description ?
+              <p className="p-2 rounded-xl bg-white/10 whitespace-pre-wrap italic" >{p.description}</p> :
+              <p className="p-2 rounded-xl bg-white/10 whitespace-pre-wrap text-center" ><span className="italic">Här var det tomt</span> 🙁</p>
+            }
+          </Card>
+          <Card header={<>Skicka ett meddelande till <HighlightText>{p.username}</HighlightText></>} >
+
+            <SendAMessageForm profileId={profileid as string} username={p.username}></SendAMessageForm>
+
+          </Card>
         </div >
 
       </div>

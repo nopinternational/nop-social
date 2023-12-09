@@ -28,7 +28,7 @@ export const TextEditForm: FC<{ placeholder?: string, value?: string, onsubmitHa
         if (!headingText)
             return null;
 
-        return <div className="m-2">{headingText}</div>
+        return <div className="">{headingText}</div>
 
     }
 
