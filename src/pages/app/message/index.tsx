@@ -54,14 +54,12 @@ const Home: NextPage = () => {
                     <Card header="Pågående konversationer">
 
                         {CONVERSATION.map(convo => (
-                            <>
-                                <Link
-                                    key={convo.conversationId}
-                                    className="grid grid-cols-4 gap-2"
-                                    href={`/app/message/${convo.conversationId}`}>
-                                    <Conversation convo={convo} />
-                                </Link >
-                            </>
+                            <Link
+                                key={convo.conversationId}
+                                className="grid grid-cols-4 "
+                                href={`/app/message/${convo.conversationId}`}>
+                                <Conversation convo={convo} />
+                            </Link >
                         ))}
 
                     </Card>
