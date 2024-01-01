@@ -4,7 +4,9 @@ import { Card } from "~/components/Card";
 import HighlightText from "~/components/HighlightText";
 import Layout from "~/components/Layout";
 import { ProfilePic } from "~/module/profile/components/ProfilePic";
-
+import { useFlag, useUnleashContext } from "@unleash/nextjs/client";
+import { useEffect } from "react";
+import { useSession } from "next-auth/react";
 
 type Conversation = {
     conversationId: string
@@ -14,6 +16,20 @@ type Conversation = {
 
 const Home: NextPage = () => {
 
+    const session = useSession()
+    const MESSAGE_FEATURE_FLAG_NAME = "message"
+    const messageIsEnabled = useFlag(MESSAGE_FEATURE_FLAG_NAME)
+    const updateContext = useUnleashContext();
+
+    useEffect(() => {
+
+        // const userId = "7K7PxXthSmblBF8uJIQN2zWMCyw1"
+        const userId = session.data?.user.id
+        void updateContext({ userId, properties: { foo: "true" } });
+    });
+
+
+    console.log("message.isEnabled: ", messageIsEnabled)
     const CONVERSATION: Conversation[] = [
         {
             conversationId: "e36db886ceadadf6e26678b57222a6d0",
@@ -50,6 +66,18 @@ const Home: NextPage = () => {
                             Som ni märker är vi inte riktigt klara... Men nedan kan ni se hur vi tänkt oss.
                         </div >
                     </Card >
+                    {messageIsEnabled ?
+                        <Card header={<>är <HighlightText>feature toogle</HighlightText> igång?</>}>
+                            <div className="text-lg">
+                                Kollar om feature flagga är igång eller inte
+                            </div >
+
+                            <div className="text-lg">
+                                Är <HighlightText>{MESSAGE_FEATURE_FLAG_NAME}</HighlightText> igång? {messageIsEnabled.toString()}
+                            </div >
+
+                        </Card>
+                        : null}
 
                     <Card header="Pågående konversationer">
 
