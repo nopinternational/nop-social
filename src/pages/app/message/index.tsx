@@ -1,12 +1,11 @@
 import { type NextPage } from "next";
 import Link from "next/link";
 import { Card } from "~/components/Card";
+import { useFeaure } from "~/components/FeatureFlag";
 import HighlightText from "~/components/HighlightText";
 import Layout from "~/components/Layout";
 import { ProfilePic } from "~/module/profile/components/ProfilePic";
-import { useFlag, useUnleashContext } from "@unleash/nextjs/client";
-import { useEffect } from "react";
-import { useSession } from "next-auth/react";
+
 
 type Conversation = {
     conversationId: string
@@ -16,20 +15,8 @@ type Conversation = {
 
 const Home: NextPage = () => {
 
-    const session = useSession()
-    const MESSAGE_FEATURE_FLAG_NAME = "message"
-    const messageIsEnabled = useFlag(MESSAGE_FEATURE_FLAG_NAME)
-    const updateContext = useUnleashContext();
+    const messageIsEnabled = useFeaure("message")
 
-    useEffect(() => {
-
-        // const userId = "7K7PxXthSmblBF8uJIQN2zWMCyw1"
-        const userId = session.data?.user.id
-        void updateContext({ userId, properties: { foo: "true" } });
-    });
-
-
-    console.log("message.isEnabled: ", messageIsEnabled)
     const CONVERSATION: Conversation[] = [
         {
             conversationId: "e36db886ceadadf6e26678b57222a6d0",
@@ -73,7 +60,7 @@ const Home: NextPage = () => {
                             </div >
 
                             <div className="text-lg">
-                                Är <HighlightText>{MESSAGE_FEATURE_FLAG_NAME}</HighlightText> igång? {messageIsEnabled.toString()}
+                                Är <HighlightText>messsage</HighlightText> igång? {messageIsEnabled.toString()}
                             </div >
 
                         </Card>
