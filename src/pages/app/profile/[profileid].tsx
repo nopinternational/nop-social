@@ -13,6 +13,8 @@ import Layout from "~/components/Layout";
 import { Spinner } from "~/components/Spinner";
 import { ProfileHeader } from "~/module/profile/components/ProfileHeader";
 import { useFeaure } from "~/components/FeatureFlag";
+import { Card } from "~/components/Card";
+import { SendChatMessageForm } from "~/components/Message/ChatMessage";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -76,15 +78,29 @@ const Home: NextPage = () => {
             </div > */}
 
         <div className="col-span-2">
-          <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/10">
-            <h3 className="text-2xl font-bold">Så här <HighlightText>beskriver</HighlightText> dom sig</h3>
+          {/* <Card header={undefined} >
+            <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/10 items-center">
+              <ProfileHeader profileName={p.username}></ProfileHeader>
+              <div className="text-lg">
+                <p>{p.username} är ett par som heter <HighlightText>{p.person1?.name}</HighlightText> & <HighlightText>{p.person2.name}</HighlightText>,
+                  dom är {YEAR - p.person1?.born} och {YEAR - p.person2?.born}år.</p>
+              </div>
+            </div>
+          </Card> */}
+
+          <Card header={<>Så här <HighlightText>beskriver</HighlightText> dom sig</>} >
             <div className="text-lg">
               {p.description ?
                 <p className="p-2 rounded-xl bg-white/10 whitespace-pre-wrap italic" >{p.description}</p> :
                 <p className="p-2 rounded-xl bg-white/10 whitespace-pre-wrap text-center" ><span className="italic">Här var det tomt</span> 🙁</p>
               }
             </div>
-          </div>
+          </Card>
+          {messageFeatureFlagIsEnabled ?
+            <Card header={<>Skicka ett meddelande till <HighlightText>{p.username}</HighlightText></>} >
+              <SendChatMessageForm toUsername={p.username}></SendChatMessageForm>
+            </Card>
+            : null}
         </div >
 
       </div>
