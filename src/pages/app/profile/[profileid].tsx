@@ -12,9 +12,11 @@ import couplePic from "./couple_icon_square.png"
 import Layout from "~/components/Layout";
 import { Spinner } from "~/components/Spinner";
 import { ProfileHeader } from "~/module/profile/components/ProfileHeader";
+import { useFeaure } from "~/components/FeatureFlag";
 
 const Home: NextPage = () => {
   const router = useRouter();
+  const messageFeatureFlagIsEnabled = useFeaure("message")
 
   const { profileid } = router.query;
   const pid = profileid as string
