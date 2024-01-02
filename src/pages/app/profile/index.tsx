@@ -24,8 +24,8 @@ const Home: NextPage = () => {
 
     const profileSlug = `profile/${profile.username}`
     return (
-      <Link href={profileSlug} className="col-span-2 md:col-span-1">
-        <div key={profile.username} className="flex flex-col gap-4 col-span-2 md:col-span-1 items-center w-full justify-center rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
+      <Link href={profileSlug} className="col-span-2 md:col-span-1" key={profile.username} >
+        <div className="flex flex-col gap-4 col-span-2 md:col-span-1 items-center w-full justify-center rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
           <ProfileHeader profileName={profile.username} />
         </div>
       </Link>
