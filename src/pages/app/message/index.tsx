@@ -36,10 +36,6 @@ const Home: NextPage = () => {
         }
     ]
 
-    function postMessageHandler(description: { description: string; }): void {
-        throw new Error("Function not implemented.");
-    }
-
     return (
         <Layout headingText={<><HighlightText>Meddelanden</HighlightText></>}>
             <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">

@@ -15,8 +15,8 @@ export const useFeature = (featureName: string): boolean => {
     return featureIsEnabled
 }
 
-export const ToggledByFeatureFlag = ({ featureName, children }: { featureName: string, children: ReactNode }): React.JSX.Element => {
+export const ToggledByFeatureFlag = ({ featureName, children }: { featureName: string, children: ReactNode }): React.JSX.Element | null => {
     const featureFlagToggle = useFeature(featureName)
 
-    return featureFlagToggle ? <>{children}</> : <>null</>
+    return featureFlagToggle ? <>{children}</> : null
 }

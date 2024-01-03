@@ -9,7 +9,6 @@ import { api } from "~/utils/api";
 import Layout from "~/components/Layout";
 import { Spinner } from "~/components/Spinner";
 import { ProfileHeader } from "~/module/profile/components/ProfileHeader";
-import { ToggledByFeatureFlag } from "~/components/FeatureFlag";
 import { Card } from "~/components/Card";
 import { SendChatMessageForm } from "~/components/Message/ChatMessage";
 
@@ -52,6 +51,10 @@ const Home: NextPage = () => {
     return renderNoProfileFound(pid)
   }
 
+  function postMessageHandler(): void {
+    alert("tack för att du vill testa att skicka ett meddelande, men det är inget som fungerar ännu 😟");
+  }
+
   const p = profile.data
 
   return (
@@ -92,11 +95,10 @@ const Home: NextPage = () => {
               }
             </div>
           </Card>
-          <ToggledByFeatureFlag featureName="message" >
-            <Card header={<>Skicka ett meddelande till <HighlightText>{p.username}</HighlightText></>} >
-              <SendChatMessageForm toUsername={p.username}></SendChatMessageForm>
-            </Card>
-          </ToggledByFeatureFlag>
+
+          <Card header={<>Skicka ett meddelande till <HighlightText>{p.username}</HighlightText></>} >
+            <SendChatMessageForm toUsername={p.username} postMessageHandler={postMessageHandler}></SendChatMessageForm>
+          </Card>
 
         </div >
 

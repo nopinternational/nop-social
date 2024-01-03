@@ -30,7 +30,7 @@ const Home: NextPage = () => {
         },
     ]
 
-    function postMessageHandler(description: { description: string }): void {
+    function postMessageHandler(): void {
         alert("tack för att du vill testa att skicka ett meddelande, men det är inget som fungerar ännu 😟");
     }
 

@@ -81,7 +81,6 @@ export const NoPEventForm = ({ event, onCreateHandler }: { event?: EventFormType
 
     const toggleOption = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
         const name: string = e.target.name
-        const currentVal = eventOptions[name as keyof EventOptions]
         setEventOptions((options) => {
             const newOptions = { ...options }
             const newVal = !options[name as keyof EventOptions]

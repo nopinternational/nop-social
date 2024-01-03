@@ -39,6 +39,7 @@ const Home: NextPage = () => {
         return renderAttendingToCocktailMeet()
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const renderAttendingToSkargardsParty = () => {
         return (
             <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">

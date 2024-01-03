@@ -5,18 +5,10 @@ import Layout from "~/components/Layout";
 import { type EventFormType, NoPEventForm } from "~/module/events/components/NoPEventForm";
 import { api } from "~/utils/api";
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from "react";
-
 
 const Home: NextPage = () => {
     const router = useRouter()
     const { mutateAsync: persistEvent } = api.event.createEvent.useMutation()
-    const [savedId, setSavedId] = useState<string>("")
-
-    useEffect(() => {
-        console.log("useEfffect with id", savedId)
-        //router.push(`/app/event/${savedId}`)
-    }, [savedId])
 
     const saveNewEvent = (nopEvent: EventFormType): void => {
 
@@ -26,10 +18,6 @@ const Home: NextPage = () => {
             }).catch((error) => {
                 console.error("saveNewEvent ended with an error", error)
             });
-
-
-        //setSavedId((old) => { return id })
-
     }
 
     return (
