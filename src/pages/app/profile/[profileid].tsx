@@ -2,23 +2,19 @@
 import { type NextPage } from "next";
 import { useRouter } from 'next/router';
 import Link from "next/link";
-import Image from 'next/image'
 import { useSession } from "next-auth/react";
 import HighlightText from "~/components/HighlightText";
 
 import { api } from "~/utils/api";
-import { type Profile } from "~/module/profile/profileRouter";
-import couplePic from "./couple_icon_square.png"
 import Layout from "~/components/Layout";
 import { Spinner } from "~/components/Spinner";
 import { ProfileHeader } from "~/module/profile/components/ProfileHeader";
-import { useFeaure } from "~/components/FeatureFlag";
+import { ToggledByFeatureFlag } from "~/components/FeatureFlag";
 import { Card } from "~/components/Card";
 import { SendChatMessageForm } from "~/components/Message/ChatMessage";
 
 const Home: NextPage = () => {
   const router = useRouter();
-  const messageFeatureFlagIsEnabled = useFeaure("message")
 
   const { profileid } = router.query;
   const pid = profileid as string
@@ -96,11 +92,12 @@ const Home: NextPage = () => {
               }
             </div>
           </Card>
-          {messageFeatureFlagIsEnabled ?
+          <ToggledByFeatureFlag featureName="message" >
             <Card header={<>Skicka ett meddelande till <HighlightText>{p.username}</HighlightText></>} >
               <SendChatMessageForm toUsername={p.username}></SendChatMessageForm>
             </Card>
-            : null}
+          </ToggledByFeatureFlag>
+
         </div >
 
       </div>

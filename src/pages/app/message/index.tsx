@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
 import Link from "next/link";
 import { Card } from "~/components/Card";
-import { useFeaure } from "~/components/FeatureFlag";
+import { useFeature } from "~/components/FeatureFlag";
 import HighlightText from "~/components/HighlightText";
 import Layout from "~/components/Layout";
 import { ProfilePic } from "~/module/profile/components/ProfilePic";
@@ -15,7 +15,7 @@ type Conversation = {
 
 const Home: NextPage = () => {
 
-    const messageIsEnabled = useFeaure("message")
+    const messageIsEnabled = useFeature("message")
 
     const CONVERSATION: Conversation[] = [
         {
