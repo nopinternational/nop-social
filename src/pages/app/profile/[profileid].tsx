@@ -2,16 +2,15 @@
 import { type NextPage } from "next";
 import { useRouter } from 'next/router';
 import Link from "next/link";
-import Image from 'next/image'
 import { useSession } from "next-auth/react";
 import HighlightText from "~/components/HighlightText";
 
 import { api } from "~/utils/api";
-import { type Profile } from "~/module/profile/profileRouter";
-import couplePic from "./couple_icon_square.png"
 import Layout from "~/components/Layout";
 import { Spinner } from "~/components/Spinner";
 import { ProfileHeader } from "~/module/profile/components/ProfileHeader";
+import { Card } from "~/components/Card";
+import { SendChatMessageForm } from "~/components/Message/ChatMessage";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -52,6 +51,10 @@ const Home: NextPage = () => {
     return renderNoProfileFound(pid)
   }
 
+  function postMessageHandler(): void {
+    alert("tack för att du vill testa att skicka ett meddelande, men det är inget som fungerar ännu 😟");
+  }
+
   const p = profile.data
 
   return (
@@ -74,15 +77,29 @@ const Home: NextPage = () => {
             </div > */}
 
         <div className="col-span-2">
-          <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/10">
-            <h3 className="text-2xl font-bold">Så här <HighlightText>beskriver</HighlightText> dom sig</h3>
+          {/* <Card header={undefined} >
+            <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/10 items-center">
+              <ProfileHeader profileName={p.username}></ProfileHeader>
+              <div className="text-lg">
+                <p>{p.username} är ett par som heter <HighlightText>{p.person1?.name}</HighlightText> & <HighlightText>{p.person2.name}</HighlightText>,
+                  dom är {YEAR - p.person1?.born} och {YEAR - p.person2?.born}år.</p>
+              </div>
+            </div>
+          </Card> */}
+
+          <Card header={<>Så här <HighlightText>beskriver</HighlightText> dom sig</>} >
             <div className="text-lg">
               {p.description ?
                 <p className="p-2 rounded-xl bg-white/10 whitespace-pre-wrap italic" >{p.description}</p> :
                 <p className="p-2 rounded-xl bg-white/10 whitespace-pre-wrap text-center" ><span className="italic">Här var det tomt</span> 🙁</p>
               }
             </div>
-          </div>
+          </Card>
+
+          <Card header={<>Skicka ett meddelande till <HighlightText>{p.username}</HighlightText></>} >
+            <SendChatMessageForm toUsername={p.username} postMessageHandler={postMessageHandler}></SendChatMessageForm>
+          </Card>
+
         </div >
 
       </div>

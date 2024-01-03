@@ -1,25 +1,12 @@
-import { firestoreFoo } from "../../lib/firebase/firebase";
 import { firestoreAdmin } from "~/server/api/firebaseAdmin";
-import {
-
-    type SnapshotOptions,
-    collection,
-    getDocs,
-    setDoc,
-    query,
-    where,
-    doc,
-} from "firebase/firestore";
 import {
     type Person,
     type Profile
 } from "~/module/profile/profileRouter";
 import {
-    type CollectionReference,
     type QueryDocumentSnapshot,
     type FirestoreDataConverter,
-    FieldValue,
-    DocumentData
+    type DocumentData
 } from "firebase-admin/firestore";
 
 interface ProfileDbModel extends DocumentData {

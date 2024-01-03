@@ -147,10 +147,10 @@ export const authOptions: NextAuthOptions = {
     //maxAge: 2 * 60 * 60, // 2 hours
   },
   events: {
-    signIn: (obj) => {
+    signIn: () => {
       // console.log("EVENT: signin ", obj)
     },
-    signOut: (obj) => {
+    signOut: () => {
       // console.log("EVENT: signout ", obj)
       signOut(authApp)
         .then(() => { console.log("firebase signout OK") })

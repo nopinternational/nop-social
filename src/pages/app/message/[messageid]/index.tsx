@@ -3,15 +3,7 @@ import Link from "next/link";
 import { Card } from "~/components/Card";
 import HighlightText from "~/components/HighlightText";
 import Layout from "~/components/Layout";
-import { TextEditForm, type TextEditFormOptions } from "~/components/TextEditForm";
-import { ProfilePic } from "~/module/profile/components/ProfilePic";
-
-
-type Message = {
-    id: string
-    from: string
-    message: string
-}
+import { ChatMessage, type Message, SendChatMessageForm } from "~/components/Message/ChatMessage";
 
 const Home: NextPage = () => {
 
@@ -38,14 +30,8 @@ const Home: NextPage = () => {
         },
     ]
 
-    function postMessageHandler(description: { description: string; }): void {
+    function postMessageHandler(): void {
         alert("tack för att du vill testa att skicka ett meddelande, men det är inget som fungerar ännu 😟");
-    }
-
-    const OPTIONS: TextEditFormOptions = {
-        buttontext: "Skicka",
-        headingText: <>Skriv ett meddelande till <HighlightText>Sexy-couple</HighlightText></>,
-        emptyOnSubmit: true
     }
 
     return (
@@ -70,7 +56,7 @@ const Home: NextPage = () => {
                             )
                         })}
 
-                        <TextEditForm onsubmitHandler={postMessageHandler} placeholder="" options={OPTIONS} ></TextEditForm>
+                        <SendChatMessageForm toUsername="Sexy-Couple" postMessageHandler={postMessageHandler}></SendChatMessageForm>
                     </Card>
 
                 </div >
@@ -86,28 +72,3 @@ const Home: NextPage = () => {
 };
 
 export default Home;
-
-const ChatMessage = ({ message, fromMe }: { message: Message, fromMe: boolean }) => {
-
-    return (
-        <>
-            {fromMe ?
-                <div className="pl-10">
-
-                    <p className="p-2  rounded-xl bg-white/10 whitespace-pre-wrap italic" >{message.message}</p>
-                </div> :
-                <div className="pr-10">
-                    <p><HighlightText>{message.from}</HighlightText> säger:</p>
-                    <p className="p-2 rounded-xl bg-white/10 whitespace-pre-wrap italic" >{message.message}</p>
-                </div>
-            }
-            {/* <div className="flex col-span-1 items-center justify-center pt-2">
-                <ProfilePic />
-            </div>
-            <div className="col-span-3">
-                <h3 className="text-2xl font-bold"><HighlightText>{convo.username}</HighlightText></h3>
-                <p className=" p-2 rounded-xl bg-white/10 whitespace-pre-wrap italic" >{convo.lastMessage}</p>
-            </div> */}
-        </ >
-    )
-}
