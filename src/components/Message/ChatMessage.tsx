@@ -32,11 +32,21 @@ export const ChatMessage = ({ message, fromMe }: { message: Message, fromMe: boo
     )
 }
 
-export const SendChatMessageForm = ({ toUsername, postMessageHandler }: { toUsername: string, postMessageHandler?: (description: { description: string }) => void }) => {
-    const OPTIONS: TextEditFormOptions = {
+type SendChatMessageFormProps = {
+    toUsername: string,
+    postMessageHandler?: (description: { description: string }) => void,
+    options?: TextEditFormOptions
+}
+
+export const SendChatMessageForm = ({
+    toUsername,
+    postMessageHandler,
+    options
+}: SendChatMessageFormProps): JSX.Element => {
+    const DEFAULT_OPTIONS: TextEditFormOptions = {
         buttontext: "Skicka",
         headingText: <>Skriv ett meddelande till <HighlightText>{toUsername}</HighlightText></>,
         emptyOnSubmit: true
     }
-    return <TextEditForm onsubmitHandler={postMessageHandler} placeholder="" options={OPTIONS} ></TextEditForm>
+    return <TextEditForm onsubmitHandler={postMessageHandler} placeholder="" options={{ ...DEFAULT_OPTIONS, ...options }} ></TextEditForm>
 }
