@@ -10,17 +10,17 @@ export interface TextEditFormOptions {
     emptyOnSubmit?: boolean
 }
 
-export const TextEditForm: FC<{ placeholder?: string, value?: string, onsubmitHandler?: (description: { description: string }) => void, options?: TextEditFormOptions }> = ({ placeholder, value, onsubmitHandler, options }) => {
-    const [desc, setdescription] = useState<string>(value || "");
+export const TextEditForm: FC<{ placeholder?: string, value?: string, onsubmitHandler?: ({ text }: { text: string }) => void, options?: TextEditFormOptions }> = ({ placeholder, value, onsubmitHandler, options }) => {
+    const [text, setText] = useState<string>(value || "");
 
     const btText = options?.buttontext || "Ändra"
 
 
     const onChange = (e: React.MouseEvent<HTMLButtonElement>): void => {
         e.preventDefault()
-        onsubmitHandler && onsubmitHandler({ description: desc })
+        onsubmitHandler && onsubmitHandler({ text: text })
         if (options?.emptyOnSubmit)
-            setdescription(() => "")
+            setText(() => "")
     };
 
 
@@ -39,8 +39,8 @@ export const TextEditForm: FC<{ placeholder?: string, value?: string, onsubmitHa
             <textarea
                 className="w-full px-3 py-3 rounded-lg text-black "
                 name="name"
-                value={desc}
-                onChange={event => setdescription(event.target.value)}
+                value={text}
+                onChange={event => setText(event.target.value)}
                 rows={4}
                 placeholder={placeholder}
             ></textarea><br />

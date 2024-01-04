@@ -34,7 +34,7 @@ export const ChatMessage = ({ message, fromMe }: { message: Message, fromMe: boo
 
 type SendChatMessageFormProps = {
     toUsername: string,
-    postMessageHandler?: (description: { description: string }) => void,
+    postMessageHandler?: ({ text }: { text: string }) => void,
     options?: TextEditFormOptions
 }
 
