@@ -11,9 +11,12 @@ import { Spinner } from "~/components/Spinner";
 import { ProfileHeader } from "~/module/profile/components/ProfileHeader";
 import { Card } from "~/components/Card";
 import { SendChatMessageForm } from "~/components/Message/ChatMessage";
+import { useFeature } from "~/components/FeatureFlag";
+import { sendMessageToUser } from "~/module/message/messageService";
 
 const Home: NextPage = () => {
   const router = useRouter();
+  const isMessageFeatureEnabled = useFeature("message")
 
   const { profileid } = router.query;
   const pid = profileid as string
@@ -51,9 +54,16 @@ const Home: NextPage = () => {
     return renderNoProfileFound(pid)
   }
 
-  function postMessageHandler(): void {
-    alert("tack för att du vill testa att skicka ett meddelande, men det är inget som fungerar ännu 😟");
+  function postMessageHandler({ text }: { text: string }): void {
+    if (isMessageFeatureEnabled) {
+      console.log("postMessageHandler.MessageFeatureEnabled", text)
+      sendMessageToUser(text)
+      
+    }
+    else { alert("tack för att du vill testa att skicka ett meddelande, men det är inget som fungerar ännu 😟"); }
   }
+
+
 
   const p = profile.data
 
@@ -97,7 +107,11 @@ const Home: NextPage = () => {
           </Card>
 
           <Card header={<>Skicka ett meddelande till <HighlightText>{p.username}</HighlightText></>} >
-            <SendChatMessageForm toUsername={p.username} postMessageHandler={postMessageHandler}></SendChatMessageForm>
+            <SendChatMessageForm
+              toUsername={p.username}
+              postMessageHandler={postMessageHandler}
+              options={{ emptyOnSubmit: false }}
+            ></SendChatMessageForm>
           </Card>
 
         </div >
