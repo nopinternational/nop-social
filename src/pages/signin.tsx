@@ -39,11 +39,9 @@ const Signin = ({ providers }: SigninPageProps) => {
             void signIn('nop-auth', {
                 //redirect: true,
                 callbackUrl: callbackUrl as string || '/app/welcome',
-                username: inputUsername.current?.value,
-                password: inputPassword.current?.value
+                username: inputUsername.current?.value.trim(),
+                password: inputPassword.current?.value.trim()
             })
-
-
         }
 
         return (
