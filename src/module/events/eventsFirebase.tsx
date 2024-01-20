@@ -127,7 +127,7 @@ class FirbaseAdminClient {
         //console.log("FirbaseAdminClient.getEvent -> snapshot", snapshot)
         if (snapshot.exists) {
             //console.log("FirbaseAdminClient.getEvent -> snapshot.data()", snapshot.data())
-            return snapshot.data()
+            return snapshot.data() as { when: string }
         } else {
             // docSnap.data() will be undefined in this case
             // console.log("No such event!", eventid);

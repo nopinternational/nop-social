@@ -32,12 +32,7 @@ const Home: NextPage = () => {
     const myEventStatus = api.event.getMyEventStatus.useQuery(queryInput,
         { enabled: sessionData?.user !== undefined })
 
-    if (myEventStatus.data) {
-        console.log("MyEventStatus", myEventStatus.data)
-
-    }
     useEffect(() => {
-        console.log("MyEventStatus.useEffect", myEventStatus.data)
         if (myEventStatus.data)
             setAttendToEvent(true)
     }, [myEventStatus.data])
