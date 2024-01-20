@@ -119,7 +119,7 @@ const Home: NextPage = () => {
                         <div>
                             Eller så öppnar ni upp er swish app och skannar QR koden nedan.
                         </div>
-                        <div className="p-4 m-2">
+                        <div className="p-2">
                             <SwishQR />
                         </div>
                     </Card>
