@@ -24,7 +24,7 @@ const BUTTONS: CTA_Button[] = [
     {
         text: "Meddelanden",
         url: "/app/message",
-        isnew: true
+        isnew: false
     },
 
 ]
