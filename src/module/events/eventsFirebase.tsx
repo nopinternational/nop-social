@@ -25,6 +25,10 @@ export const getEvent = async (eventid: string): Promise<NopEvent | null> => {
     const db = new FirbaseAdminClient(firestore)
     return await db.getEvent(eventid);
 }
+export const getMyEventStatus = async (iam_userid: string, eventid: string) => {
+    const db = new FirbaseAdminClient(firestore)
+    return await db.getMyEventStatus(iam_userid, eventid);
+}
 
 export const getEventAttendes = async (iam_userid: string, eventid: string) => {
     const db = new FirbaseAdminClient(firestore)
@@ -109,6 +113,28 @@ class FirbaseAdminClient {
         }
         return null
     }
+
+
+    getMyEventStatus = async (iam_userid: string, eventid: string): Promise<{ when: string } | null> => {
+        //console.log("FirbaseAdminClient.getEvent for id", eventid)
+        const eventStatusRef = this.firestore
+            .collection(EVENTS_COLLECTION)
+            .doc(eventid)
+            .collection("participants")
+            .doc(iam_userid)
+
+        const snapshot = await eventStatusRef.get();
+        //console.log("FirbaseAdminClient.getEvent -> snapshot", snapshot)
+        if (snapshot.exists) {
+            //console.log("FirbaseAdminClient.getEvent -> snapshot.data()", snapshot.data())
+            return snapshot.data() as { when: string }
+        } else {
+            // docSnap.data() will be undefined in this case
+            // console.log("No such event!", eventid);
+        }
+        return null
+    }
+
 
     getEventAttendes = async (iam_userid: string, eventid: string) => {
         //events / REdvBu1tM2iI5GHEur8F / signups / attendes
