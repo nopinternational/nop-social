@@ -7,7 +7,7 @@ import { api } from "~/utils/api";
 import Link from "next/link";
 import { useState } from "react";
 import EventDescription from "~/module/events/components/EventDescription"
-import { SwishQR } from "~/components/SwishQR/SwishQR"
+import { SwishQR } from "~/components/Swish/SwishQR/SwishQR"
 import Layout from "~/components/Layout";
 import { Spinner } from "~/components/Spinner";
 import { Card } from "~/components/Card";
