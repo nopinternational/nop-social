@@ -11,6 +11,7 @@ import { SwishQR } from "~/components/Swish/SwishQR/SwishQR"
 import Layout from "~/components/Layout";
 import { Spinner } from "~/components/Spinner";
 import { Card } from "~/components/Card";
+import { CocktailSwishButton, SwishButton } from "~/components/Swish/SwishButton/SwishButton";
 
 
 const Home: NextPage = () => {
@@ -88,6 +89,9 @@ const Home: NextPage = () => {
                         </div>
                         <div>
                             <SwishQR />
+                        </div>
+                        <div>
+                            <CocktailSwishButton message="user / hon och han" />
                         </div>
                         <div className="text-lg whitespace-pre-wrap">
                             Efter betalningen så kommer vi lägga till er till träffen och ni kan då se vilka andra som har anmält sig.
