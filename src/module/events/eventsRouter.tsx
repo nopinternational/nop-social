@@ -8,7 +8,8 @@ import {
     signupToEvent,
     postEventMessage as postEventMessageFirebase,
     persistEvent,
-    updateEvent
+    updateEvent,
+    getMyEventStatus
 } from "~/module/events/eventsFirebase";
 import { type EventFormType } from "~/module/events/components/NoPEventForm";
 import { postEventMessage } from "./components/types";
@@ -27,6 +28,12 @@ export const eventRouter = createTRPCRouter({
             .input(z.object({ eventId: z.string() }))
             .query(async ({ input }) => {
                 return await getEvent(input.eventId)
+            }),
+    getMyEventStatus:
+        protectedProcedure
+            .input(z.object({ eventId: z.string() }))
+            .query(async ({ input, ctx }) => {
+                return await getMyEventStatus(ctx.session.user.id, input.eventId)
             }),
 
     createEvent:
