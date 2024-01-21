@@ -9,6 +9,6 @@ type ProfileLinkProps = {
 export const ProfileLink = ({ username }: ProfileLinkProps) => {
 
     return <Link href={`/app/profile/${username}`}>
-        foo
+        {username}
     </Link>
 }

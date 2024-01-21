@@ -5,6 +5,7 @@ import { api } from "~/utils/api";
 import { TextEditForm, type TextEditFormOptions } from "~/components/TextEditForm";
 import { type UseTRPCQueryResult } from "@trpc/react-query/shared";
 import { Spinner } from "~/components/Spinner";
+import { ProfileLink } from "~/module/profile/components/ProfileLink";
 
 
 
@@ -111,9 +112,13 @@ export const EventMessages = ({ eventid }: { eventid: string }) => {
 
 const Message = ({ messageObject }: { messageObject: EventMessage }) => {
     // console.log("Message.messageObject", messageObject)
+    const username = messageObject.from.username
     return (
         <div>
-            <div><HighlightText>{messageObject.from.username}</HighlightText> säger:</div>
+            <div>
+                <HighlightText>
+                    <ProfileLink username={username} />
+                </HighlightText> säger:</div>
             <div className="text-lg whitespace-pre-wrap p-2 bg-white/10 rounded-md">
                 {messageObject.message}
             </div>

@@ -42,7 +42,7 @@ export const EventAttendes: FC<{ eventid: string }> = ({ eventid }) => {
 const Attende: FC<{ profilename: string, username?: string }> = ({ profilename, username }) => {
     // console.log("Attende.profilename", profilename)
     if (username) {
-        return (<p >{profilename} (<HighlightText><ProfileLink username={username}></ProfileLink></HighlightText>)</p >)
+        return (<p >{profilename} (<HighlightText><ProfileLink username={username} /></HighlightText>)</p >)
     }
     return (<p >{profilename}</p>)
 }
