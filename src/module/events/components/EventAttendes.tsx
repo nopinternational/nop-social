@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { type FC } from "react"
 import HighlightText from "~/components/HighlightText"
+import { ProfileLink } from "~/module/profile/components/ProfileLink"
 import { api } from "~/utils/api"
 
 export const EventAttendes: FC<{ eventid: string }> = ({ eventid }) => {
@@ -41,7 +42,7 @@ export const EventAttendes: FC<{ eventid: string }> = ({ eventid }) => {
 const Attende: FC<{ profilename: string, username?: string }> = ({ profilename, username }) => {
     // console.log("Attende.profilename", profilename)
     if (username) {
-        return (<p >{profilename} (<HighlightText>{username}</HighlightText>)</p>)
+        return (<p >{profilename} (<HighlightText><ProfileLink username={username} /></HighlightText>)</p >)
     }
     return (<p >{profilename}</p>)
 }
