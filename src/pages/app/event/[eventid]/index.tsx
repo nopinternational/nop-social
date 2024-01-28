@@ -202,8 +202,7 @@ const EventIsClosedForAttendes = () => {
         >
           Ni är anmälda till träffen men det går inte längre att amäla sig till
           träffen. Nedan finns information om hur ni betalar för träffen, om ni
-          ännu inte gjort det. träffen men inte betalat så hittar ni information
-          om betalning nedan.
+          ännu inte gjort det.
         </Card>
       </div>
     </div>
