@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { type NextPage } from "next";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import HighlightText from "~/components/HighlightText";
@@ -12,72 +12,103 @@ import { ProfileHeader } from "~/module/profile/components/ProfileHeader";
 import { Card } from "~/components/Card";
 import { SendChatMessageForm } from "~/components/Message/ChatMessage";
 import { useFeature } from "~/components/FeatureFlag";
-import { sendMessageToUser } from "~/module/message/messageService";
 
 const Home: NextPage = () => {
   const router = useRouter();
-  const isMessageFeatureEnabled = useFeature("message")
+  const isMessageFeatureEnabled = useFeature("message");
 
   const { profileid } = router.query;
-  const pid = profileid as string
+  const pid = profileid as string;
 
   // console.log("profileid", pid)
   // console.log("useParams()", useParams())
   const { data: sessionData } = useSession();
-
+  const { mutate: sendChatMessage } = api.chat.sendChatMessage.useMutation();
   const profile = api.profile.getProfile.useQuery(
     { profileid: pid },
     { enabled: sessionData?.user !== undefined }
   );
 
-  const YEAR = new Date().getFullYear()
+  const YEAR = new Date().getFullYear();
 
   const renderLoading = (profileid: string) => {
     return (
-      <Layout headingText={<>Laddar <HighlightText>{profileid}</HighlightText></>}>
+      <Layout
+        headingText={
+          <>
+            Laddar <HighlightText>{profileid}</HighlightText>
+          </>
+        }
+      >
         <Spinner />
       </Layout>
-    )
-  }
+    );
+  };
   const renderNoProfileFound = (profileid: string) => {
     return (
-      <Layout headingText={<>Vi hittar inte <HighlightText>{profileid}</HighlightText></>}>
-      </Layout>
-    )
-  }
+      <Layout
+        headingText={
+          <>
+            Vi hittar inte <HighlightText>{profileid}</HighlightText>
+          </>
+        }
+      ></Layout>
+    );
+  };
 
   if (profile.isLoading || false) {
-    return renderLoading(pid)
+    return renderLoading(pid);
   }
   // console.log("before return", profile.data)
   if (!profile.data) {
-    return renderNoProfileFound(pid)
+    return renderNoProfileFound(pid);
   }
 
   function postMessageHandler({ text }: { text: string }): void {
     if (isMessageFeatureEnabled) {
-      console.log("postMessageHandler.MessageFeatureEnabled", text)
-      sendMessageToUser(text)
-      
+      console.log("postMessageHandler.MessageFeatureEnabled", text);
+      sendMessageToUser(text);
+    } else {
+      alert(
+        "tack för att du vill testa att skicka ett meddelande, men det är inget som fungerar ännu 😟"
+      );
     }
-    else { alert("tack för att du vill testa att skicka ett meddelande, men det är inget som fungerar ännu 😟"); }
   }
 
+  const sendMessageToUser = (message: string) => {
+    console.log("sendMessageToUser", message);
 
+    const convoId = "123";
+    const fromUserId = "abc123";
+    const result_sendChatMessage = sendChatMessage({
+      chatConvoId: convoId,
+      fromUserId,
+      chatMessage: message,
+    });
 
-  const p = profile.data
+    console.log("messagService.sendMessageToUser", result_sendChatMessage);
+  };
+  const p = profile.data;
 
   return (
-    <Layout headingText={<>Här är <HighlightText>{pid}</HighlightText></>}>
-      <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
-
+    <Layout
+      headingText={
+        <>
+          Här är <HighlightText>{pid}</HighlightText>
+        </>
+      }
+    >
+      <div className="grid grid-cols-2  gap-4   sm:grid-cols-2 md:gap-8">
         <div className="col-span-2">
-          <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/10 items-center">
+          <div className="flex flex-col items-center gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/10">
             <ProfileHeader profileName={p.username}></ProfileHeader>
             <div className="text-lg">
-              <p>{p.username} är ett par som heter <HighlightText>{p.person1?.name}</HighlightText> & <HighlightText>{p.person2.name}</HighlightText>,
-                dom är {YEAR - p.person1?.born} och {YEAR - p.person2?.born}år.</p>
-
+              <p>
+                {p.username} är ett par som heter{" "}
+                <HighlightText>{p.person1?.name}</HighlightText> &{" "}
+                <HighlightText>{p.person2.name}</HighlightText>, dom är{" "}
+                {YEAR - p.person1?.born} och {YEAR - p.person2?.born}år.
+              </p>
             </div>
           </div>
         </div>
@@ -97,38 +128,49 @@ const Home: NextPage = () => {
             </div>
           </Card> */}
 
-          <Card header={<>Så här <HighlightText>beskriver</HighlightText> dom sig</>} >
+          <Card
+            header={
+              <>
+                Så här <HighlightText>beskriver</HighlightText> dom sig
+              </>
+            }
+          >
             <div className="text-lg">
-              {p.description ?
-                <p className="p-2 rounded-xl bg-white/10 whitespace-pre-wrap italic" >{p.description}</p> :
-                <p className="p-2 rounded-xl bg-white/10 whitespace-pre-wrap text-center" ><span className="italic">Här var det tomt</span> 🙁</p>
-              }
+              {p.description ? (
+                <p className="whitespace-pre-wrap rounded-xl bg-white/10 p-2 italic">
+                  {p.description}
+                </p>
+              ) : (
+                <p className="whitespace-pre-wrap rounded-xl bg-white/10 p-2 text-center">
+                  <span className="italic">Här var det tomt</span> 🙁
+                </p>
+              )}
             </div>
           </Card>
 
-          <Card header={<>Skicka ett meddelande till <HighlightText>{p.username}</HighlightText></>} >
+          <Card
+            header={
+              <>
+                Skicka ett meddelande till{" "}
+                <HighlightText>{p.username}</HighlightText>
+              </>
+            }
+          >
             <SendChatMessageForm
               toUsername={p.username}
               postMessageHandler={postMessageHandler}
               options={{ emptyOnSubmit: false }}
             ></SendChatMessageForm>
           </Card>
-
-        </div >
-
+        </div>
       </div>
-      <Link
-        href="/app/profile"
-      >
-        <button
-          className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
+      <Link href="/app/profile">
+        <button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
           Tillbaka till profiler
         </button>
       </Link>
-
     </Layout>
-  )
+  );
 };
 
 export default Home;
-
