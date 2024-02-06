@@ -5,7 +5,7 @@ import { useFeature } from "~/components/FeatureFlag";
 import HighlightText from "~/components/HighlightText";
 import Layout from "~/components/Layout";
 import { ProfilePic } from "~/module/profile/components/ProfilePic";
-
+import { api } from "~/utils/api";
 
 type Conversation = {
     conversationId: string
@@ -16,6 +16,15 @@ type Conversation = {
 const Home: NextPage = () => {
 
     const messageIsEnabled = useFeature("message")
+
+    const messages = api.chat.getChatMessage.useQuery({
+      chatConvoId: "TliD2abuGuAbNELbtDXf",
+    });
+
+    if (messages.data) {
+        console.log("message page, messages.data:", messages.data)
+
+    }
 
     const CONVERSATION: Conversation[] = [
         {

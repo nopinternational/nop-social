@@ -12,13 +12,19 @@ export const persistChatMessage = async (aChatMessage: AChatMessage) => {
   const db = new FirbaseChatMessageClient(firestore);
   return db.persistChatMessage(aChatMessage);
 };
+export const getChatMessages = async (messageCollection: string) => {
+  const db = new FirbaseChatMessageClient(firestore);
+  return db.getChatMessages(messageCollection);
+};
 
 const CHATMESSAGE_COLLECTION = "message";
 class FirbaseChatMessageClient {
   firestore: FirebaseFirestore.Firestore;
+
   constructor(firestoreApp: FirebaseFirestore.Firestore) {
     this.firestore = firestoreApp;
   }
+
   persistChatMessage = async ({
     chatConvoId,
     fromUserId,
@@ -32,5 +38,24 @@ class FirbaseChatMessageClient {
     await docRef.set({ chatConvoId, fromUserId, chatMessage });
 
     return docRef.id;
+  };
+
+  getChatMessages = async (messageCollection: string) => {
+    const messageCollectionRef = this.firestore
+      .collection(CHATMESSAGE_COLLECTION)
+      .doc(messageCollection);
+
+    const snapshot = await messageCollectionRef.get();
+    if (snapshot.exists) {
+      console.log(
+        "FirbaseAdminClient.getChatMessages -> snapshot.data()",
+        snapshot.data()
+      );
+      return snapshot.data();
+    } else {
+      // docSnap.data() will be undefined in this case
+      // console.log("No such event!", eventid);
+    }
+    return null;
   };
 }

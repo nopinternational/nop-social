@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { persistChatMessage } from "./messageFirebase";
+import { getChatMessages, persistChatMessage } from "./messageFirebase";
 
 import { type AChatMessage } from "~/module/message/messageFirebase";
 export const chatRouter = createTRPCRouter({
@@ -24,5 +24,15 @@ export const chatRouter = createTRPCRouter({
       console.log("ctx.session.user.", ctx.session.user);
       console.log("ctx.session.user.name", ctx.session.user.name);
       return await persistChatMessage(aChatMessage);
+    }),
+  getChatMessage: protectedProcedure
+    .input(
+      z.object({
+        chatConvoId: z.string(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      console.log("input", input);
+      return await getChatMessages(input.chatConvoId);
     }),
 });
