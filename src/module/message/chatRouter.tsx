@@ -33,6 +33,8 @@ export const chatRouter = createTRPCRouter({
     )
     .query(async ({ input, ctx }) => {
       console.log("input", input);
-      return await getChatMessages(input.chatConvoId);
+      const messages = await getChatMessages(input.chatConvoId);
+      console.log("return messages", messages);
+      return messages;
     }),
 });

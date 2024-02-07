@@ -43,19 +43,29 @@ class FirbaseChatMessageClient {
   getChatMessages = async (messageCollection: string) => {
     const messageCollectionRef = this.firestore
       .collection(CHATMESSAGE_COLLECTION)
-      .doc(messageCollection);
+      .doc(messageCollection)
+      .collection("messages");
 
     const snapshot = await messageCollectionRef.get();
-    if (snapshot.exists) {
-      console.log(
-        "FirbaseAdminClient.getChatMessages -> snapshot.data()",
-        snapshot.data()
-      );
-      return snapshot.data();
-    } else {
-      // docSnap.data() will be undefined in this case
-      // console.log("No such event!", eventid);
-    }
-    return null;
+
+    const messages = [];
+    snapshot.forEach((doc) => {
+      console.log(doc.id, doc.data());
+      messages.push(doc.data());
+    });
+
+    return messages;
+
+    // if (snapshot.exists) {
+    //   console.log(
+    //     "FirbaseAdminClient.getChatMessages -> snapshot.data()",
+    //     snapshot.data()
+    //   );
+    //   return snapshot.data();
+    // } else {
+    //   // docSnap.data() will be undefined in this case
+    //   // console.log("No such event!", eventid);
+    // }
+    // return null;
   };
 }
