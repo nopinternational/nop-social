@@ -41,22 +41,32 @@ const Home: NextPage = () => {
   const router = useRouter();
   const { messageid } = router.query;
   const convoId = messageid as string;
-  console.log(messageid);
+  console.log("message/", messageid);
 
   const messageApi = api.chat.getChatMessage.useQuery({
     chatConvoId: convoId,
   });
 
-  if (messageApi.data) {
-    const messages = messageApi.data;
-    console.log(messages);
-    messages.forEach((message) => {
-      MESSAGES.push({
-        id: message.chatConvoId,
-        from: message.fromUserId,
-        message: message.chatMessage,
-      });
-    });
+  //   if (messageApi.data) {
+  //     const messages = messageApi.data;
+  //     console.log("messageApi.data", messages);
+  // messages.forEach((message) => {
+  //   MESSAGES.push({
+  //     id: message.chatConvoId,
+  //     from: message.fromUserId,
+  //     message: message.chatMessage,
+  //   });
+  //     });
+  //   }
+  function renderMessage(message: Message) {
+    console.log("render message for message", message);
+    return (
+      <ChatMessage
+        key={message.id}
+        message={message}
+        fromMe={message.from === "sthlmpar08"}
+      />
+    );
   }
 
   function postMessageHandler(): void {
@@ -64,6 +74,7 @@ const Home: NextPage = () => {
       "tack för att du vill testa att skicka ett meddelande, men det är inget som fungerar ännu 😟"
     );
   }
+  const data = messageApi.data || [];
 
   return (
     <Layout
@@ -101,13 +112,22 @@ const Home: NextPage = () => {
             }
           >
             {MESSAGES.map((message) => {
-              return (
-                <ChatMessage
-                  key={message.id}
-                  message={message}
-                  fromMe={message.from === "sthlmpar08"}
-                />
-              );
+              return renderMessage(message);
+              //   return (
+              //     <ChatMessage
+              //       key={message.id}
+              //       message={message}
+              //       fromMe={message.from === "sthlmpar08"}
+              //     />
+              //   );
+            })}
+            {data.map((message) => {
+              return renderMessage(message);
+              //   return renderMessage({
+              //     id: "123",
+              //     message: message.chatMessage as string,
+              //     from: message.fromUserId as string,
+              //   });
             })}
 
             <SendChatMessageForm

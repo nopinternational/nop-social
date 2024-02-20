@@ -3,6 +3,7 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { getChatMessages, persistChatMessage } from "./messageFirebase";
 
 import { type AChatMessage } from "~/module/message/messageFirebase";
+import { type Message } from "~/components/Message/ChatMessage";
 export const chatRouter = createTRPCRouter({
   sendChatMessage: protectedProcedure
     .input(
@@ -31,10 +32,18 @@ export const chatRouter = createTRPCRouter({
         chatConvoId: z.string(),
       })
     )
-    .query(async ({ input, ctx }) => {
+    .query(async ({ input, ctx }): Message[] => {
       console.log("input", input);
       const messages = await getChatMessages(input.chatConvoId);
       console.log("return messages", messages);
-      return messages;
+      const ret_values = messages.map((message): Message => {
+        return {
+          from: message.fromUserId as string,
+          id: message.chatConvoId as string,
+          message: message.chatMessage as string,
+        };
+      });
+      console.log("return messages", ret_values);
+      return ret_values;
     }),
 });
