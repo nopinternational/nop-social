@@ -2,13 +2,21 @@ import { firestoreAdmin } from "~/server/api/firebaseAdmin";
 
 const firestore: FirebaseFirestore.Firestore = firestoreAdmin;
 
-export type AChatMessage = {
+import {
+  type QueryDocumentSnapshot,
+  type FirestoreDataConverter,
+} from "firebase-admin/firestore";
+import { type Message } from "~/components/Message/ChatMessage";
+
+export type MessageFirestoreModel = {
   chatConvoId: string;
   fromUserId: string;
   chatMessage: string;
 };
 
-export const persistChatMessage = async (aChatMessage: AChatMessage) => {
+export const persistChatMessage = async (
+  aChatMessage: MessageFirestoreModel
+) => {
   const db = new FirbaseChatMessageClient(firestore);
   return db.persistChatMessage(aChatMessage);
 };
@@ -29,7 +37,7 @@ class FirbaseChatMessageClient {
     chatConvoId,
     fromUserId,
     chatMessage,
-  }: AChatMessage): Promise<string> => {
+  }: MessageFirestoreModel): Promise<string> => {
     console.log("persist event", chatConvoId, fromUserId, chatMessage);
 
     const eventsRef = this.firestore.collection(CHATMESSAGE_COLLECTION);
@@ -40,17 +48,18 @@ class FirbaseChatMessageClient {
     return docRef.id;
   };
 
-  getChatMessages = async (messageCollection: string) => {
+  getChatMessages = async (messageCollection: string): Promise<Message[]> => {
     const messageCollectionRef = this.firestore
       .collection(CHATMESSAGE_COLLECTION)
       .doc(messageCollection)
-      .collection("messages");
+      .collection("messages")
+      .withConverter(messageConverter);
 
     const snapshot = await messageCollectionRef.get();
 
-    const messages = [];
+    const messages: Message[] = [];
     snapshot.forEach((doc) => {
-      console.log(doc.id, doc.data());
+      console.log("getChatMessages", doc.id, doc.data());
       messages.push(doc.data());
     });
 
@@ -69,3 +78,25 @@ class FirbaseChatMessageClient {
     // return null;
   };
 }
+const messageConverter: FirestoreDataConverter<Message> = {
+  toFirestore: (message: Message): MessageFirestoreModel => {
+    return {
+      fromUserId: message.from,
+      chatConvoId: message.id,
+      chatMessage: message.message,
+    };
+  },
+  fromFirestore: (
+    snapshot: QueryDocumentSnapshot<MessageFirestoreModel>
+    //options: SnapshotOptions
+  ): Message => {
+    const data = snapshot.data();
+
+    // return { id: snapshot.id, ...data };
+    return {
+      from: data.fromUserId,
+      id: data.chatConvoId,
+      message: data.chatMessage,
+    };
+  },
+};
