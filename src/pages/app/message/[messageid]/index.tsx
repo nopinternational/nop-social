@@ -1,74 +1,149 @@
 import { type NextPage } from "next";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { Card } from "~/components/Card";
 import HighlightText from "~/components/HighlightText";
 import Layout from "~/components/Layout";
-import { ChatMessage, type Message, SendChatMessageForm } from "~/components/Message/ChatMessage";
+import {
+  ChatMessage,
+  type Message,
+  SendChatMessageForm,
+} from "~/components/Message/ChatMessage";
+import { api } from "~/utils/api";
+
+const MESSAGES: Message[] = [
+  {
+    id: "jscfdn",
+    from: "sthlmpar08",
+    message:
+      "Hej på er. Tack för ett ni kom cocktailträffen. Vi tycker det var väldigt kul att få träffa er och lära känna er.",
+  },
+  {
+    id: "awergzx",
+    from: "Sexy-couple",
+    message:
+      "Tack själva! Vilket härligt gäng det var, supertrevligt. Ni är ett par vi kände vi klickade med... ",
+  },
+  {
+    id: "lkojmn",
+    from: "Sexy-couple",
+    message:
+      "Vi ska ha en middags-träff på lördag med ett annat par, vi tror ni skulle gilla dom också. Det vore kul och spännande om ni vill joina oss.",
+  },
+  {
+    id: "nccarp",
+    from: "sthlmpar08",
+    message: "Så roligt att höra. Vi ses gärna på lördag för en middag, kul!",
+  },
+];
 
 const Home: NextPage = () => {
+  const router = useRouter();
+  const { messageid } = router.query;
+  const convoId = messageid as string;
+  console.log("message/", messageid);
 
-    const MESSAGES: Message[] = [
-        {
-            id: "jscfdn",
-            from: "sthlmpar08",
-            message: "Hej på er. Tack för ett ni kom cocktailträffen. Vi tycker det var väldigt kul att få träffa er och lära känna er."
-        },
-        {
-            id: "awergzx",
-            from: "Sexy-couple",
-            message: "Tack själva! Vilket härligt gäng det var, supertrevligt. Ni är ett par vi kände vi klickade med... "
-        },
-        {
-            id: "lkojmn",
-            from: "Sexy-couple",
-            message: "Vi ska ha en middags-träff på lördag med ett annat par, vi tror ni skulle gilla dom också. Det vore kul och spännande om ni vill joina oss."
-        },
-        {
-            id: "nccarp",
-            from: "sthlmpar08",
-            message: "Så roligt att höra. Vi ses gärna på lördag för en middag, kul!"
-        },
-    ]
+  const messageApi = api.chat.getChatMessage.useQuery({
+    chatConvoId: convoId,
+  });
 
-    function postMessageHandler(): void {
-        alert("tack för att du vill testa att skicka ett meddelande, men det är inget som fungerar ännu 😟");
-    }
-
+  //   if (messageApi.data) {
+  //     const messages = messageApi.data;
+  //     console.log("messageApi.data", messages);
+  // messages.forEach((message) => {
+  //   MESSAGES.push({
+  //     id: message.chatConvoId,
+  //     from: message.fromUserId,
+  //     message: message.chatMessage,
+  //   });
+  //     });
+  //   }
+  function renderMessage(message: Message) {
+    console.log("render message for message", message);
     return (
-        <Layout headingText={<><HighlightText>Meddelanden</HighlightText></>}>
-            <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
-                <div className="col-span-2">
+      <ChatMessage
+        key={message.id}
+        message={message}
+        fromMe={message.from === "sthlmpar08"}
+      />
+    );
+  }
 
-                    <Card header={<>Skicka <HighlightText>meddelande</HighlightText> till andra <HighlightText>profiler</HighlightText></>}>
-                        <div className="text-lg">
-                            Tjoho! Just nu arbetar vi med att göra det möjligt att skicka meddelande till varandra. Bra va 😃
-                        </div>
-                        <div className="text-lg">
-                            Som ni märker är vi inte riktigt klara... Men nedan kan ni se hur vi tänkt oss.
-                        </div >
-                    </Card >
+  function postMessageHandler(): void {
+    alert(
+      "tack för att du vill testa att skicka ett meddelande, men det är inget som fungerar ännu 😟"
+    );
+  }
+  const data = messageApi.data || [];
 
-                    <Card header={<>Konversation med <HighlightText>Sexy-couple</HighlightText>:</>}>
-                        {MESSAGES.map(message => {
-                            return (
+  return (
+    <Layout
+      headingText={
+        <>
+          <HighlightText>Meddelanden</HighlightText>
+        </>
+      }
+    >
+      <div className="grid grid-cols-2  gap-4   sm:grid-cols-2 md:gap-8">
+        <div className="col-span-2">
+          <Card
+            header={
+              <>
+                Skicka <HighlightText>meddelande</HighlightText> till andra{" "}
+                <HighlightText>profiler</HighlightText>
+              </>
+            }
+          >
+            <div className="text-lg">
+              Tjoho! Just nu arbetar vi med att göra det möjligt att skicka
+              meddelande till varandra. Bra va 😃
+            </div>
+            <div className="text-lg">
+              Som ni märker är vi inte riktigt klara... Men nedan kan ni se hur
+              vi tänkt oss.
+            </div>
+          </Card>
 
-                                <ChatMessage key={message.id} message={message} fromMe={message.from === "sthlmpar08"} />
-                            )
-                        })}
+          <Card
+            header={
+              <>
+                Konversation med <HighlightText>Sexy-couple</HighlightText>:
+              </>
+            }
+          >
+            {MESSAGES.map((message) => {
+              return renderMessage(message);
+              //   return (
+              //     <ChatMessage
+              //       key={message.id}
+              //       message={message}
+              //       fromMe={message.from === "sthlmpar08"}
+              //     />
+              //   );
+            })}
+            {data.map((message) => {
+              return renderMessage(message);
+              //   return renderMessage({
+              //     id: "123",
+              //     message: message.chatMessage as string,
+              //     from: message.fromUserId as string,
+              //   });
+            })}
 
-                        <SendChatMessageForm toUsername="Sexy-Couple" postMessageHandler={postMessageHandler}></SendChatMessageForm>
-                    </Card>
-
-                </div >
-            </div >
-            <Link href="/app/message">
-                <button
-                    className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
-                    Tillbaka till meddelanden
-                </button>
-            </Link>
-        </Layout >
-    )
+            <SendChatMessageForm
+              toUsername="Sexy-Couple"
+              postMessageHandler={postMessageHandler}
+            ></SendChatMessageForm>
+          </Card>
+        </div>
+      </div>
+      <Link href="/app/message">
+        <button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
+          Tillbaka till meddelanden
+        </button>
+      </Link>
+    </Layout>
+  );
 };
 
 export default Home;

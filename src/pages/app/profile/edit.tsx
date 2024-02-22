@@ -69,10 +69,11 @@ const Home: NextPage = () => {
   const persistPerson_p1 = (person: Person) => persistPerson({ "person1": person })
   const persistPerson_p2 = (person: Person) => persistPerson({ "person2": person })
 
-  const persistDescription = (description: PartialProfile) => {
+  const persistDescription = ({ text }: { text: string }) => {
+    //const persistDescription = (description: PartialProfile) => {
     //console.log("Edit.persistDescription", description)
 
-    mergeProfile(description)
+    mergeProfile({ description: text })
   }
   const default_user: Profile = {
     username: "",
