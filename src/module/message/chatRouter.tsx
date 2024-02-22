@@ -39,4 +39,15 @@ export const chatRouter = createTRPCRouter({
 
       return messages;
     }),
+  postChatMessage: protectedProcedure
+    .input(
+      z.object({
+        chatConvoId: z.string(),
+        chatMessage: z.string(),
+      })
+    )
+    .mutation(({ input, ctx }) => {
+      console.log("postChatMessage", input);
+      console.log("postChatMessage", ctx);
+    }),
 });

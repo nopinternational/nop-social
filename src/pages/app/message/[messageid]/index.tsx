@@ -2,6 +2,7 @@ import { type NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Card } from "~/components/Card";
+import { useFeature } from "~/components/FeatureFlag";
 import HighlightText from "~/components/HighlightText";
 import Layout from "~/components/Layout";
 import {
@@ -38,6 +39,8 @@ const MESSAGES: Message[] = [
 ];
 
 const Home: NextPage = () => {
+  const messageIsEnabled = useFeature("message");
+
   const router = useRouter();
   const { messageid } = router.query;
   const convoId = messageid as string;
@@ -46,18 +49,8 @@ const Home: NextPage = () => {
   const messageApi = api.chat.getChatMessage.useQuery({
     chatConvoId: convoId,
   });
+  const { mutate: postChatMessage } = api.chat.postChatMessage.useMutation();
 
-  //   if (messageApi.data) {
-  //     const messages = messageApi.data;
-  //     console.log("messageApi.data", messages);
-  // messages.forEach((message) => {
-  //   MESSAGES.push({
-  //     id: message.chatConvoId,
-  //     from: message.fromUserId,
-  //     message: message.chatMessage,
-  //   });
-  //     });
-  //   }
   function renderMessage(message: Message) {
     console.log("render message for message", message);
     return (
@@ -69,10 +62,16 @@ const Home: NextPage = () => {
     );
   }
 
-  function postMessageHandler(): void {
-    alert(
-      "tack för att du vill testa att skicka ett meddelande, men det är inget som fungerar ännu 😟"
-    );
+  function postMessageHandler({ text }: { text: string }): void {
+    console.log("postMessageHandler ", text);
+    if (messageIsEnabled) {
+      alert("Nu skickar vi iväg meddelandet");
+      postChatMessage({ chatConvoId: convoId, chatMessage: text });
+    } else {
+      alert(
+        "tack för att du vill testa att skicka ett meddelande, men det är inget som fungerar ännu 😟"
+      );
+    }
   }
   const data = messageApi.data || [];
 
