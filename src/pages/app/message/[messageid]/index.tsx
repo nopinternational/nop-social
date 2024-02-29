@@ -71,6 +71,7 @@ const Home: NextPage = () => {
         id: messageid as string,
         message: text,
       };
+      console.log("postMessageHandler.postChatMessage", message);
       postChatMessage({ chatMessage: message });
     } else {
       alert(
@@ -135,7 +136,7 @@ const Home: NextPage = () => {
             })}
 
             <SendChatMessageForm
-              toUsername="Sexy-Couple"
+              toUsername="stockholm"
               postMessageHandler={postMessageHandler}
             ></SendChatMessageForm>
           </Card>

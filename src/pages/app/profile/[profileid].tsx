@@ -23,7 +23,7 @@ const Home: NextPage = () => {
   // console.log("profileid", pid)
   // console.log("useParams()", useParams())
   const { data: sessionData } = useSession();
-  const { mutate: sendChatMessage } = api.chat.sendChatMessage.useMutation();
+  //const { mutate: sendChatMessage } = api.chat.sendChatMessage.useMutation();
   const profile = api.profile.getProfile.useQuery(
     { profileid: pid },
     { enabled: sessionData?.user !== undefined }
@@ -80,13 +80,13 @@ const Home: NextPage = () => {
 
     const convoId = "123";
     const fromUserId = "abc123";
-    const result_sendChatMessage = sendChatMessage({
-      chatConvoId: convoId,
-      fromUserId,
-      chatMessage: message,
-    });
+    // const result_sendChatMessage = sendChatMessage({
+    //   chatConvoId: convoId,
+    //   fromUserId,
+    //   chatMessage: message,
+    // });
 
-    console.log("messagService.sendMessageToUser", result_sendChatMessage);
+    // console.log("messagService.sendMessageToUser", result_sendChatMessage);
   };
   const p = profile.data;
 

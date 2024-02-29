@@ -5,27 +5,35 @@ import { getChatMessages, persistChatMessage } from "./messageFirebase";
 import { type MessageFirestoreModel } from "~/module/message/messageFirebase";
 import { type Message } from "~/components/Message/ChatMessage";
 export const chatRouter = createTRPCRouter({
-  sendChatMessage: protectedProcedure
-    .input(
-      z.object({
-        chatConvoId: z.string(),
-        fromUserId: z.string(),
-        chatMessage: z.string(),
-      })
-    )
-    .mutation(async ({ input, ctx }) => {
-      const aChatMessage: MessageFirestoreModel = {
-        chatConvoId: input.chatConvoId,
-        fromUserId: input.fromUserId,
-        chatMessage: input.chatMessage,
-      };
-      console.log("------------sendChatMessage.input", input);
-      console.log("ctx", ctx);
-      console.log("ctx.session", ctx.session);
-      console.log("ctx.session.user.", ctx.session.user);
-      console.log("ctx.session.user.name", ctx.session.user.name);
-      return await persistChatMessage(aChatMessage);
-    }),
+  // sendChatMessage: protectedProcedure
+  //   .input(
+  //     z.object({
+  //       chatConvoId: z.string(),
+  //       fromUserId: z.string(),
+  //       chatMessage: z.string(),
+  //     })
+  //   )
+  //   .mutation(async ({ input, ctx }) => {
+  //     const aChatMessage2: MessageFirestoreModel = {
+  //       chatConvoId: input.chatConvoId,
+  //       fromUserId: input.fromUserId,
+  //       chatMessage: input.chatMessage,
+  //     };
+
+  //     const aChatMessage: Message = {
+  //       id: input.chatConvoId,
+  //       from: input.fromUserId,
+  //       message: input.chatMessage,
+  //     };
+
+  //     console.log("------------sendChatMessage.input", input);
+  //     console.log("------------sendChatMessage.aChatMessage", aChatMessage);
+  //     console.log("ctx", ctx);
+  //     console.log("ctx.session", ctx.session);
+  //     console.log("ctx.session.user.", ctx.session.user);
+  //     console.log("ctx.session.user.name", ctx.session.user.name);
+  //     return await persistChatMessage(aChatMessage);
+  //   }),
   getChatMessage: protectedProcedure
     .input(
       z.object({
@@ -33,7 +41,8 @@ export const chatRouter = createTRPCRouter({
       })
     )
     .query(async ({ input, ctx }): Promise<Message[]> => {
-      console.log("input", input);
+      console.log("getChatMessage.input", input);
+      console.log("getChatMessage.ctx", ctx);
       const messages = await getChatMessages(input.chatConvoId);
       console.log("return messages from fb", messages);
 
@@ -41,9 +50,9 @@ export const chatRouter = createTRPCRouter({
     }),
   postChatMessage: protectedProcedure
     .input(z.object({ chatMessage: z.custom<Message>() }))
-    .mutation(({ input, ctx }) => {
+    .mutation(async ({ input, ctx }) => {
       console.log("postChatMessage", input);
       console.log("postChatMessage", ctx);
-      persistChatMessage(input.chatMessage);
+      return await persistChatMessage(input.chatMessage);
     }),
 });
