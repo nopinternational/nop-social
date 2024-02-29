@@ -18,23 +18,27 @@ const MESSAGES: Message[] = [
     from: "sthlmpar08",
     message:
       "Hej på er. Tack för ett ni kom cocktailträffen. Vi tycker det var väldigt kul att få träffa er och lära känna er.",
+    when: "2024-02-29T11:04:37.083Z",
   },
   {
     id: "awergzx",
     from: "Sexy-couple",
     message:
       "Tack själva! Vilket härligt gäng det var, supertrevligt. Ni är ett par vi kände vi klickade med... ",
+    when: "2024-02-29T11:04:37.083Z",
   },
   {
     id: "lkojmn",
     from: "Sexy-couple",
     message:
       "Vi ska ha en middags-träff på lördag med ett annat par, vi tror ni skulle gilla dom också. Det vore kul och spännande om ni vill joina oss.",
+    when: "2024-02-29T11:04:37.083Z",
   },
   {
     id: "nccarp",
     from: "sthlmpar08",
     message: "Så roligt att höra. Vi ses gärna på lördag för en middag, kul!",
+    when: "2024-02-29T11:04:37.083Z",
   },
 ];
 
@@ -55,7 +59,7 @@ const Home: NextPage = () => {
     console.log("render message for message", message);
     return (
       <ChatMessage
-        key={message.id}
+        key={message.message}
         message={message}
         fromMe={message.from === "sthlmpar08"}
       />
@@ -70,6 +74,7 @@ const Home: NextPage = () => {
         from: "from",
         id: messageid as string,
         message: text,
+        when: "", // will be set on server
       };
       console.log("postMessageHandler.postChatMessage", message);
       postChatMessage({ chatMessage: message });

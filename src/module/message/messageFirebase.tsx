@@ -12,6 +12,7 @@ export type MessageFirestoreModel = {
   chatConvoId: string;
   fromUserId: string;
   chatMessage: string;
+  when: string;
 };
 
 // export const persistChatMessage = async (
@@ -85,6 +86,7 @@ class FirbaseChatMessageClient {
       .collection(CHATMESSAGE_COLLECTION)
       .doc(messageCollection)
       .collection("messages")
+      .orderBy("when", "asc")
       .withConverter(messageConverter);
 
     const snapshot = await messageCollectionRef.get();
@@ -116,6 +118,7 @@ const messageConverter: FirestoreDataConverter<Message> = {
       fromUserId: message.from,
       chatConvoId: message.id,
       chatMessage: message.message,
+      when: new Date().toISOString(),
     };
   },
   fromFirestore: (
@@ -129,6 +132,7 @@ const messageConverter: FirestoreDataConverter<Message> = {
       from: data.fromUserId,
       id: data.chatConvoId,
       message: data.chatMessage,
+      when: data.when,
     };
   },
 };
