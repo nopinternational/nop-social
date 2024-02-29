@@ -65,8 +65,13 @@ const Home: NextPage = () => {
   function postMessageHandler({ text }: { text: string }): void {
     console.log("postMessageHandler ", text);
     if (messageIsEnabled) {
-      alert("Nu skickar vi iväg meddelandet");
-      postChatMessage({ chatConvoId: convoId, chatMessage: text });
+      // alert("Nu skickar vi iväg meddelandet");
+      const message: Message = {
+        from: "from",
+        id: messageid as string,
+        message: text,
+      };
+      postChatMessage({ chatMessage: message });
     } else {
       alert(
         "tack för att du vill testa att skicka ett meddelande, men det är inget som fungerar ännu 😟"

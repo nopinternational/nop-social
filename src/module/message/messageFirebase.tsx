@@ -14,15 +14,19 @@ export type MessageFirestoreModel = {
   chatMessage: string;
 };
 
-export const persistChatMessage = async (
-  aChatMessage: MessageFirestoreModel
-) => {
-  const db = new FirbaseChatMessageClient(firestore);
-  return db.persistChatMessage(aChatMessage);
-};
+// export const persistChatMessage = async (
+//   aChatMessage: MessageFirestoreModel
+// ) => {
+//   const db = new FirbaseChatMessageClient(firestore);
+//   return db.storeChatMessage_old(aChatMessage);
+// };
 export const getChatMessages = async (messageCollection: string) => {
   const db = new FirbaseChatMessageClient(firestore);
   return db.getChatMessages(messageCollection);
+};
+export const persistChatMessage = async (message: Message) => {
+  const db = new FirbaseChatMessageClient(firestore);
+  return db.storeChatMessage(message);
 };
 
 const CHATMESSAGE_COLLECTION = "message";
@@ -33,7 +37,34 @@ class FirbaseChatMessageClient {
     this.firestore = firestoreApp;
   }
 
-  persistChatMessage = async ({
+  storeChatMessage = async (message: Message): Promise<void> => {
+    console.log("persist message", message);
+    console.log("persist message", message.from);
+    console.log("persist message", message.id);
+    console.log("persist message", message.message);
+
+    const messageCollectionRef = this.firestore
+      .collection(CHATMESSAGE_COLLECTION)
+      .doc(message.id)
+      .collection("messages")
+      .withConverter(messageConverter);
+
+    const setreturn = await messageCollectionRef.doc().set(message);
+    console.log("set message", setreturn);
+    //console.log("messageCollectionRef", messageCollectionRef);
+    // void this.firestore
+    //   .collection(CHATMESSAGE_COLLECTION)
+    //   .doc(message.id)
+    //   .collection("messages")
+    //   .withConverter(messageConverter)
+    //   .set(message);
+
+    // const docRef = eventsRef.doc();
+    // await docRef.set({ chatConvoId, fromUserId, chatMessage });
+
+    // return docRef.id;
+  };
+  storeChatMessage_old = async ({
     chatConvoId,
     fromUserId,
     chatMessage,
@@ -49,6 +80,7 @@ class FirbaseChatMessageClient {
   };
 
   getChatMessages = async (messageCollection: string): Promise<Message[]> => {
+    // console.log("getChatMessages", messageCollection);
     const messageCollectionRef = this.firestore
       .collection(CHATMESSAGE_COLLECTION)
       .doc(messageCollection)
@@ -59,7 +91,7 @@ class FirbaseChatMessageClient {
 
     const messages: Message[] = [];
     snapshot.forEach((doc) => {
-      console.log("getChatMessages", doc.id, doc.data());
+      //console.log("getChatMessages", doc.id, doc.data());
       messages.push(doc.data());
     });
 
