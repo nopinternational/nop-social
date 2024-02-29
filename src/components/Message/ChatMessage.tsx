@@ -15,6 +15,12 @@ export const ChatMessage = ({
   message: Message;
   fromMe: boolean;
 }) => {
+  //  new Date(message.when).toLocaleString();
+
+  const whenStr = message.when;
+
+  console.log("whenStr", whenStr);
+  console.log("message.when", message.when);
   return (
     <>
       {fromMe ? (
@@ -22,16 +28,17 @@ export const ChatMessage = ({
           <p className="whitespace-pre-wrap  rounded-xl bg-white/10 p-2 italic">
             {message.message}
           </p>
+          <p className="text-right text-xs">{whenStr}</p>
         </div>
       ) : (
         <div className="pr-10">
           <p>
-            <HighlightText>{message.from}</HighlightText> säger ({message.when}
-            ):
+            <HighlightText>{message.from}</HighlightText> säger:
           </p>
           <p className="whitespace-pre-wrap rounded-xl bg-white/10 p-2 italic">
             {message.message}
           </p>
+          <p className="text-right text-xs">{whenStr}</p>
         </div>
       )}
       {/* <div className="flex col-span-1 items-center justify-center pt-2">
