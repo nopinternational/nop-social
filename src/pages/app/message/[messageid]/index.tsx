@@ -59,7 +59,7 @@ const Home: NextPage = () => {
     console.log("render message for message", message);
     return (
       <ChatMessage
-        key={message.message}
+        key={message.id}
         message={message}
         fromMe={message.from === "sthlmpar08"}
       />

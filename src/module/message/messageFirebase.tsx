@@ -130,7 +130,7 @@ const messageConverter: FirestoreDataConverter<Message> = {
     // return { id: snapshot.id, ...data };
     return {
       from: data.fromUserId,
-      id: data.chatConvoId,
+      id: snapshot.id,
       message: data.chatMessage,
       when: data.when,
     };

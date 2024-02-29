@@ -2,7 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { getChatMessages, persistChatMessage } from "./messageFirebase";
 
-import { type MessageFirestoreModel } from "~/module/message/messageFirebase";
+// import { type MessageFirestoreModel } from "~/module/message/messageFirebase";
 import { type Message } from "~/components/Message/ChatMessage";
 export const chatRouter = createTRPCRouter({
   // sendChatMessage: protectedProcedure
