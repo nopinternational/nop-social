@@ -4,6 +4,7 @@ import { TextEditForm, type TextEditFormOptions } from "../TextEditForm";
 export type Message = {
   id: string;
   from: string;
+  fromId: string;
   message: string;
   when: string;
 };

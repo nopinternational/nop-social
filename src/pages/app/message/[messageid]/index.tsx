@@ -1,6 +1,9 @@
 import { type NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
+
+import { useSession } from "next-auth/react";
+
 import { Card } from "~/components/Card";
 import { useFeature } from "~/components/FeatureFlag";
 import HighlightText from "~/components/HighlightText";
@@ -12,11 +15,12 @@ import {
 } from "~/components/Message/ChatMessage";
 import { api } from "~/utils/api";
 
-const MESSAGES: Message[] = []
+const MESSAGES: Message[] = [];
 const MESSAGES2: Message[] = [
   {
     id: "jscfdn",
     from: "sthlmpar08",
+    fromId: "sthlmpar08",
     message:
       "Hej på er. Tack för ett ni kom cocktailträffen. Vi tycker det var väldigt kul att få träffa er och lära känna er.",
     when: "2024-02-29T11:04:37.083Z",
@@ -24,6 +28,7 @@ const MESSAGES2: Message[] = [
   {
     id: "awergzx",
     from: "Sexy-couple",
+    fromId: "Sexy-couple",
     message:
       "Tack själva! Vilket härligt gäng det var, supertrevligt. Ni är ett par vi kände vi klickade med... ",
     when: "2024-02-29T11:04:37.083Z",
@@ -31,6 +36,7 @@ const MESSAGES2: Message[] = [
   {
     id: "lkojmn",
     from: "Sexy-couple",
+    fromId: "Sexy-couple",
     message:
       "Vi ska ha en middags-träff på lördag med ett annat par, vi tror ni skulle gilla dom också. Det vore kul och spännande om ni vill joina oss.",
     when: "2024-02-29T11:04:37.083Z",
@@ -38,6 +44,7 @@ const MESSAGES2: Message[] = [
   {
     id: "nccarp",
     from: "sthlmpar08",
+    fromId: "sthlmpar08",
     message: "Så roligt att höra. Vi ses gärna på lördag för en middag, kul!",
     when: "2024-02-29T11:04:37.083Z",
   },
@@ -45,6 +52,7 @@ const MESSAGES2: Message[] = [
 
 const Home: NextPage = () => {
   const messageIsEnabled = useFeature("message");
+  const session = useSession();
 
   const router = useRouter();
   const { messageid } = router.query;
@@ -62,7 +70,7 @@ const Home: NextPage = () => {
       <ChatMessage
         key={message.id}
         message={message}
-        fromMe={message.from === "sthlmpar08"}
+        fromMe={message.fromId === session.data?.user.id}
       />
     );
   }
@@ -72,7 +80,8 @@ const Home: NextPage = () => {
     if (messageIsEnabled) {
       // alert("Nu skickar vi iväg meddelandet");
       const message: Message = {
-        from: "from",
+        from: "from", // will be set on server
+        fromId: "from", // will be set on server
         id: messageid as string,
         message: text,
         when: "", // will be set on server

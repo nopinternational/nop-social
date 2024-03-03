@@ -13,6 +13,7 @@ import { type ConversationGroup } from "~/pages/app/message";
 export type MessageFirestoreModel = {
   chatConvoId: string;
   fromUserId: string;
+  fromUser: string;
   chatMessage: string;
   when: string;
 };
@@ -199,7 +200,8 @@ const groupConverter: FirestoreDataConverter<ConversationGroup> = {
 const messageConverter: FirestoreDataConverter<Message> = {
   toFirestore: (message: Message): MessageFirestoreModel => {
     return {
-      fromUserId: message.from,
+      fromUserId: message.fromId,
+      fromUser: message.from,
       chatConvoId: message.id,
       chatMessage: message.message,
       when: message.when,
@@ -213,7 +215,8 @@ const messageConverter: FirestoreDataConverter<Message> = {
 
     // return { id: snapshot.id, ...data };
     return {
-      from: data.fromUserId,
+      from: data.fromUser,
+      fromId: data.fromUserId,
       id: snapshot.id,
       message: data.chatMessage,
       when: data.when,

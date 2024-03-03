@@ -27,6 +27,7 @@ export const chatRouter = createTRPCRouter({
       return groups;
     }
   ),
+
   getChatMessage: protectedProcedure
     .input(
       z.object({
@@ -41,13 +42,15 @@ export const chatRouter = createTRPCRouter({
 
       return messages;
     }),
+
   postChatMessage: protectedProcedure
     .input(z.object({ chatMessage: z.custom<Message>() }))
     .mutation(async ({ input, ctx }) => {
-      // console.log("postChatMessage", input);
-      // console.log("postChatMessage", ctx);
+      console.log("postChatMessage", input);
+      console.log("postChatMessage", ctx);
 
       input.chatMessage.from = ctx.session.user.name || "";
+      input.chatMessage.fromId = ctx.session.user.id || "";
       input.chatMessage.when = new Date().toISOString();
       // console.log("postChatMessage", input);
       return await persistChatMessage(input.chatMessage);
