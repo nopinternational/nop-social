@@ -8,11 +8,19 @@ import {
 } from "firebase-admin/firestore";
 import { type Message } from "~/components/Message/ChatMessage";
 import { useAmp } from "next/amp";
+import { type ConversationGroup } from "~/pages/app/message";
 
 export type MessageFirestoreModel = {
   chatConvoId: string;
   fromUserId: string;
   chatMessage: string;
+  when: string;
+};
+
+export type GroupFirestoreModel = {
+  createdBy: string;
+  members: string[];
+  lastMessage: string;
   when: string;
 };
 
@@ -88,20 +96,21 @@ class FirbaseChatMessageClient {
     return docRef.id;
   };
 
-  getGroups = async (userId: string): Promise<string[]> => {
+  getGroups = async (userId: string): Promise<ConversationGroup[]> => {
     // console.log("getChatMessages", messageCollection);
     const groupRef = this.firestore
       .collection(GROOUP_COLLECTION)
-      .where("members", "array-contains", userId);
+      .where("members", "array-contains", userId)
+      .withConverter(groupConverter);
 
-    const allGroups: string[] = [];
+    const allGroups: ConversationGroup[] = [];
 
     const snapshot = await groupRef.get();
 
     snapshot.forEach((doc) => {
       const data = doc.data();
       console.log("getGroups: data=", data);
-      allGroups.push(doc.id);
+      allGroups.push(data);
     });
     // const foo = groupRef.onSnapshot(await (snapshot) => {
     //   snapshot.forEach((doc) => {
@@ -165,6 +174,32 @@ class FirbaseChatMessageClient {
     // return null;
   };
 }
+
+const groupConverter: FirestoreDataConverter<ConversationGroup> = {
+  toFirestore: (conversationGroup: ConversationGroup): GroupFirestoreModel => {
+    return {
+      createdBy: "someone",
+      members: [],
+      lastMessage: "something has been said",
+      when: new Date().toISOString(),
+    };
+  },
+
+  fromFirestore: (
+    snapshot: QueryDocumentSnapshot<GroupFirestoreModel>
+    //options: SnapshotOptions
+  ): ConversationGroup => {
+    const data = snapshot.data();
+
+    // return { id: snapshot.id, ...data };
+    return {
+      conversationId: snapshot.id,
+      lastMessage: data.lastMessage,
+      username: data.members[0] || "",
+      members: data.members,
+    };
+  },
+};
 const messageConverter: FirestoreDataConverter<Message> = {
   toFirestore: (message: Message): MessageFirestoreModel => {
     return {

@@ -45,15 +45,15 @@ export const chatRouter = createTRPCRouter({
       // console.log("getMyConvoGroups.ctx", ctx);
       const groups = await getGroups(ctx.session.user.id);
       console.log("return groups from fb", groups);
-      const conversation_groups: ConversationGroup[] = groups.map((group) => ({
-        // const convo_group: ConversationGroup = {
-        conversationId: group,
-        lastMessage: "last message",
-        username: "USRNAME",
-        // };
-        // return convo_group;
-      }));
-      return conversation_groups;
+      // const conversation_groups: ConversationGroup[] = groups.map((group) => ({
+      //   // const convo_group: ConversationGroup = {
+      //   conversationId: group,
+      //   lastMessage: "last message",
+      //   username: "USRNAME",
+      //   // };
+      //   // return convo_group;
+      // }));
+      return groups;
     }
   ),
   getChatMessage: protectedProcedure
