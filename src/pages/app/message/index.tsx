@@ -149,6 +149,7 @@ const Conversation = ({ convo }: { convo: ConversationGroup }) => {
         <p className="line-clamp-3 truncate  whitespace-pre-wrap rounded-xl bg-white/10 p-2 pb-1 italic">
           {convo.lastMessage || "inget har sagts ännu"}
         </p>
+        <p className="text-right text-xs">id: {convo.conversationId}</p>
       </div>
     </>
   );
