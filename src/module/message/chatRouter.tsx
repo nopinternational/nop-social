@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { getChatMessages, persistChatMessage } from "./messageFirebase";
+import {
+  getChatMessages,
+  getGroups,
+  persistChatMessage,
+} from "./messageFirebase";
 
 // import { type MessageFirestoreModel } from "~/module/message/messageFirebase";
 import { type Message } from "~/components/Message/ChatMessage";
@@ -34,6 +38,16 @@ export const chatRouter = createTRPCRouter({
   //     console.log("ctx.session.user.name", ctx.session.user.name);
   //     return await persistChatMessage(aChatMessage);
   //   }),
+  getMyConvoGroups: protectedProcedure.query(
+    async ({ ctx }): Promise<Message[]> => {
+      // console.log("getMyConvoGroups.input", input);
+      // console.log("getMyConvoGroups.ctx", ctx);
+      const groups = await getGroups(ctx.session.user.id);
+      console.log("return groups from fb", groups);
+
+      return groups;
+    }
+  ),
   getChatMessage: protectedProcedure
     .input(
       z.object({
@@ -41,18 +55,20 @@ export const chatRouter = createTRPCRouter({
       })
     )
     .query(async ({ input, ctx }): Promise<Message[]> => {
-      console.log("getChatMessage.input", input);
-      console.log("getChatMessage.ctx", ctx);
+      // console.log("getChatMessage.input", input);
+      // console.log("getChatMessage.ctx", ctx);
       const messages = await getChatMessages(input.chatConvoId);
-      console.log("return messages from fb", messages);
+      // console.log("return messages from fb", messages);
 
       return messages;
     }),
   postChatMessage: protectedProcedure
     .input(z.object({ chatMessage: z.custom<Message>() }))
     .mutation(async ({ input, ctx }) => {
-      console.log("postChatMessage", input);
-      console.log("postChatMessage", ctx);
+      // console.log("postChatMessage", input);
+      // console.log("postChatMessage", ctx);
+      input.chatMessage.from = ctx.session.user.name || "";
+      // console.log("postChatMessage", input);
       return await persistChatMessage(input.chatMessage);
     }),
 });

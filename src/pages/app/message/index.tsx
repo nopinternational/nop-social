@@ -16,6 +16,11 @@ type Conversation = {
 const Home: NextPage = () => {
   const messageIsEnabled = useFeature("message");
 
+  const myConvoGroups = api.chat.getMyConvoGroups.useQuery();
+
+  if (myConvoGroups.data) {
+    console.log("myConvoGroups.data", myConvoGroups.data);
+  }
   const messages = api.chat.getChatMessage.useQuery({
     chatConvoId: "TliD2abuGuAbNELbtDXf",
   });
