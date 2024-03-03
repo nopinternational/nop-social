@@ -215,7 +215,7 @@ const messageConverter: FirestoreDataConverter<Message> = {
 
     // return { id: snapshot.id, ...data };
     return {
-      from: data.fromUser,
+      from: data.fromUser || data.fromUserId,
       fromId: data.fromUserId,
       id: snapshot.id,
       message: data.chatMessage,

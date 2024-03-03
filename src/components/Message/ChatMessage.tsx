@@ -20,8 +20,6 @@ export const ChatMessage = ({
 
   const whenStr = message.when;
 
-  console.log("whenStr", whenStr);
-  console.log("message.when", message.when);
   return (
     <>
       {fromMe ? (
