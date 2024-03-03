@@ -14,7 +14,8 @@ export type ConversationGroup = {
   members: string[];
 };
 
-const CONVERSATION_GROUP: ConversationGroup[] = [
+const CONVERSATION_GROUP: ConversationGroup[] = [];
+const CONVERSATION_GROUP2: ConversationGroup[] = [
   {
     conversationId: "e36db886ceadadf6e26678b57222a6d0",
     username: "sthlmpar08",

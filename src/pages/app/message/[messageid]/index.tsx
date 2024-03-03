@@ -12,7 +12,8 @@ import {
 } from "~/components/Message/ChatMessage";
 import { api } from "~/utils/api";
 
-const MESSAGES: Message[] = [
+const MESSAGES: Message[] = []
+const MESSAGES2: Message[] = [
   {
     id: "jscfdn",
     from: "sthlmpar08",
