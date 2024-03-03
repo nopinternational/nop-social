@@ -8,6 +8,7 @@ import {
 
 // import { type MessageFirestoreModel } from "~/module/message/messageFirebase";
 import { type Message } from "~/components/Message/ChatMessage";
+import { type ConversationGroup } from "~/pages/app/message";
 export const chatRouter = createTRPCRouter({
   // sendChatMessage: protectedProcedure
   //   .input(
@@ -39,13 +40,20 @@ export const chatRouter = createTRPCRouter({
   //     return await persistChatMessage(aChatMessage);
   //   }),
   getMyConvoGroups: protectedProcedure.query(
-    async ({ ctx }): Promise<Message[]> => {
+    async ({ ctx }): Promise<ConversationGroup[]> => {
       // console.log("getMyConvoGroups.input", input);
       // console.log("getMyConvoGroups.ctx", ctx);
       const groups = await getGroups(ctx.session.user.id);
       console.log("return groups from fb", groups);
-
-      return groups;
+      const conversation_groups: ConversationGroup[] = groups.map((group) => ({
+        // const convo_group: ConversationGroup = {
+        conversationId: group,
+        lastMessage: "last message",
+        username: "USRNAME",
+        // };
+        // return convo_group;
+      }));
+      return conversation_groups;
     }
   ),
   getChatMessage: protectedProcedure
