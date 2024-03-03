@@ -7,7 +7,6 @@ import {
   type FirestoreDataConverter,
 } from "firebase-admin/firestore";
 import { type Message } from "~/components/Message/ChatMessage";
-import { useAmp } from "next/amp";
 import { type ConversationGroup } from "~/pages/app/message";
 
 export type MessageFirestoreModel = {
@@ -25,12 +24,6 @@ export type GroupFirestoreModel = {
   when: string;
 };
 
-// export const persistChatMessage = async (
-//   aChatMessage: MessageFirestoreModel
-// ) => {
-//   const db = new FirbaseChatMessageClient(firestore);
-//   return db.storeChatMessage_old(aChatMessage);
-// };
 export const getChatMessages = async (messageCollection: string) => {
   const db = new FirbaseChatMessageClient(firestore);
   return db.getChatMessages(messageCollection);
@@ -75,18 +68,7 @@ class FirbaseChatMessageClient {
 
     const setreturn = await messageCollectionRef.doc().set(message);
     console.log("set message", setreturn);
-    //console.log("messageCollectionRef", messageCollectionRef);
-    // void this.firestore
-    //   .collection(CHATMESSAGE_COLLECTION)
-    //   .doc(message.id)
-    //   .collection("messages")
-    //   .withConverter(messageConverter)
-    //   .set(message);
 
-    // const docRef = eventsRef.doc();
-    // await docRef.set({ chatConvoId, fromUserId, chatMessage });
-
-    // return docRef.id;
   };
   storeChatMessage_old = async ({
     chatConvoId,
@@ -119,34 +101,10 @@ class FirbaseChatMessageClient {
       console.log("getGroups: data=", data);
       allGroups.push(data);
     });
-    // const foo = groupRef.onSnapshot(await (snapshot) => {
-    //   snapshot.forEach((doc) => {
-    //     const data = doc.data();
-    //     // data.id = doc.id;
-    //     console.log("getGroups: data=", data);
-    //     // if (data.recentMessage) allGroups.push(data);
-    //     allGroups.push(doc.id);
-    //   });
-    // });
-    // console.log("getGroups foo", foo);
+
     console.log("getGroups return: ", allGroups);
     return allGroups;
-    // .doc(messageCollection)
-    // .collection("messages")
-    // .orderBy("when", "asc")
-    // .withConverter(messageConverter);
 
-    // if (snapshot.exists) {
-    //   console.log(
-    //     "FirbaseAdminClient.getChatMessages -> snapshot.data()",
-    //     snapshot.data()
-    //   );
-    //   return snapshot.data();
-    // } else {
-    //   // docSnap.data() will be undefined in this case
-    //   // console.log("No such event!", eventid);
-    // }
-    // return null;
   };
 
   getChatMessages = async (messageCollection: string): Promise<Message[]> => {
