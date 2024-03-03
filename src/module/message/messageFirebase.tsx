@@ -56,9 +56,15 @@ class FirbaseChatMessageClient {
 
   storeChatMessage = async (message: Message): Promise<void> => {
     console.log("persist message", message);
-    console.log("persist message", message.from);
-    console.log("persist message", message.id);
-    console.log("persist message", message.message);
+
+    const groupRef = this.firestore
+      .collection(GROOUP_COLLECTION)
+      .doc(message.id);
+
+    await groupRef.set(
+      { when: message.when, lastMessage: message.message },
+      { merge: true }
+    );
 
     const messageCollectionRef = this.firestore
       .collection(CHATMESSAGE_COLLECTION)
@@ -160,18 +166,6 @@ class FirbaseChatMessageClient {
     });
 
     return messages;
-
-    // if (snapshot.exists) {
-    //   console.log(
-    //     "FirbaseAdminClient.getChatMessages -> snapshot.data()",
-    //     snapshot.data()
-    //   );
-    //   return snapshot.data();
-    // } else {
-    //   // docSnap.data() will be undefined in this case
-    //   // console.log("No such event!", eventid);
-    // }
-    // return null;
   };
 }
 
@@ -180,7 +174,7 @@ const groupConverter: FirestoreDataConverter<ConversationGroup> = {
     return {
       createdBy: "someone",
       members: [],
-      lastMessage: "something has been said",
+      lastMessage: conversationGroup.lastMessage,
       when: new Date().toISOString(),
     };
   },
@@ -197,16 +191,18 @@ const groupConverter: FirestoreDataConverter<ConversationGroup> = {
       lastMessage: data.lastMessage,
       username: data.members[0] || "",
       members: data.members,
+      when: data.when,
     };
   },
 };
+
 const messageConverter: FirestoreDataConverter<Message> = {
   toFirestore: (message: Message): MessageFirestoreModel => {
     return {
       fromUserId: message.from,
       chatConvoId: message.id,
       chatMessage: message.message,
-      when: new Date().toISOString(),
+      when: message.when,
     };
   },
   fromFirestore: (

@@ -10,35 +10,6 @@ import {
 import { type Message } from "~/components/Message/ChatMessage";
 import { type ConversationGroup } from "~/pages/app/message";
 export const chatRouter = createTRPCRouter({
-  // sendChatMessage: protectedProcedure
-  //   .input(
-  //     z.object({
-  //       chatConvoId: z.string(),
-  //       fromUserId: z.string(),
-  //       chatMessage: z.string(),
-  //     })
-  //   )
-  //   .mutation(async ({ input, ctx }) => {
-  //     const aChatMessage2: MessageFirestoreModel = {
-  //       chatConvoId: input.chatConvoId,
-  //       fromUserId: input.fromUserId,
-  //       chatMessage: input.chatMessage,
-  //     };
-
-  //     const aChatMessage: Message = {
-  //       id: input.chatConvoId,
-  //       from: input.fromUserId,
-  //       message: input.chatMessage,
-  //     };
-
-  //     console.log("------------sendChatMessage.input", input);
-  //     console.log("------------sendChatMessage.aChatMessage", aChatMessage);
-  //     console.log("ctx", ctx);
-  //     console.log("ctx.session", ctx.session);
-  //     console.log("ctx.session.user.", ctx.session.user);
-  //     console.log("ctx.session.user.name", ctx.session.user.name);
-  //     return await persistChatMessage(aChatMessage);
-  //   }),
   getMyConvoGroups: protectedProcedure.query(
     async ({ ctx }): Promise<ConversationGroup[]> => {
       // console.log("getMyConvoGroups.input", input);
@@ -75,7 +46,9 @@ export const chatRouter = createTRPCRouter({
     .mutation(async ({ input, ctx }) => {
       // console.log("postChatMessage", input);
       // console.log("postChatMessage", ctx);
+
       input.chatMessage.from = ctx.session.user.name || "";
+      input.chatMessage.when = new Date().toISOString();
       // console.log("postChatMessage", input);
       return await persistChatMessage(input.chatMessage);
     }),
