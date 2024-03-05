@@ -7,12 +7,19 @@ import Layout from "~/components/Layout";
 import { ProfilePic } from "~/module/profile/components/ProfilePic";
 import { api } from "~/utils/api";
 
+export type ChatMember = {
+  profileid: string;
+  profilename: string;
+};
+
 export type ConversationGroup = {
+  [x: string]: any;
   conversationId: string;
   username: string;
   lastMessage: string;
   members: string[];
   when: string;
+  chatMembers: ChatMember[];
 };
 
 const CONVERSATION_GROUP: ConversationGroup[] = [];
@@ -23,6 +30,7 @@ const CONVERSATION_GROUP2: ConversationGroup[] = [
     lastMessage: "Så roligt att höra! Vi ses på lördag för en middag",
     members: ["123", "456"],
     when: "2024-03-01T10:40:28.706Z",
+    chatMembers: [{ profileid: "sthlmpar08", profilename: "sthlmpar08" }],
   },
   {
     conversationId: "6f0216ac2fa4cee37679b55795f5517d",
@@ -31,6 +39,7 @@ const CONVERSATION_GROUP2: ConversationGroup[] = [
       "Det var många härliga par på förra träffen och ni är ett par som vi särskilt gillar 😉",
     members: ["123", "456"],
     when: "2024-03-01T10:41:28.706Z",
+    chatMembers: [{ profileid: "Sexy-couple", profilename: "Sexy-couple" }],
   },
   {
     conversationId: "7061c9f8e194f2076a40e0b988a00859",
@@ -39,6 +48,12 @@ const CONVERSATION_GROUP2: ConversationGroup[] = [
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
     members: ["123", "456"],
     when: "2024-03-01T10:42:28.706Z",
+    chatMembers: [
+      {
+        profileid: "Latin-Language-Lovers",
+        profilename: "Latin-Language-Lovers",
+      },
+    ],
   },
   {
     conversationId: "TliD2abuGuAbNELbtDXf",
@@ -46,8 +61,10 @@ const CONVERSATION_GROUP2: ConversationGroup[] = [
     lastMessage: "Tjoho på er!",
     members: ["123", "456"],
     when: "2024-03-01T10:43:28.706Z",
+    chatMembers: [{ profileid: "happy couple", profilename: "happy couple" }],
   },
 ];
+
 const Home: NextPage = () => {
   const messageIsEnabled = useFeature("message");
 
@@ -143,6 +160,7 @@ const Home: NextPage = () => {
 export default Home;
 
 const Conversation = ({ convo }: { convo: ConversationGroup }) => {
+  console.log("render Conversation", convo);
   return (
     <>
       <div className="col-span-1 flex items-center justify-center pt-2">
@@ -150,7 +168,7 @@ const Conversation = ({ convo }: { convo: ConversationGroup }) => {
       </div>
       <div className="col-span-3">
         <h3 className="text-2xl font-bold">
-          <HighlightText>{convo.username}</HighlightText>
+          <HighlightText>{convo.chatMembers[0]?.profilename}</HighlightText>
         </h3>
         <p className="line-clamp-3 truncate  whitespace-pre-wrap rounded-xl bg-white/10 p-2 pb-1 italic">
           {convo.lastMessage || "inget har sagts ännu"}
