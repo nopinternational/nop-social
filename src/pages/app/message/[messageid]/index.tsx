@@ -15,11 +15,9 @@ import {
 } from "~/components/Message/ChatMessage";
 import { api } from "~/utils/api";
 
+const MESSAGES_EMPTY: Message[] = [];
 
-const MESSAGES: Message[] = [];
-
-
-const MESSAGES2: Message[] = [
+const MESSAGES_DUMMY: Message[] = [
   {
     id: "jscfdn",
     from: "sthlmpar08",
@@ -53,18 +51,24 @@ const MESSAGES2: Message[] = [
   },
 ];
 
+const MESSAGES = MESSAGES_DUMMY;
+
 const Home: NextPage = () => {
   const messageIsEnabled = useFeature("message");
   const session = useSession();
 
   const router = useRouter();
   const { messageid } = router.query;
+
   const convoId = messageid as string;
+  const isTestConversation = convoId.startsWith("test-");
+
   console.log("message/", messageid);
 
   const messageApi = api.chat.getChatMessage.useQuery({
     chatConvoId: convoId,
   });
+
   const { mutate: postChatMessage } = api.chat.postChatMessage.useMutation();
 
   function renderMessage(message: Message) {
@@ -97,7 +101,7 @@ const Home: NextPage = () => {
       );
     }
   }
-  const data = messageApi.data || [];
+  const data = isTestConversation ? MESSAGES : messageApi.data || [];
 
   return (
     <Layout
@@ -134,16 +138,6 @@ const Home: NextPage = () => {
               </>
             }
           >
-            {MESSAGES.map((message) => {
-              return renderMessage(message);
-              //   return (
-              //     <ChatMessage
-              //       key={message.id}
-              //       message={message}
-              //       fromMe={message.from === "sthlmpar08"}
-              //     />
-              //   );
-            })}
             {data.map((message) => {
               return renderMessage(message);
               //   return renderMessage({
