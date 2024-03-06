@@ -23,10 +23,10 @@ export type ConversationGroup = {
   chatMembers?: ChatMember[];
 };
 
-const CONVERSATION_GROUP: ConversationGroup[] = [];
-const CONVERSATION_GROUP2: ConversationGroup[] = [
+const CONVERSATION_GROUP_EMPTY: ConversationGroup[] = [];
+const CONVERSATION_GROUP_DUMMY: ConversationGroup[] = [
   {
-    conversationId: "e36db886ceadadf6e26678b57222a6d0",
+    conversationId: "test-e36db886ceadadf6e26678b57222a6d0",
     username: "sthlmpar08",
     lastMessage: "Så roligt att höra! Vi ses på lördag för en middag",
     members: ["123", "456"],
@@ -34,7 +34,7 @@ const CONVERSATION_GROUP2: ConversationGroup[] = [
     chatMembers: [{ profileid: "sthlmpar08", profilename: "sthlmpar08" }],
   },
   {
-    conversationId: "6f0216ac2fa4cee37679b55795f5517d",
+    conversationId: "test-6f0216ac2fa4cee37679b55795f5517d",
     username: "Sexy-couple",
     lastMessage:
       "Det var många härliga par på förra träffen och ni är ett par som vi särskilt gillar 😉",
@@ -43,7 +43,7 @@ const CONVERSATION_GROUP2: ConversationGroup[] = [
     chatMembers: [{ profileid: "Sexy-couple", profilename: "Sexy-couple" }],
   },
   {
-    conversationId: "7061c9f8e194f2076a40e0b988a00859",
+    conversationId: "test-7061c9f8e194f2076a40e0b988a00859",
     username: "Latin-Language-Lovers",
     lastMessage:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
@@ -57,7 +57,7 @@ const CONVERSATION_GROUP2: ConversationGroup[] = [
     ],
   },
   {
-    conversationId: "TliD2abuGuAbNELbtDXf",
+    conversationId: "test-TliD2abuGuAbNELbtDXf",
     username: "happy couple",
     lastMessage: "Tjoho på er!",
     members: ["123", "456"],
@@ -65,6 +65,7 @@ const CONVERSATION_GROUP2: ConversationGroup[] = [
     chatMembers: [{ profileid: "happy couple", profilename: "happy couple" }],
   },
 ];
+const CONVERSATION_GROUP = CONVERSATION_GROUP_DUMMY;
 
 const Home: NextPage = () => {
   const messageIsEnabled = useFeature("message");
