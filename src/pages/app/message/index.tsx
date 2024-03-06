@@ -1,3 +1,4 @@
+import { group } from "console";
 import { type NextPage } from "next";
 import Link from "next/link";
 import { Card } from "~/components/Card";
@@ -19,7 +20,7 @@ export type ConversationGroup = {
   lastMessage: string;
   members: string[];
   when: string;
-  chatMembers: ChatMember[];
+  chatMembers?: ChatMember[];
 };
 
 const CONVERSATION_GROUP: ConversationGroup[] = [];
@@ -161,6 +162,21 @@ export default Home;
 
 const Conversation = ({ convo }: { convo: ConversationGroup }) => {
   console.log("render Conversation", convo);
+
+  // : string | null
+  function getFirstChatmember(chatmembers: ChatMember[]): string | null {
+    // (convo.chatMembers && convo.chatMembers.length > 0) ||
+    // convo.chatMembers[0]?.profileName ||
+    console.log("chatmembers", chatmembers);
+    if (chatmembers.length >= 0) {
+      const chtmember = chatmembers[0] as ChatMember;
+      return chtmember.profilename;
+    }
+    return null;
+  }
+  const chatMemberProfileName: string =
+    getFirstChatmember(convo.chatMembers || []) || "--unknown--";
+
   return (
     <>
       <div className="col-span-1 flex items-center justify-center pt-2">
@@ -168,7 +184,7 @@ const Conversation = ({ convo }: { convo: ConversationGroup }) => {
       </div>
       <div className="col-span-3">
         <h3 className="text-2xl font-bold">
-          <HighlightText>{convo.chatMembers[0]?.profilename}</HighlightText>
+          <HighlightText>{chatMemberProfileName}</HighlightText>
         </h3>
         <p className="line-clamp-3 truncate  whitespace-pre-wrap rounded-xl bg-white/10 p-2 pb-1 italic">
           {convo.lastMessage || "inget har sagts ännu"}

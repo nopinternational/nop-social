@@ -166,6 +166,7 @@ const profileConverter: FirestoreDataConverter<Profile> = {
     // const data = snapshot.data(options) as ProfileDbModel;
     const data = snapshot.data();
     return {
+      id: snapshot.id,
       username: data.username,
       person1: {
         name: data.person1.name,
