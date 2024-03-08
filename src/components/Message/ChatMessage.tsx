@@ -9,6 +9,27 @@ export type Message = {
   when: string;
 };
 
+export type ConversationGroup = {
+  // [x: string]: any;
+  conversationId: string;
+  username: string;
+  lastMessage: string;
+  members: string[];
+  when: string;
+  chatMembers?: ChatMember[];
+  conversationGroupName: string
+};
+
+export type ChatMember = {
+  profileid: string;
+  profilename: string;
+};
+
+export type ConvoWithMessages = {
+  conversation: ConversationGroup;
+  messages: Message[];
+};
+
 export const ChatMessage = ({
   message,
   fromMe,

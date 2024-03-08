@@ -6,11 +6,13 @@ import {
   type QueryDocumentSnapshot,
   type FirestoreDataConverter,
 } from "firebase-admin/firestore";
-import { type Message } from "~/components/Message/ChatMessage";
-import { type ConversationGroup } from "~/pages/app/message";
+import {
+  type ConvoWithMessages,
+  type ConversationGroup,
+  type Message,
+} from "~/components/Message/ChatMessage";
 import { getProfileByUserIdFromFirestore } from "../profile/firebaseProfiles";
 import { type Profile } from "../profile/profileRouter";
-import { group } from "console";
 
 export type MessageFirestoreModel = {
   chatConvoId: string;
@@ -27,11 +29,23 @@ export type GroupFirestoreModel = {
   when: string;
 };
 
-export const getChatMessages = async (messageCollection: string) => {
+export const getChatMessages = async (
+  messageCollection: string
+): Promise<Message[]> => {
   const db = new FirbaseChatMessageClient(firestore);
   return db.getChatMessages(messageCollection);
 };
-export const getGroups = async (userId: string) => {
+
+export const getConvoAndMessages = async (
+  messageCollection: string
+): Promise<ConvoWithMessages> => {
+  const db = new FirbaseChatMessageClient(firestore);
+  return db.getConvoAndMessages(messageCollection);
+};
+
+export const getGroups = async (
+  userId: string
+): Promise<ConversationGroup[]> => {
   const db = new FirbaseChatMessageClient(firestore);
   return db.getGroupsWithProfiles(userId);
 };
@@ -106,7 +120,7 @@ class FirbaseChatMessageClient {
           profilename: profile?.username || "",
         };
       });
-      console.log("group.chatmembers", group, group.chatmembers);
+      console.log("group.chatmembers", group, group.chatMembers);
     }
     // const participantsIds = groups.members.filter((userid) => userid != userId);
 
@@ -240,6 +254,43 @@ class FirbaseChatMessageClient {
 
     return messages;
   };
+
+  getConvoAndMessages = async (
+    messageCollection: string
+  ): Promise<ConvoWithMessages> => {
+    // console.log("getChatMessages", messageCollection);
+    const messageCollectionRef = this.firestore
+      .collection(CHATMESSAGE_COLLECTION)
+      .doc(messageCollection)
+      .collection("messages")
+      .orderBy("when", "asc")
+      .withConverter(messageConverter);
+
+    const snapshot = await messageCollectionRef.get();
+
+    const messages: Message[] = [];
+    snapshot.forEach((doc) => {
+      //console.log("getChatMessages", doc.id, doc.data());
+      messages.push(doc.data());
+    });
+
+    const conversation_dummy: ConversationGroup = {
+      conversationId: "convoid",
+      lastMessage: "lastmessage",
+      username: "username",
+      when: "2024-03-03T11:43:06.626Z",
+      members: ["123", "456"],
+      chatMembers: [{ profileid: "222", profilename: "cyklop" }],
+      conversationGroupName: "cyklop",
+    };
+
+    const convoWithMessages: ConvoWithMessages = {
+      messages: messages,
+      conversation: conversation_dummy,
+    };
+
+    return convoWithMessages;
+  };
 }
 
 const groupConverter: FirestoreDataConverter<ConversationGroup> = {
@@ -265,6 +316,7 @@ const groupConverter: FirestoreDataConverter<ConversationGroup> = {
       username: data.members[0] || "",
       members: data.members,
       when: data.when,
+      conversationGroupName: "",
     };
   },
 };

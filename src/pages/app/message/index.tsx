@@ -1,27 +1,15 @@
-import { group } from "console";
 import { type NextPage } from "next";
 import Link from "next/link";
 import { Card } from "~/components/Card";
 import { useFeature } from "~/components/FeatureFlag";
 import HighlightText from "~/components/HighlightText";
 import Layout from "~/components/Layout";
+import {
+  type ChatMember,
+  type ConversationGroup,
+} from "~/components/Message/ChatMessage";
 import { ProfilePic } from "~/module/profile/components/ProfilePic";
 import { api } from "~/utils/api";
-
-export type ChatMember = {
-  profileid: string;
-  profilename: string;
-};
-
-export type ConversationGroup = {
-  [x: string]: any;
-  conversationId: string;
-  username: string;
-  lastMessage: string;
-  members: string[];
-  when: string;
-  chatMembers?: ChatMember[];
-};
 
 const CONVERSATION_GROUP_EMPTY: ConversationGroup[] = [];
 const CONVERSATION_GROUP_DUMMY: ConversationGroup[] = [

@@ -9,9 +9,12 @@ import { useFeature } from "~/components/FeatureFlag";
 import HighlightText from "~/components/HighlightText";
 import Layout from "~/components/Layout";
 import {
-  ChatMessage,
-  type Message,
   SendChatMessageForm,
+  ChatMessage,
+  type ChatMember,
+  type ConversationGroup,
+  type ConvoWithMessages,
+  type Message,
 } from "~/components/Message/ChatMessage";
 import { api } from "~/utils/api";
 
@@ -52,6 +55,27 @@ const MESSAGES_DUMMY: Message[] = [
 ];
 
 const MESSAGES = MESSAGES_DUMMY;
+const CONVERSTAION_GROUP_DUMMY: ConversationGroup = {
+  conversationId: "convoid",
+  lastMessage: "lastmessage",
+  username: "username",
+  when: "2024-03-03T11:43:06.626Z",
+  members: ["123", "456"],
+  chatMembers: [{ profileid: "222", profilename: "cyklop" }],
+};
+const CONVERSTAION_GROUP_EMPTY: ConversationGroup = {
+  conversationId: "",
+  lastMessage: "",
+  username: "",
+  when: "",
+  members: [],
+  chatMembers: [],
+};
+
+const CONVO_WITH_MESSAGES: ConvoWithMessages = {
+  messages: MESSAGES,
+  conversation: CONVERSTAION_GROUP_DUMMY,
+};
 
 const Home: NextPage = () => {
   const messageIsEnabled = useFeature("message");
@@ -61,18 +85,20 @@ const Home: NextPage = () => {
   const { messageid } = router.query;
 
   const convoId = messageid as string;
-  const isTestConversation = convoId.startsWith("test-");
+  console.log("message/", messageid, convoId);
+  const isTestConversation = convoId ? convoId.startsWith("test-") : true;
 
-  console.log("message/", messageid);
+  // const messageApi = api.chat.getChatMessage.useQuery({
+  //   chatConvoId: convoId,
+  // });
 
-  const messageApi = api.chat.getChatMessage.useQuery({
+  const messageApiConvoAndMessages = api.chat.getConvoAndChatMessages.useQuery({
     chatConvoId: convoId,
   });
 
   const { mutate: postChatMessage } = api.chat.postChatMessage.useMutation();
 
   function renderMessage(message: Message) {
-    console.log("render message for message", message);
     return (
       <ChatMessage
         key={message.id}
@@ -101,8 +127,26 @@ const Home: NextPage = () => {
       );
     }
   }
-  const data = isTestConversation ? MESSAGES : messageApi.data || [];
+  const data: ConvoWithMessages = messageApiConvoAndMessages.data || {
+    messages: [],
+    conversation: CONVERSTAION_GROUP_EMPTY,
+  };
+  // const data: ConvoWithMessages = isTestConversation
+  //   ? CONVO_WITH_MESSAGES
+  //   : (messageApiConvoAndMessages.data as ConvoWithMessages);
+  function getGroupNameFromChatMembers(
+    chatMembers: ChatMember[] | undefined
+  ): string {
+    if (chatMembers && chatMembers.length > 0) {
+      return chatMembers.map((chatMember) => chatMember.profilename).join(", ");
+    } else return "--unknown--";
+  }
 
+  data.conversation.conversationGroupName = getGroupNameFromChatMembers(
+    data.conversation.chatMembers
+  );
+
+  console.log("ConvoWithMessages", data);
   return (
     <Layout
       headingText={
@@ -134,12 +178,17 @@ const Home: NextPage = () => {
           <Card
             header={
               <>
-                Konversation med <HighlightText>Sexy-couple</HighlightText>:
+                Konversation med{" "}
+                <HighlightText>
+                  {data.conversation.conversationGroupName}
+                </HighlightText>
+                :
               </>
             }
           >
-            {data.map((message) => {
+            {data.messages.map((message) => {
               return renderMessage(message);
+
               //   return renderMessage({
               //     id: "123",
               //     message: message.chatMessage as string,
@@ -148,7 +197,7 @@ const Home: NextPage = () => {
             })}
 
             <SendChatMessageForm
-              toUsername="stockholm"
+              toUsername={data.conversation.conversationGroupName}
               postMessageHandler={postMessageHandler}
             ></SendChatMessageForm>
           </Card>

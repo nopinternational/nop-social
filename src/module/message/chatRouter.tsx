@@ -2,13 +2,18 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import {
   getChatMessages,
+  getConvoAndMessages,
   getGroups,
   persistChatMessage,
 } from "./messageFirebase";
 
 // import { type MessageFirestoreModel } from "~/module/message/messageFirebase";
-import { type Message } from "~/components/Message/ChatMessage";
-import { type ConversationGroup } from "~/pages/app/message";
+import {
+  type ConvoWithMessages,
+  type ConversationGroup,
+  type Message,
+} from "~/components/Message/ChatMessage";
+
 export const chatRouter = createTRPCRouter({
   getMyConvoGroups: protectedProcedure.query(
     async ({ ctx }): Promise<ConversationGroup[]> => {
@@ -41,6 +46,21 @@ export const chatRouter = createTRPCRouter({
       // console.log("return messages from fb", messages);
 
       return messages;
+    }),
+
+  getConvoAndChatMessages: protectedProcedure
+    .input(
+      z.object({
+        chatConvoId: z.string(),
+      })
+    )
+    .query(async ({ input, ctx }): Promise<ConvoWithMessages> => {
+      // console.log("getChatMessage.input", input);
+      // console.log("getChatMessage.ctx", ctx);
+      const convoWithMessages = await getConvoAndMessages(input.chatConvoId);
+      // console.log("return messages from fb", messages);
+
+      return convoWithMessages;
     }),
 
   postChatMessage: protectedProcedure
