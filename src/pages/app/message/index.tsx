@@ -20,6 +20,7 @@ const CONVERSATION_GROUP_DUMMY: ConversationGroup[] = [
     members: ["123", "456"],
     when: "2024-03-01T10:40:28.706Z",
     chatMembers: [{ profileid: "sthlmpar08", profilename: "sthlmpar08" }],
+    conversationGroupName: "sthlmpar08",
   },
   {
     conversationId: "test-6f0216ac2fa4cee37679b55795f5517d",
@@ -29,6 +30,7 @@ const CONVERSATION_GROUP_DUMMY: ConversationGroup[] = [
     members: ["123", "456"],
     when: "2024-03-01T10:41:28.706Z",
     chatMembers: [{ profileid: "Sexy-couple", profilename: "Sexy-couple" }],
+    conversationGroupName: "Sexy-couple",
   },
   {
     conversationId: "test-7061c9f8e194f2076a40e0b988a00859",
@@ -43,6 +45,7 @@ const CONVERSATION_GROUP_DUMMY: ConversationGroup[] = [
         profilename: "Latin-Language-Lovers",
       },
     ],
+    conversationGroupName: "Latin-Language-Lovers",
   },
   {
     conversationId: "test-TliD2abuGuAbNELbtDXf",
@@ -51,6 +54,7 @@ const CONVERSATION_GROUP_DUMMY: ConversationGroup[] = [
     members: ["123", "456"],
     when: "2024-03-01T10:43:28.706Z",
     chatMembers: [{ profileid: "happy couple", profilename: "happy couple" }],
+    conversationGroupName: "happy couple",
   },
 ];
 const CONVERSATION_GROUP = CONVERSATION_GROUP_DUMMY;

@@ -61,7 +61,8 @@ const CONVERSTAION_GROUP_DUMMY: ConversationGroup = {
   username: "username",
   when: "2024-03-03T11:43:06.626Z",
   members: ["123", "456"],
-  chatMembers: [{ profileid: "222", profilename: "cyklop" }],
+  chatMembers: [{ profileid: "222", profilename: "cyklop-gabbe" }],
+  conversationGroupName: "cyclos-gab",
 };
 const CONVERSTAION_GROUP_EMPTY: ConversationGroup = {
   conversationId: "",
@@ -70,6 +71,7 @@ const CONVERSTAION_GROUP_EMPTY: ConversationGroup = {
   when: "",
   members: [],
   chatMembers: [],
+  conversationGroupName: "",
 };
 
 const CONVO_WITH_MESSAGES: ConvoWithMessages = {
