@@ -61,8 +61,8 @@ const CONVERSTAION_GROUP_DUMMY: ConversationGroup = {
   username: "username",
   when: "2024-03-03T11:43:06.626Z",
   members: ["123", "456"],
-  chatMembers: [{ profileid: "222", profilename: "cyklop-gabbe" }],
-  conversationGroupName: "cyclos-gab",
+  chatMembers: [{ profileid: "222", profilename: "Sexy-couple" }],
+  conversationGroupName: "Sexy-couple",
 };
 const CONVERSTAION_GROUP_EMPTY: ConversationGroup = {
   conversationId: "",
@@ -101,11 +101,12 @@ const Home: NextPage = () => {
   const { mutate: postChatMessage } = api.chat.postChatMessage.useMutation();
 
   function renderMessage(message: Message) {
+    const myUserId = isTestConversation ? "sthlmpar08" : session.data?.user.id;
     return (
       <ChatMessage
         key={message.id}
         message={message}
-        fromMe={message.fromId === session.data?.user.id}
+        fromMe={message.fromId === myUserId}
       />
     );
   }
@@ -129,13 +130,18 @@ const Home: NextPage = () => {
       );
     }
   }
-  const data: ConvoWithMessages = messageApiConvoAndMessages.data || {
-    messages: [],
-    conversation: CONVERSTAION_GROUP_EMPTY,
-  };
-  // const data: ConvoWithMessages = isTestConversation
-  //   ? CONVO_WITH_MESSAGES
-  //   : (messageApiConvoAndMessages.data as ConvoWithMessages);
+
+  function getDummyConvoWithMessages(): ConvoWithMessages {
+    return CONVO_WITH_MESSAGES;
+  }
+
+  const data: ConvoWithMessages = isTestConversation
+    ? getDummyConvoWithMessages()
+    : messageApiConvoAndMessages.data || {
+        messages: [],
+        conversation: CONVERSTAION_GROUP_EMPTY,
+      };
+
   function getGroupNameFromChatMembers(
     chatMembers: ChatMember[] | undefined
   ): string {

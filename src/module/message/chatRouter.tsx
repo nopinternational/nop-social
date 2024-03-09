@@ -57,7 +57,10 @@ export const chatRouter = createTRPCRouter({
     .query(async ({ input, ctx }): Promise<ConvoWithMessages> => {
       // console.log("getChatMessage.input", input);
       // console.log("getChatMessage.ctx", ctx);
-      const convoWithMessages = await getConvoAndMessages(input.chatConvoId);
+      const convoWithMessages = await getConvoAndMessages(
+        input.chatConvoId,
+        ctx.session.user.id
+      );
       // console.log("return messages from fb", messages);
 
       return convoWithMessages;
