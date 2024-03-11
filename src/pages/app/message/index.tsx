@@ -119,12 +119,33 @@ export default Home;
 const ConnectedConversationsCard = () => {
   const myConvoGroups = api.chat.getMyConvoGroups.useQuery();
   const myConversations = myConvoGroups.data || [];
+  //const myConversations: ConversationGroup[] = [];
 
   if (myConvoGroups.data) {
     console.log("myConvoGroups.data", myConvoGroups.data);
   }
+  if (myConversations && myConversations.length == 0) {
+    return (
+      <Card
+        header={
+          <>
+            Inga pågående <HighlightText>konversationer</HighlightText>
+          </>
+        }
+      >
+        <p>Här var det tomt 😏</p>
+      </Card>
+    );
+  }
+
   return (
-    <Card header="Pågående konversationer">
+    <Card
+      header={
+        <>
+          Pågående <HighlightText>konversationer</HighlightText>
+        </>
+      }
+    >
       {myConversations.map((convo) => (
         <Link
           key={convo.conversationId}
@@ -140,7 +161,13 @@ const ConnectedConversationsCard = () => {
 
 const DummyConversationsCard = () => {
   return (
-    <Card header="Pågående konversationer">
+    <Card
+      header={
+        <>
+          Pågående <HighlightText>konversationer</HighlightText>
+        </>
+      }
+    >
       {CONVERSATION_GROUP.map((convo) => (
         <Link
           key={convo.conversationId}
