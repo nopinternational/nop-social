@@ -62,22 +62,6 @@ const CONVERSATION_GROUP = CONVERSATION_GROUP_DUMMY;
 const Home: NextPage = () => {
   const messageIsEnabled = useFeature("message");
 
-  const myConvoGroups = api.chat.getMyConvoGroups.useQuery();
-
-  if (myConvoGroups.data) {
-    console.log("myConvoGroups.data", myConvoGroups.data);
-  }
-
-  const messages = api.chat.getChatMessage.useQuery({
-    chatConvoId: "TliD2abuGuAbNELbtDXf",
-  });
-
-  if (messages.data) {
-    console.log("message page, messages.data:", messages.data);
-  }
-
-  const myConversations = myConvoGroups.data || [];
-
   return (
     <Layout
       headingText={
@@ -106,45 +90,24 @@ const Home: NextPage = () => {
             </div>
           </Card>
           {messageIsEnabled ? (
-            <Card
-              header={
-                <>
-                  är <HighlightText>feature toogle</HighlightText> igång?
-                </>
-              }
-            >
-              <div className="text-lg">
-                Kollar om feature flagga är igång eller inte
-              </div>
-
-              <div className="text-lg">
-                Är <HighlightText>messsage</HighlightText> igång?{" "}
-                {messageIsEnabled.toString()}
-              </div>
-            </Card>
-          ) : null}
-
-          <Card header="Pågående konversationer">
-            {CONVERSATION_GROUP.map((convo) => (
-              <Link
-                key={convo.conversationId}
-                className="grid grid-cols-4 hover:bg-white/20"
-                href={`/app/message/${convo.conversationId}`}
+            <>
+              <Card
+                header={
+                  <>
+                    <HighlightText>Meddelande funktionen</HighlightText> är
+                    aktiv
+                  </>
+                }
               >
-                <Conversation convo={convo} />
-              </Link>
-            ))}
-
-            {myConversations.map((convo) => (
-              <Link
-                key={convo.conversationId}
-                className="grid grid-cols-4 rounded-xl hover:bg-white/20"
-                href={`/app/message/${convo.conversationId}`}
-              >
-                <Conversation convo={convo} />
-              </Link>
-            ))}
-          </Card>
+                <div className="text-lg">
+                  Du testar just nu meddelande funktionen
+                </div>
+              </Card>
+              <ConnectedConversationsCard></ConnectedConversationsCard>
+            </>
+          ) : (
+            <DummyConversationsCard></DummyConversationsCard>
+          )}
         </div>
       </div>
     </Layout>
@@ -152,6 +115,44 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+const ConnectedConversationsCard = () => {
+  const myConvoGroups = api.chat.getMyConvoGroups.useQuery();
+  const myConversations = myConvoGroups.data || [];
+
+  if (myConvoGroups.data) {
+    console.log("myConvoGroups.data", myConvoGroups.data);
+  }
+  return (
+    <Card header="Pågående konversationer">
+      {myConversations.map((convo) => (
+        <Link
+          key={convo.conversationId}
+          className="grid grid-cols-4 hover:bg-white/20"
+          href={`/app/message/${convo.conversationId}`}
+        >
+          <Conversation convo={convo} />
+        </Link>
+      ))}
+    </Card>
+  );
+};
+
+const DummyConversationsCard = () => {
+  return (
+    <Card header="Pågående konversationer">
+      {CONVERSATION_GROUP.map((convo) => (
+        <Link
+          key={convo.conversationId}
+          className="grid grid-cols-4 hover:bg-white/20"
+          href={`/app/message/${convo.conversationId}`}
+        >
+          <Conversation convo={convo} />
+        </Link>
+      ))}
+    </Card>
+  );
+};
 
 const Conversation = ({ convo }: { convo: ConversationGroup }) => {
   console.log("render Conversation", convo);
