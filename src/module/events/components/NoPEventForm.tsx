@@ -89,13 +89,27 @@ export const NoPEventForm = ({
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
     setEventInformation((e: EventInformation) => {
-      const newEvnt = { ...e };
+      const newEvnt: EventInformation = { ...e };
       const keyName: string = event.target.name;
-      const eventVal: string | number =
-        keyName === "order" ? parseInt(event.target.value) : event.target.value;
-      newEvnt[keyName as keyof typeof e] = eventVal;
+      const eventVal = event.target.value;
+      if (keyName === "order") {
+        newEvnt["order"] = parseInt(eventVal);
+      } else {
+        // ? parseInt(event.target.value) : event.target.value;
+        // newEvnt[keyName] = eventVal;
+        // newEvnt[keyName as keyof typeof e] = eventVal;
+        setKeyValue(newEvnt, keyName as keyof typeof e, eventVal);
+      }
       return newEvnt;
     });
+  };
+
+  const setKeyValue = <K extends keyof EventInformation>(
+    eventInformation: EventInformation,
+    key: K,
+    value: EventInformation[K]
+  ) => {
+    eventInformation[key] = value;
   };
 
   const toggleOption = (
