@@ -187,7 +187,7 @@ const Attending = ({
   session,
 }: {
   event: NopEvent;
-  session: Session;
+  session: Session | null;
 }) => {
   if (event.options.customSignupPage) {
     return <AttendingToSkargardsParty />;

@@ -48,6 +48,7 @@ const getInitialEventInformation = (
       description: event.description,
       longDesc: event.longDesc,
       order: event.order,
+      options: event.options,
     };
   }
   return {
@@ -56,6 +57,7 @@ const getInitialEventInformation = (
     description: DEFAULT_EVENT.description,
     longDesc: DEFAULT_EVENT.longDesc,
     order: DEFAULT_EVENT.order,
+    options: DEFAULT_EVENT.options,
   };
 };
 
