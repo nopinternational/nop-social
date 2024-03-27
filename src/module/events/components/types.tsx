@@ -13,6 +13,7 @@ const nopEvent = z.object({
     signupOpen: z.boolean(),
     active: z.boolean(),
     showParticipants: z.boolean(),
+    customSignupPage: z.boolean(),
   }),
   order: z.number(),
 });
@@ -36,6 +37,7 @@ export interface EventFirestoreModel extends DocumentData {
     signupOpen: boolean;
     active: boolean;
     showParticipants: boolean;
+    customSignupPage: boolean;
   };
   order: number;
 }

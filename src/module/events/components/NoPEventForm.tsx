@@ -15,12 +15,14 @@ export type EventInformation = {
   description: string;
   longDesc: string;
   order: number;
+  options: EventOptions;
 };
 
 export type EventOptions = {
   active: boolean;
   showParticipants: boolean;
   signupOpen: boolean;
+  customSignupPage: boolean;
 };
 
 const DEFAULT_EVENT: EventFormType = {
@@ -32,6 +34,7 @@ const DEFAULT_EVENT: EventFormType = {
     active: true,
     showParticipants: false,
     signupOpen: false,
+    customSignupPage: false,
   },
   order: 10000,
 };
@@ -66,9 +69,14 @@ export const NoPEventForm = ({
   const [eventInformation, setEventInformation] = useState<EventInformation>(
     getInitialEventInformation(event)
   );
-  const [eventOptions, setEventOptions] = useState<EventOptions>(
-    event?.options || DEFAULT_EVENT.options
-  );
+
+  const initialOptions: EventOptions = {
+    ...event?.options,
+    ...DEFAULT_EVENT.options,
+  };
+
+  const [eventOptions, setEventOptions] =
+    useState<EventOptions>(initialOptions);
   const [isSaving, setIsSaving] = useState(false);
 
   const createEvent = (e: React.MouseEvent<HTMLButtonElement>): void => {
@@ -191,6 +199,14 @@ export const NoPEventForm = ({
         name="showParticipants"
         optionText="Visa deltagare?"
         checked={eventOptions.showParticipants}
+        onClick={toggleOption}
+      />
+      <br />
+
+      <Toggle
+        name="customSignupPage"
+        optionText="Custom anmälningssida"
+        checked={eventOptions.customSignupPage}
         onClick={toggleOption}
       />
 
