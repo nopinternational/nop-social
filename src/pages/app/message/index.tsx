@@ -182,13 +182,11 @@ const DummyConversationsCard = () => {
 };
 
 const Conversation = ({ convo }: { convo: ConversationGroup }) => {
-  console.log("render Conversation", convo);
 
   // : string | null
   function getFirstChatmember(chatmembers: ChatMember[]): string | null {
     // (convo.chatMembers && convo.chatMembers.length > 0) ||
     // convo.chatMembers[0]?.profileName ||
-    console.log("chatmembers", chatmembers);
     if (chatmembers.length >= 0) {
       const chtmember = chatmembers[0] as ChatMember;
       return chtmember.profilename;

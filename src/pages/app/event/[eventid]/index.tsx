@@ -1,5 +1,5 @@
 import { type NextPage } from "next";
-import { type SessionContextValue, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import HighlightText from "~/components/HighlightText";
 
 import { useRouter } from "next/router";
@@ -12,7 +12,6 @@ import Layout from "~/components/Layout";
 import { Spinner } from "~/components/Spinner";
 import { Card } from "~/components/Card";
 import { CocktailSwishButton } from "~/components/Swish/SwishButton/SwishButton";
-import { type EventInformation } from "~/module/events/components/NoPEventForm";
 import { type NopEvent } from "~/module/events/components/types";
 import { type Session } from "next-auth";
 
@@ -45,20 +44,6 @@ const Home: NextPage = () => {
     setAttendToEvent(true);
     eventSignUp({ eventId: eventid as string });
   };
-
-  const renderAttending = (nopEvent: NopEvent) => {
-    if (nopEvent.options.customSignupPage) {
-      <AttendingToSkargardsParty />;
-    }
-    return (
-      <AttendingToCocktailMeet
-        eventTitle={nopEvent.title}
-        username={sessionData?.user.name}
-      />
-    );
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
   const renderEventClosedForSignup = () => {
     return (
