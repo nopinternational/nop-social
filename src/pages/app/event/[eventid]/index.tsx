@@ -12,6 +12,8 @@ import Layout from "~/components/Layout";
 import { Spinner } from "~/components/Spinner";
 import { Card } from "~/components/Card";
 import { CocktailSwishButton } from "~/components/Swish/SwishButton/SwishButton";
+import { type NopEvent } from "~/module/events/components/types";
+import { type Session } from "next-auth";
 
 const Home: NextPage = () => {
   //const hello = api.example.hello.useQuery({ text: "from tRPC" });
@@ -41,54 +43,6 @@ const Home: NextPage = () => {
     //console.log("attendToEventHandler")
     setAttendToEvent(true);
     eventSignUp({ eventId: eventid as string });
-  };
-
-  const renderAttending = ({ title: title }: { title: string }) => {
-    //return renderAttendingToCoecktailMeet(title);
-    return (
-      <AttendingToCocktailMeet
-        eventTitle={title}
-        username={sessionData?.user.name}
-      />
-    );
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const renderAttendingToSkargardsParty = () => {
-    return (
-      <div className="grid grid-cols-2  gap-4   sm:grid-cols-2 md:gap-8">
-        <div className="col-span-2">
-          <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
-            <h3 className="text-2xl font-bold">
-              <HighlightText>Snart klart...</HighlightText>
-            </h3>
-            <div className="whitespace-pre-wrap text-lg">
-              Vad kul att ni vill hänga med på skärgårdsfest 🎉🍸🍾
-            </div>
-            <div className="whitespace-pre-wrap text-lg">
-              Ännu går det inte riktigt att anmäla sig på vår site. Istället så
-              får skicka ett mail till{" "}
-              <a
-                className="text-[hsl(280,100%,70%)]"
-                href="mailto:fest@nightofpassion.se"
-              >
-                fest@nightofpassion.se
-              </a>{" "}
-              och anmäla er 😀
-            </div>
-            <div className="whitespace-pre-wrap text-lg">
-              Vänta inte med att skicka in er anmälan. Det är inte först till
-              kvarn, vi försöker hitta en bra blandning på paren som gör att
-              alla ska trivas ihop på festen. Det gör att det kan dröja innan vi
-              bekräftar er plats.
-            </div>
-            <div className="whitespace-pre-wrap text-lg">
-              Kram på er så länge 😘
-            </div>
-          </div>
-        </div>
-      </div>
-    );
   };
 
   const renderEventClosedForSignup = () => {
@@ -139,7 +93,7 @@ const Home: NextPage = () => {
     );
   }
 
-  const e = event.data;
+  const e: NopEvent = event.data;
 
   return (
     <Layout
@@ -175,14 +129,13 @@ const Home: NextPage = () => {
         </div>
       ) : null}
 
-      {attendingToEvent && e.options.signupOpen ? renderAttending(e) : null}
+      {attendingToEvent && e.options.signupOpen ? (
+        <Attending event={e} session={session.data} />
+      ) : null}
       {attendingToEvent && !e.options.signupOpen ? (
         <>
           <EventIsClosedForAttendes />
-          <AttendingToCocktailMeet
-            eventTitle={e.title}
-            username={sessionData?.user.name}
-          />
+          <Attending event={e} session={session.data} />
         </>
       ) : null}
     </Layout>
@@ -214,6 +167,61 @@ type AttendingToCocktailMeetProps = {
   username?: string | null;
 };
 
+const Attending = ({
+  event,
+  session,
+}: {
+  event: NopEvent;
+  session: Session | null;
+}) => {
+  if (event.options.customSignupPage) {
+    return <AttendingToSkargardsParty />;
+  }
+
+  return (
+    <AttendingToCocktailMeet
+      eventTitle={event.title}
+      username={session?.user.name}
+    />
+  );
+};
+
+const AttendingToSkargardsParty = () => {
+  return (
+    <div className="grid grid-cols-2  gap-4   sm:grid-cols-2 md:gap-8">
+      <div className="col-span-2">
+        <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
+          <h3 className="text-2xl font-bold">
+            <HighlightText>Snart klart...</HighlightText>
+          </h3>
+          <div className="whitespace-pre-wrap text-lg">
+            Vad kul att ni vill hänga med på skärgårdsfest 🎉🍸🍾
+          </div>
+          <div className="whitespace-pre-wrap text-lg">
+            Ännu går det inte riktigt att anmäla sig på vår site. Istället så
+            får skicka ett mail till{" "}
+            <a
+              className="text-[hsl(280,100%,70%)]"
+              href="mailto:fest@nightofpassion.se"
+            >
+              fest@nightofpassion.se
+            </a>{" "}
+            och anmäla er 😀
+          </div>
+          <div className="whitespace-pre-wrap text-lg">
+            Vänta inte med att skicka in er anmälan. Det är inte först till
+            kvarn, vi försöker hitta en bra blandning på paren som gör att alla
+            ska trivas ihop på festen. Det gör att det kan dröja innan vi
+            bekräftar er plats.
+          </div>
+          <div className="whitespace-pre-wrap text-lg">
+            Kram på er så länge 😘
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 const AttendingToCocktailMeet = ({
   eventTitle,
   username,

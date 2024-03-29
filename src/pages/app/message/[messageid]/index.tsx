@@ -154,7 +154,6 @@ const Home: NextPage = () => {
     data.conversation.chatMembers
   );
 
-  console.log("ConvoWithMessages", data);
   return (
     <Layout
       headingText={
