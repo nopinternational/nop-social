@@ -286,91 +286,12 @@ class FirbaseChatMessageClient {
       .where("members", "array-contains", userId)
       .withConverter(groupConverter);
 
-    const profilesColllectionRef = this.firestore.collection("profiles");
     const allGroups: ConversationGroup[] = [];
 
     const snapshot = await groupRef.get();
-    const uspr = [];
     snapshot.forEach((groupDoc) => allGroups.push(groupDoc.data()));
-    // const foo =snapshot.forEach(async (doc) => {
-    //   const data = doc.data();
-    //   console.log("getGroups: data=", data);
-    //   allGroups.push(data);
-    //   const userProfiles = await data.members
-    //     .filter((userid) => userid != userId)
-    //     .map(async (uid) => {
-    //       console.log("+++222++++++++ p2_async BEFORE");
-    //       const p2_async = await getProfileByUserIdFromFirestore(
-    //         "7K7PxXthSmblBF8uJIQN2zWMCyw1"
-    //       ).then((profile) => {
-    //         console.log(
-    //           "FETCHED ------------------------------ profile",
-    //           profile
-    //         );
-    //         return profile;
-    //       });
-    //       console.log("+++222++++++++ p2_async", p2_async);
-    //       // return "--" + uid + "--";
-    //       return p2_async;
-    //     });
 
-    //   data.profiles = userProfiles;
-    //   return data;
-    // });
     console.log("allgroups befor getuser", allGroups);
-    // let i = 1;
-    // let members_map;
-    // const foo = await allGroups.map(async (group) => {
-    //   const members = group.members;
-    //   group.counter = i++;
-    //   group.groupUsers = [];
-    //   members_map = await members
-    //     .filter((userid) => userid != userId)
-    //     .map(async (uid) => {
-    //       console.log("get user for member uid: ", uid);
-    //       group.groupUsers.push({ profileid: uid, profileName: "--" + uid });
-    //       // void (async () => {
-    //       //   const userFromFirebase = await getProfileByUserIdFromFirestore(uid);
-    //       //   console.log("============= userFromFirebase: ", userFromFirebase);
-    //       // })();
-    //       //const userFromFirebase = await getProfileByUserIdFromFirestore(uid);
-    //       const userFromFirebase = this.getProfile(uid);
-    //       console.log("+++++++++++ p2_async BEFORE");
-    //       const p2_async = await getProfileByUserIdFromFirestore(
-    //         "7K7PxXthSmblBF8uJIQN2zWMCyw1"
-    //       );
-    //       console.log("+++++++++++ p2_async", p2_async);
-    //       console.log("============= userFromFirebase: ", userFromFirebase);
-    //       console.log("at the end of foreach");
-    //       return await p2_async;
-    //     });
-
-    //   console.log("members_map!!!!!!!!!!!!!!!!", members_map);
-    //   return members_map;
-    // });
-    // console.log("!!!!!!!!members_map!!!!!!!!!!!!!!!!", members_map);
-    // console.log("!!!!!!!!foo!!!!!!!!!!!!!!!!", foo);
-    // members.forEach(async (userid) => {
-
-    //   const userDoc = await profilesColllectionRef.doc(userid).get();
-    //   if (userDoc.exists) {
-    //     const userProfileData = userDoc.data();
-    //     console.log("fetch userProfileData:", userProfileData);
-
-    //     const up = {
-    //       profileName: userProfileData.username,
-    //       profileId: userDoc.id,
-    //     };
-    //     uspr.push(up);
-    //     console.log("up: ", up);
-    //     // return up;
-    //   } else {
-    //     // return null;
-    //   }
-    // });
-
-    // console.log("fetch userprofiles:", uspr);
-
     console.log("----------------------getGroups return: ", allGroups);
 
     return allGroups;
