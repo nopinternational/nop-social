@@ -13,6 +13,7 @@ import {
 } from "~/components/Message/ChatMessage";
 import { getProfileByUserIdFromFirestore } from "../profile/firebaseProfiles";
 import { type Profile } from "../profile/profileRouter";
+import { type APIMessageToUser } from "./types";
 
 export type MessageFirestoreModel = {
   chatConvoId: string;
@@ -56,8 +57,20 @@ export const persistChatMessage = async (message: ConversationMessage) => {
   return db.storeChatMessage(message);
 };
 
+export const persistChatMessageToUser = async (message: APIMessageToUser) => {
+  const db = new FirbaseChatMessageClient(firestore);
+  return db.persistChatMessageToUser(message);
+};
+
 const CHATMESSAGE_COLLECTION = "message";
 const GROUP_COLLECTION = "group";
+
+type CreateConversationGroup = {
+  createdBy: string;
+  lastMessage: string;
+  members: string[];
+  when: string;
+};
 
 class FirbaseChatMessageClient {
   firestore: FirebaseFirestore.Firestore;
@@ -69,6 +82,7 @@ class FirbaseChatMessageClient {
   storeChatMessage = async (message: ConversationMessage): Promise<void> => {
     console.log("persist message", message);
 
+    // first: update group meta
     const groupRef = this.firestore
       .collection(GROUP_COLLECTION)
       .doc(message.conversationId);
@@ -78,6 +92,7 @@ class FirbaseChatMessageClient {
       { merge: true }
     );
 
+    // second: add message to message collection
     const messageCollectionRef = this.firestore
       .collection(CHATMESSAGE_COLLECTION)
       .doc(message.conversationId)
@@ -88,20 +103,130 @@ class FirbaseChatMessageClient {
     console.log("set message", setreturn);
   };
 
-  storeChatMessage_old = async ({
-    chatConvoId,
-    fromUserId,
-    chatMessage,
-  }: MessageFirestoreModel): Promise<string> => {
-    console.log("persist event", chatConvoId, fromUserId, chatMessage);
+  createGroup = async (
+    converasationGroup: CreateConversationGroup
+  ): Promise<ConversationGroup> => {
+    const groupDocRef = this.firestore.collection(GROUP_COLLECTION).doc();
+    const setReturn = await groupDocRef.set({ ...converasationGroup });
 
-    const eventsRef = this.firestore.collection(CHATMESSAGE_COLLECTION);
-
-    const docRef = eventsRef.doc();
-    await docRef.set({ chatConvoId, fromUserId, chatMessage });
-
-    return docRef.id;
+    return converasationGroup;
   };
+
+  getGroupForUsers = async (
+    userIdList: string[]
+  ): Promise<ConversationGroup> => {
+    console.log("getGroupForUsers", userIdList);
+    const userIdsPermutations = [
+      ["7K7PxXthSmblBF8uJIQN2zWMCyw1", "b4Qf3UhNP3PrI0dfJCLpfL2ckwr2"],
+      ["b4Qf3UhNP3PrI0dfJCLpfL2ckwr2", "7K7PxXthSmblBF8uJIQN2zWMCyw1"],
+    ];
+    const groupRef = this.firestore
+      .collection(GROUP_COLLECTION)
+      .where("members", "in", userIdsPermutations)
+      .withConverter(groupConverter);
+
+    const allGroups: ConversationGroup[] = [];
+
+    const snapshot = await groupRef.get();
+    snapshot.forEach((groupDoc) => allGroups.push(groupDoc.data()));
+    console.log("getGroupForUsers:", allGroups);
+
+    if (allGroups && allGroups.length > 0) {
+      return allGroups[0] as ConversationGroup;
+    } else {
+      return null;
+    }
+  };
+
+  getOrCreateGroup = async (
+    message: APIMessageToUser
+  ): Promise<ConversationGroup> => {
+    const existingGroup = await this.getGroupForUsers([
+      message.fromProfileId,
+      message.toProfileId,
+    ]);
+
+    if (existingGroup) {
+      return existingGroup;
+    } else {
+      const createGroup: CreateConversationGroup = {
+        createdBy: message.fromProfileId,
+        lastMessage: message.message,
+        members: [message.fromProfileId, message.toProfileId],
+        when: new Date().toISOString(),
+      };
+      const createdGroup = await this.createGroup(createGroup);
+      return createdGroup;
+    }
+  };
+  // createGroup = async (createGroup: CreateConversationGroup) => {
+  //   if (!group) {
+  //     const createGroup: CreateConversationGroup = {
+  //   createdBy: message.fromProfileId,
+  //   lastMessage: message.message,
+  //   members: [message.fromProfileId, message.toProfileId],
+  //   when: new Date().toISOString(),
+
+  // };
+
+  // this.createGroup(createGroup)
+  //     const createdGroup = await this.createGroup(createGroup);
+  //     console.log("creeatedGroup: ", createGroup);
+  //   }
+  //   // ELSE create
+  // };
+  persistChatMessageToUser = async (
+    message: APIMessageToUser
+  ): Promise<void> => {
+    console.log("persist message", message);
+
+    // get conversation if exist
+    const group = await this.getGroupForUsers([
+      message.toProfileId,
+      message.fromProfileId,
+    ]);
+    console.log("got group", group);
+
+    // const groupRef = this.firestore
+    //   .collection(GROUP_COLLECTION)
+    //   .doc(group?.conversationId);
+
+    // await groupRef.set(
+    //   { when: new Date().toISOString(), lastMessage: message.message },
+    //   { merge: true }
+    // );
+
+    const messageCollectionDocRef = this.firestore
+      .collection(CHATMESSAGE_COLLECTION)
+      .doc(group.conversationId);
+    //const messCollecDoc = await messageCollectionDocRef.set({});
+    console.log("messagecollection doc ref: ", messageCollectionDocRef.id);
+    await messageCollectionDocRef.set({ hello: "world" });
+    const messageCollectionRef = messageCollectionDocRef
+      .collection("messages")
+      .doc();
+    // //await messageCollectionRef.create();
+
+    // //.withConverter(messageConverter);
+
+    const setreturn = await messageCollectionRef.set(message);
+    // console.log("set message", setreturn);
+  };
+
+  // storeChatMessage_old = async ({
+  //   chatConvoId,
+  //   fromUserId,
+  //   chatMessage,
+  // }: MessageFirestoreModel): Promise<string> => {
+  //   console.log("persist event", chatConvoId, fromUserId, chatMessage);
+
+  //   const eventsRef = this.firestore.collection(CHATMESSAGE_COLLECTION);
+
+  //   const docRef = eventsRef.doc();
+  //   await docRef.set({ chatConvoId, fromUserId, chatMessage });
+
+  //   return docRef.id;
+  // };
 
   getConvoGroupsWithProfiles = async (
     userId: string

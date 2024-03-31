@@ -1,6 +1,11 @@
 import HighlightText from "../HighlightText";
 import { TextEditForm, type TextEditFormOptions } from "../TextEditForm";
 
+export type MessageToUser = {
+  toProfileId: string;
+  message: string;
+};
+
 export type ConversationMessage = {
   conversationId: string;
   from: string;
