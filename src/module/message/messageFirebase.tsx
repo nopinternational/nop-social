@@ -30,6 +30,33 @@ export type GroupFirestoreModel = {
   when: string;
 };
 
+// https://stackoverflow.com/a/37580979
+function permute(permutation: string[]) {
+  const length = permutation.length;
+  const result = [permutation.slice()];
+
+  const c = new Array(length).fill(0);
+  let i = 1;
+  let k: number;
+  let p: string;
+
+  while (i < length) {
+    if (c[i] < i) {
+      k = i % 2 && (c[i] as number);
+      p = permutation[i] as string;
+      permutation[i] = permutation[k] as string;
+      permutation[k] = p;
+      ++c[i];
+      i = 1;
+      result.push(permutation.slice());
+    } else {
+      c[i] = 0;
+      ++i;
+    }
+  }
+  return result;
+}
+
 export const getChatMessages = async (
   messageCollection: string
 ): Promise<ConversationMessage[]> => {
@@ -117,10 +144,8 @@ class FirbaseChatMessageClient {
     userIdList: string[]
   ): Promise<ConversationGroup | null> => {
     console.log("getGroupForUsers", userIdList);
-    const userIdsPermutations = [
-      ["7K7PxXthSmblBF8uJIQN2zWMCyw1", "b4Qf3UhNP3PrI0dfJCLpfL2ckwr2"],
-      ["b4Qf3UhNP3PrI0dfJCLpfL2ckwr2", "7K7PxXthSmblBF8uJIQN2zWMCyw1"],
-    ];
+    const userIdsPermutations = permute(userIdList);
+    console.log("getGroupForUsers.userIdsPermutations", userIdsPermutations);
     const groupRef = this.firestore
       .collection(GROUP_COLLECTION)
       .where("members", "in", userIdsPermutations)
