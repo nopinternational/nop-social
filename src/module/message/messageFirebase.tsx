@@ -57,7 +57,7 @@ export const persistChatMessage = async (message: Message) => {
 };
 
 const CHATMESSAGE_COLLECTION = "message";
-const GROOUP_COLLECTION = "group";
+const GROUP_COLLECTION = "group";
 
 class FirbaseChatMessageClient {
   firestore: FirebaseFirestore.Firestore;
@@ -70,7 +70,7 @@ class FirbaseChatMessageClient {
     console.log("persist message", message);
 
     const groupRef = this.firestore
-      .collection(GROOUP_COLLECTION)
+      .collection(GROUP_COLLECTION)
       .doc(message.id);
 
     await groupRef.set(
@@ -138,7 +138,7 @@ class FirbaseChatMessageClient {
   ): Promise<ConversationGroup | null> => {
     // console.log("getChatMessages", messageCollection);
     const groupRef = this.firestore
-      .collection(GROOUP_COLLECTION)
+      .collection(GROUP_COLLECTION)
       .doc(convoGroupId)
       // .where("members", "array-contains", "userId")
       .withConverter(groupConverter);
@@ -157,7 +157,7 @@ class FirbaseChatMessageClient {
   getGroups = async (userId: string): Promise<ConversationGroup[]> => {
     // console.log("getChatMessages", messageCollection);
     const groupRef = this.firestore
-      .collection(GROOUP_COLLECTION)
+      .collection(GROUP_COLLECTION)
       .where("members", "array-contains", userId)
       .withConverter(groupConverter);
 
