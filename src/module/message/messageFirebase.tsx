@@ -107,9 +107,10 @@ class FirbaseChatMessageClient {
     converasationGroup: CreateConversationGroup
   ): Promise<ConversationGroup> => {
     const groupDocRef = this.firestore.collection(GROUP_COLLECTION).doc();
-    const setReturn = await groupDocRef.set({ ...converasationGroup });
 
-    return converasationGroup;
+    await groupDocRef.set({ ...converasationGroup });
+
+    return (await this.getGroup(groupDocRef.id)) as ConversationGroup;
   };
 
   getGroupForUsers = async (
@@ -146,6 +147,8 @@ class FirbaseChatMessageClient {
       message.toProfileId,
     ]);
 
+    console.log("getOrCreateGroup.existingGroup", existingGroup);
+
     if (existingGroup) {
       return existingGroup;
     } else {
@@ -156,77 +159,30 @@ class FirbaseChatMessageClient {
         when: new Date().toISOString(),
       };
       const createdGroup = await this.createGroup(createGroup);
+      console.log("getOrCreateGroup.createdGroup", createdGroup);
       return createdGroup;
     }
   };
-  // createGroup = async (createGroup: CreateConversationGroup) => {
-  //   if (!group) {
-  //     const createGroup: CreateConversationGroup = {
-  //   createdBy: message.fromProfileId,
-  //   lastMessage: message.message,
-  //   members: [message.fromProfileId, message.toProfileId],
-  //   when: new Date().toISOString(),
 
-  // };
-
-  // this.createGroup(createGroup)
-  //     const createdGroup = await this.createGroup(createGroup);
-  //     console.log("creeatedGroup: ", createGroup);
-  //   }
-  //   // ELSE create
-  // };
   persistChatMessageToUser = async (
-    message: APIMessageToUser
+    apiMessage: APIMessageToUser
   ): Promise<void> => {
-    console.log("persist message", message);
+    console.log("persist message", apiMessage);
 
     // get conversation if exist
-    const group = await this.getGroupForUsers([
-      message.toProfileId,
-      message.fromProfileId,
-    ]);
+    const group = await this.getOrCreateGroup(apiMessage);
     console.log("got group", group);
 
-    // const groupRef = this.firestore
-    //   .collection(GROUP_COLLECTION)
-    //   .doc(group?.conversationId);
-
-    // await groupRef.set(
-    //   { when: new Date().toISOString(), lastMessage: message.message },
-    //   { merge: true }
-    // );
-
-    const messageCollectionDocRef = this.firestore
-      .collection(CHATMESSAGE_COLLECTION)
-      .doc(group.conversationId);
-    //const messCollecDoc = await messageCollectionDocRef.set({});
-    console.log("messagecollection doc ref: ", messageCollectionDocRef.id);
-    await messageCollectionDocRef.set({ hello: "world" });
-    const messageCollectionRef = messageCollectionDocRef
-      .collection("messages")
-      .doc();
-    // //await messageCollectionRef.create();
-
-    // //.withConverter(messageConverter);
-
-    const setreturn = await messageCollectionRef.set(message);
-    // console.log("set message", setreturn);
+    const convoMessage: ConversationMessage = {
+      conversationId: group.conversationId,
+      fromId: apiMessage.fromProfileId,
+      from: apiMessage.fromProfileId,
+      when: new Date().toISOString(),
+      message: apiMessage.message,
+    };
+    const storedMessage = await this.storeChatMessage(convoMessage);
+    console.log("persistChatMessageToUser.storedMessage", storedMessage);
   };
-
-  // storeChatMessage_old = async ({
-  //   chatConvoId,
-  //   fromUserId,
-  //   chatMessage,
-  // }: MessageFirestoreModel): Promise<string> => {
-  //   console.log("persist event", chatConvoId, fromUserId, chatMessage);
-
-  //   const eventsRef = this.firestore.collection(CHATMESSAGE_COLLECTION);
-
-  //   const docRef = eventsRef.doc();
-  //   await docRef.set({ chatConvoId, fromUserId, chatMessage });
-
-  //   return docRef.id;
-  // };
 
   getConvoGroupsWithProfiles = async (
     userId: string
