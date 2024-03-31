@@ -14,15 +14,15 @@ import {
   type ChatMember,
   type ConversationGroup,
   type ConvoWithMessages,
-  type Message,
+  type ConversationMessage,
 } from "~/components/Message/ChatMessage";
 import { api } from "~/utils/api";
 
-const MESSAGES_EMPTY: Message[] = [];
+const MESSAGES_EMPTY: ConversationMessage[] = [];
 
-const MESSAGES_DUMMY: Message[] = [
+const MESSAGES_DUMMY: ConversationMessage[] = [
   {
-    id: "jscfdn",
+    conversationId: "jscfdn",
     from: "sthlmpar08",
     fromId: "sthlmpar08",
     message:
@@ -30,7 +30,7 @@ const MESSAGES_DUMMY: Message[] = [
     when: "2024-02-29T11:04:37.083Z",
   },
   {
-    id: "awergzx",
+    conversationId: "awergzx",
     from: "Sexy-couple",
     fromId: "Sexy-couple",
     message:
@@ -38,7 +38,7 @@ const MESSAGES_DUMMY: Message[] = [
     when: "2024-02-29T11:04:37.083Z",
   },
   {
-    id: "lkojmn",
+    conversationId: "lkojmn",
     from: "Sexy-couple",
     fromId: "Sexy-couple",
     message:
@@ -46,7 +46,7 @@ const MESSAGES_DUMMY: Message[] = [
     when: "2024-02-29T11:04:37.083Z",
   },
   {
-    id: "nccarp",
+    conversationId: "nccarp",
     from: "sthlmpar08",
     fromId: "sthlmpar08",
     message: "Så roligt att höra. Vi ses gärna på lördag för en middag, kul!",
@@ -101,11 +101,11 @@ const Home: NextPage = () => {
   const { mutate: postChatMessage } =
     api.chat.postChatMessageToConvo.useMutation();
 
-  function renderMessage(message: Message) {
+  function renderMessage(message: ConversationMessage) {
     const myUserId = isTestConversation ? "sthlmpar08" : session.data?.user.id;
     return (
       <ChatMessage
-        key={message.id}
+        key={message.conversationId}
         message={message}
         fromMe={message.fromId === myUserId}
       />
@@ -116,10 +116,10 @@ const Home: NextPage = () => {
     console.log("postMessageHandler ", text);
     if (messageIsEnabled) {
       // alert("Nu skickar vi iväg meddelandet");
-      const message: Message = {
+      const message: ConversationMessage = {
         from: "from", // will be set on server
         fromId: "from", // will be set on server
-        id: messageid as string,
+        conversationId: messageid as string,
         message: text,
         when: "", // will be set on server
       };

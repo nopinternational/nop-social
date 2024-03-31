@@ -1,8 +1,8 @@
 import HighlightText from "../HighlightText";
 import { TextEditForm, type TextEditFormOptions } from "../TextEditForm";
 
-export type Message = {
-  id: string;
+export type ConversationMessage = {
+  conversationId: string;
   from: string;
   fromId: string;
   message: string;
@@ -17,7 +17,7 @@ export type ConversationGroup = {
   members: string[];
   when: string;
   chatMembers?: ChatMember[];
-  conversationGroupName: string
+  conversationGroupName: string;
 };
 
 export type ChatMember = {
@@ -27,14 +27,14 @@ export type ChatMember = {
 
 export type ConvoWithMessages = {
   conversation: ConversationGroup;
-  messages: Message[];
+  messages: ConversationMessage[];
 };
 
 export const ChatMessage = ({
   message,
   fromMe,
 }: {
-  message: Message;
+  message: ConversationMessage;
   fromMe: boolean;
 }) => {
   //  new Date(message.when).toLocaleString();

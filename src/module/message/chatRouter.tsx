@@ -11,7 +11,7 @@ import {
 import {
   type ConvoWithMessages,
   type ConversationGroup,
-  type Message,
+  type ConversationMessage,
 } from "~/components/Message/ChatMessage";
 
 export const chatRouter = createTRPCRouter({
@@ -39,7 +39,7 @@ export const chatRouter = createTRPCRouter({
         chatConvoId: z.string(),
       })
     )
-    .query(async ({ input, ctx }): Promise<Message[]> => {
+    .query(async ({ input, ctx }): Promise<ConversationMessage[]> => {
       // console.log("getChatMessage.input", input);
       // console.log("getChatMessage.ctx", ctx);
       const messages = await getChatMessages(input.chatConvoId);
@@ -67,7 +67,7 @@ export const chatRouter = createTRPCRouter({
     }),
 
   postChatMessageToConvo: protectedProcedure
-    .input(z.object({ chatMessage: z.custom<Message>() }))
+    .input(z.object({ chatMessage: z.custom<ConversationMessage>() }))
     .mutation(async ({ input, ctx }) => {
       console.log("postChatMessage", input);
       console.log("postChatMessage", ctx);
@@ -80,7 +80,7 @@ export const chatRouter = createTRPCRouter({
     }),
 
   postChatMessageToUser: protectedProcedure
-    .input(z.object({ chatMessage: z.custom<Message>() }))
+    .input(z.object({ chatMessage: z.custom<ConversationMessage>() }))
     .mutation(async ({ input, ctx }) => {
       console.log("postChatMessage", input);
       console.log("postChatMessage", ctx);
