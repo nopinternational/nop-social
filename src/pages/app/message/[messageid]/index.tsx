@@ -98,7 +98,8 @@ const Home: NextPage = () => {
     chatConvoId: convoId,
   });
 
-  const { mutate: postChatMessage } = api.chat.postChatMessage.useMutation();
+  const { mutate: postChatMessage } =
+    api.chat.postChatMessageToConvo.useMutation();
 
   function renderMessage(message: Message) {
     const myUserId = isTestConversation ? "sthlmpar08" : session.data?.user.id;

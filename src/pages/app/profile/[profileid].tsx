@@ -28,6 +28,8 @@ const Home: NextPage = () => {
     { profileid: pid },
     { enabled: sessionData?.user !== undefined }
   );
+  const { mutate: postChatMessage } =
+    api.chat.postChatMessageToConvo.useMutation();
 
   const YEAR = new Date().getFullYear();
 
