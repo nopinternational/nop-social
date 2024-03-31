@@ -115,7 +115,7 @@ class FirbaseChatMessageClient {
 
   getGroupForUsers = async (
     userIdList: string[]
-  ): Promise<ConversationGroup> => {
+  ): Promise<ConversationGroup | null> => {
     console.log("getGroupForUsers", userIdList);
     const userIdsPermutations = [
       ["7K7PxXthSmblBF8uJIQN2zWMCyw1", "b4Qf3UhNP3PrI0dfJCLpfL2ckwr2"],
