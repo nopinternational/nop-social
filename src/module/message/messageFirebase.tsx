@@ -208,7 +208,7 @@ class FirbaseChatMessageClient {
       conversationId: group.conversationId,
       messageId: "none",
       fromId: apiMessage.fromProfileId,
-      from: apiMessage.fromProfileId,
+      from: apiMessage.fromProfileName,
       when: new Date().toISOString(),
       message: apiMessage.message,
     };

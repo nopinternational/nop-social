@@ -91,6 +91,7 @@ export const chatRouter = createTRPCRouter({
       const apiMessage: APIMessageToUser = {
         ...input.chatMessage,
         fromProfileId: ctx.session.user.id,
+        fromProfileName: ctx.session.user.name || ctx.session.user.id,
       };
 
       // input.chatMessage.t = ctx.session.user.name || "";
