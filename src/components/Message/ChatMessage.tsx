@@ -8,6 +8,7 @@ export type MessageToUser = {
 
 export type ConversationMessage = {
   conversationId: string;
+  messageId: string;
   from: string;
   fromId: string;
   message: string;

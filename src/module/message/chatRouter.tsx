@@ -97,6 +97,13 @@ export const chatRouter = createTRPCRouter({
       // input.chatMessage.fromId = ctx.session.user.id || "";
       // input.chatMessage.when = new Date().toISOString();
       // console.log("postChatMessage", input);
-      return await persistChatMessageToUser(apiMessage);
+      const persistChatMessageToUserResponse = await persistChatMessageToUser(
+        apiMessage
+      );
+      console.log(
+        "postChatMessageToUser.persistChatMessageToUserResponse----------",
+        persistChatMessageToUserResponse
+      );
+      return persistChatMessageToUserResponse;
     }),
 });

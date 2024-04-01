@@ -106,7 +106,9 @@ class FirbaseChatMessageClient {
     this.firestore = firestoreApp;
   }
 
-  storeChatMessage = async (message: ConversationMessage): Promise<void> => {
+  storeChatMessage = async (
+    message: ConversationMessage
+  ): Promise<ConversationMessage> => {
     console.log("persist message", message);
 
     // first: update group meta
@@ -124,10 +126,14 @@ class FirbaseChatMessageClient {
       .collection(CHATMESSAGE_COLLECTION)
       .doc(message.conversationId)
       .collection("messages")
+      .doc()
       .withConverter(messageConverter);
 
-    const setreturn = await messageCollectionRef.doc().set(message);
-    console.log("set message", setreturn);
+    await messageCollectionRef.set(message);
+
+    message.messageId = messageCollectionRef.id;
+    console.log("message to return", message);
+    return message;
   };
 
   createGroup = async (
@@ -191,7 +197,7 @@ class FirbaseChatMessageClient {
 
   persistChatMessageToUser = async (
     apiMessage: APIMessageToUser
-  ): Promise<void> => {
+  ): Promise<ConversationMessage> => {
     console.log("persist message", apiMessage);
 
     // get conversation if exist
@@ -200,6 +206,7 @@ class FirbaseChatMessageClient {
 
     const convoMessage: ConversationMessage = {
       conversationId: group.conversationId,
+      messageId: "none",
       fromId: apiMessage.fromProfileId,
       from: apiMessage.fromProfileId,
       when: new Date().toISOString(),
@@ -207,6 +214,7 @@ class FirbaseChatMessageClient {
     };
     const storedMessage = await this.storeChatMessage(convoMessage);
     console.log("persistChatMessageToUser.storedMessage", storedMessage);
+    return storedMessage;
   };
 
   getConvoGroupsWithProfiles = async (
@@ -249,8 +257,6 @@ class FirbaseChatMessageClient {
       // .where("members", "array-contains", "userId")
       .withConverter(groupConverter);
 
-    const allGroups: ConversationGroup[] = [];
-
     const doc = await groupRef.get();
     if (doc.exists) {
       const group = doc.data() as ConversationGroup;
@@ -281,7 +287,7 @@ class FirbaseChatMessageClient {
   getChatMessages = async (
     messageCollection: string
   ): Promise<ConversationMessage[]> => {
-    // console.log("getChatMessages", messageCollection);
+    console.log("getChatMessages", messageCollection);
     const messageCollectionRef = this.firestore
       .collection(CHATMESSAGE_COLLECTION)
       .doc(messageCollection)
@@ -293,8 +299,13 @@ class FirbaseChatMessageClient {
 
     const messages: ConversationMessage[] = [];
     snapshot.forEach((doc) => {
-      //console.log("getChatMessages", doc.id, doc.data());
-      messages.push(doc.data());
+      console.log("getChatMessages", doc.id, doc.data());
+      const convoMessage: ConversationMessage = {
+        ...doc.data(),
+        conversationId: messageCollection,
+      };
+      console.log("convoMessage ", convoMessage);
+      messages.push(convoMessage);
     });
 
     return messages;
@@ -316,8 +327,9 @@ class FirbaseChatMessageClient {
 
     const messages: ConversationMessage[] = [];
     snapshot.forEach((doc) => {
+      // TODO
       //console.log("getChatMessages", doc.id, doc.data());
-      messages.push(doc.data());
+      messages.push({ ...doc.data(), conversationId: messageCollectionId });
     });
 
     const group = (await this.getGroup(
@@ -403,6 +415,7 @@ const messageConverter: FirestoreDataConverter<ConversationMessage> = {
       from: data.fromUser || data.fromUserId,
       fromId: data.fromUserId,
       conversationId: snapshot.id,
+      messageId: snapshot.id,
       message: data.chatMessage,
       when: data.when,
     };
