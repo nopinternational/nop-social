@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { type NextPage } from "next";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -84,14 +83,8 @@ const Home: NextPage = () => {
   const sendMessageToUser = (message: string) => {
     // console.log("sendMessageToUser", message, profile.data?.id);
 
-    const convoId = "123";
-    const fromUserId = "abc123";
     const toUserId = profile.data?.id as string;
-    // const result_sendChatMessage = sendChatMessage({
-    //   chatConvoId: convoId,
-    //   fromUserId,
-    //   chatMessage: message,
-    // });
+
     const chatMessage: MessageToUser = {
       toProfileId: toUserId,
       message: message,
@@ -100,8 +93,8 @@ const Home: NextPage = () => {
     //const postMessageResponse = await  postChatMessage({ chatMessage: chatMessage });
     postChatMessageAsync({ chatMessage: chatMessage })
       .then((storedMessage: ConversationMessage) => {
-        console.log("sendMessageToUser.response", storedMessage);
-        router.push(`/app/message/${storedMessage.conversationId}`);
+        // console.log("sendMessageToUser.response", storedMessage);
+        void router.push(`/app/message/${storedMessage.conversationId}`);
       })
       .catch((error) => {
         console.error(error);
