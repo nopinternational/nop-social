@@ -72,7 +72,7 @@ export const getProfileByUserIdFromFirestore = async (
 
   if (profileSnapshot.exists) {
     const d = profileSnapshot.data() as Profile;
-    console.log("get user for id", userId, d);
+    // console.log("get user for id", userId, d);
     d.id = userId;
     return d;
   }

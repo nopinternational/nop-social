@@ -91,7 +91,7 @@ const Home: NextPage = () => {
   const { messageid } = router.query;
 
   const convoId = messageid as string;
-  console.log("message/", messageid, convoId);
+  // console.log("message/", messageid, convoId);
   const isTestConversation = convoId ? convoId.startsWith("test-") : true;
 
   // const messageApi = api.chat.getChatMessage.useQuery({
@@ -117,7 +117,7 @@ const Home: NextPage = () => {
   }
 
   function postMessageHandler({ text }: { text: string }): void {
-    console.log("postMessageHandler ", text);
+    // console.log("postMessageHandler ", text);
     if (messageIsEnabled) {
       // alert("Nu skickar vi iväg meddelandet");
       const message: ConversationMessage = {
@@ -128,7 +128,7 @@ const Home: NextPage = () => {
         message: text,
         when: "", // will be set on server
       };
-      console.log("postMessageHandler.postChatMessage", message);
+      // console.log("postMessageHandler.postChatMessage", message);
       postChatMessage({ chatMessage: message });
     } else {
       alert(

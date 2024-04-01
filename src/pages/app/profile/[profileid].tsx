@@ -72,7 +72,7 @@ const Home: NextPage = () => {
 
   function postMessageHandler({ text }: { text: string }): void {
     if (isMessageFeatureEnabled) {
-      console.log("postMessageHandler.MessageFeatureEnabled", text);
+      // console.log("postMessageHandler.MessageFeatureEnabled", text);
       sendMessageToUser(text);
     } else {
       alert(
@@ -82,7 +82,7 @@ const Home: NextPage = () => {
   }
 
   const sendMessageToUser = (message: string) => {
-    console.log("sendMessageToUser", message, profile.data?.id);
+    // console.log("sendMessageToUser", message, profile.data?.id);
 
     const convoId = "123";
     const fromUserId = "abc123";
@@ -96,7 +96,7 @@ const Home: NextPage = () => {
       toProfileId: toUserId,
       message: message,
     };
-    console.log("postMessageHandler.postChatMessage", chatMessage);
+    // console.log("postMessageHandler.postChatMessage", chatMessage);
     //const postMessageResponse = await  postChatMessage({ chatMessage: chatMessage });
     postChatMessageAsync({ chatMessage: chatMessage })
       .then((storedMessage: ConversationMessage) => {
