@@ -18,7 +18,7 @@ export const TextEditForm: FC<{ placeholder?: string, value?: string, onsubmitHa
 
     const onChange = (e: React.MouseEvent<HTMLButtonElement>): void => {
         e.preventDefault()
-        onsubmitHandler && onsubmitHandler({ text: text })
+        onsubmitHandler && text !== "" && onsubmitHandler({ text: text })
         if (options?.emptyOnSubmit)
             setText(() => "")
     };
