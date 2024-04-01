@@ -5,14 +5,17 @@ import {
   getConvoAndMessages,
   getGroups,
   persistChatMessage,
+  persistChatMessageToUser,
 } from "./messageFirebase";
 
 // import { type MessageFirestoreModel } from "~/module/message/messageFirebase";
 import {
   type ConvoWithMessages,
   type ConversationGroup,
-  type Message,
+  type ConversationMessage,
+  type MessageToUser,
 } from "~/components/Message/ChatMessage";
+import { type APIMessageToUser } from "./types";
 
 export const chatRouter = createTRPCRouter({
   getMyConvoGroups: protectedProcedure.query(
@@ -39,7 +42,7 @@ export const chatRouter = createTRPCRouter({
         chatConvoId: z.string(),
       })
     )
-    .query(async ({ input, ctx }): Promise<Message[]> => {
+    .query(async ({ input, ctx }): Promise<ConversationMessage[]> => {
       // console.log("getChatMessage.input", input);
       // console.log("getChatMessage.ctx", ctx);
       const messages = await getChatMessages(input.chatConvoId);
@@ -66,8 +69,8 @@ export const chatRouter = createTRPCRouter({
       return convoWithMessages;
     }),
 
-  postChatMessage: protectedProcedure
-    .input(z.object({ chatMessage: z.custom<Message>() }))
+  postChatMessageToConvo: protectedProcedure
+    .input(z.object({ chatMessage: z.custom<ConversationMessage>() }))
     .mutation(async ({ input, ctx }) => {
       console.log("postChatMessage", input);
       console.log("postChatMessage", ctx);
@@ -77,5 +80,23 @@ export const chatRouter = createTRPCRouter({
       input.chatMessage.when = new Date().toISOString();
       // console.log("postChatMessage", input);
       return await persistChatMessage(input.chatMessage);
+    }),
+
+  postChatMessageToUser: protectedProcedure
+    .input(z.object({ chatMessage: z.custom<MessageToUser>() }))
+    .mutation(async ({ input, ctx }) => {
+      console.log("postChatMessage", input);
+      console.log("postChatMessage", ctx);
+
+      const apiMessage: APIMessageToUser = {
+        ...input.chatMessage,
+        fromProfileId: ctx.session.user.id,
+      };
+
+      // input.chatMessage.t = ctx.session.user.name || "";
+      // input.chatMessage.fromId = ctx.session.user.id || "";
+      // input.chatMessage.when = new Date().toISOString();
+      // console.log("postChatMessage", input);
+      return await persistChatMessageToUser(apiMessage);
     }),
 });

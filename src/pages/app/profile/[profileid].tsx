@@ -10,8 +10,9 @@ import Layout from "~/components/Layout";
 import { Spinner } from "~/components/Spinner";
 import { ProfileHeader } from "~/module/profile/components/ProfileHeader";
 import { Card } from "~/components/Card";
-import { SendChatMessageForm } from "~/components/Message/ChatMessage";
+import { MessageToUser, SendChatMessageForm } from "~/components/Message/ChatMessage";
 import { useFeature } from "~/components/FeatureFlag";
+import { type ConversationMessage } from "~/components/Message/ChatMessage";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -28,6 +29,8 @@ const Home: NextPage = () => {
     { profileid: pid },
     { enabled: sessionData?.user !== undefined }
   );
+  const { mutate: postChatMessage } =
+    api.chat.postChatMessageToUser.useMutation();
 
   const YEAR = new Date().getFullYear();
 
@@ -76,16 +79,22 @@ const Home: NextPage = () => {
   }
 
   const sendMessageToUser = (message: string) => {
-    console.log("sendMessageToUser", message);
+    console.log("sendMessageToUser", message, profile.data?.id);
 
     const convoId = "123";
     const fromUserId = "abc123";
+    const toUserId = profile.data?.id as string;
     // const result_sendChatMessage = sendChatMessage({
     //   chatConvoId: convoId,
     //   fromUserId,
     //   chatMessage: message,
     // });
-
+    const chatMessage: MessageToUser = {
+      toProfileId: toUserId,      
+      message: message,
+    };
+    console.log("postMessageHandler.postChatMessage", chatMessage);
+    postChatMessage({ chatMessage: chatMessage });
     // console.log("messagService.sendMessageToUser", result_sendChatMessage);
   };
   const p = profile.data;
