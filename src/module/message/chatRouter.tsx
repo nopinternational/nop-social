@@ -23,7 +23,7 @@ export const chatRouter = createTRPCRouter({
       // console.log("getMyConvoGroups.input", input);
       // console.log("getMyConvoGroups.ctx", ctx);
       const groups = await getGroups(ctx.session.user.id);
-      console.log("return groups from fb", groups);
+      // console.log("return groups from fb", groups);
       // const conversation_groups: ConversationGroup[] = groups.map((group) => ({
       //   // const convo_group: ConversationGroup = {
       //   conversationId: group,
@@ -72,8 +72,8 @@ export const chatRouter = createTRPCRouter({
   postChatMessageToConvo: protectedProcedure
     .input(z.object({ chatMessage: z.custom<ConversationMessage>() }))
     .mutation(async ({ input, ctx }) => {
-      console.log("postChatMessage", input);
-      console.log("postChatMessage", ctx);
+      // console.log("postChatMessage", input);
+      // console.log("postChatMessage", ctx);
 
       input.chatMessage.from = ctx.session.user.name || "";
       input.chatMessage.fromId = ctx.session.user.id || "";
@@ -85,18 +85,26 @@ export const chatRouter = createTRPCRouter({
   postChatMessageToUser: protectedProcedure
     .input(z.object({ chatMessage: z.custom<MessageToUser>() }))
     .mutation(async ({ input, ctx }) => {
-      console.log("postChatMessage", input);
-      console.log("postChatMessage", ctx);
+      // console.log("postChatMessage", input);
+      // console.log("postChatMessage", ctx);
 
       const apiMessage: APIMessageToUser = {
         ...input.chatMessage,
         fromProfileId: ctx.session.user.id,
+        fromProfileName: ctx.session.user.name || ctx.session.user.id,
       };
 
       // input.chatMessage.t = ctx.session.user.name || "";
       // input.chatMessage.fromId = ctx.session.user.id || "";
       // input.chatMessage.when = new Date().toISOString();
       // console.log("postChatMessage", input);
-      return await persistChatMessageToUser(apiMessage);
+      const persistChatMessageToUserResponse = await persistChatMessageToUser(
+        apiMessage
+      );
+      // console.log(
+      //   "postChatMessageToUser.persistChatMessageToUserResponse----------",
+      //   persistChatMessageToUserResponse
+      // );
+      return persistChatMessageToUserResponse;
     }),
 });

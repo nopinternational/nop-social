@@ -122,7 +122,7 @@ const ConnectedConversationsCard = () => {
   //const myConversations: ConversationGroup[] = [];
 
   if (myConvoGroups.data) {
-    console.log("myConvoGroups.data", myConvoGroups.data);
+    // console.log("myConvoGroups.data", myConvoGroups.data);
   }
   if (myConversations && myConversations.length == 0) {
     return (

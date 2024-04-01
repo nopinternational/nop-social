@@ -23,6 +23,7 @@ const MESSAGES_EMPTY: ConversationMessage[] = [];
 const MESSAGES_DUMMY: ConversationMessage[] = [
   {
     conversationId: "jscfdn",
+    messageId: "jscfdn-1",
     from: "sthlmpar08",
     fromId: "sthlmpar08",
     message:
@@ -31,6 +32,7 @@ const MESSAGES_DUMMY: ConversationMessage[] = [
   },
   {
     conversationId: "awergzx",
+    messageId: "awergzx-1",
     from: "Sexy-couple",
     fromId: "Sexy-couple",
     message:
@@ -39,6 +41,7 @@ const MESSAGES_DUMMY: ConversationMessage[] = [
   },
   {
     conversationId: "lkojmn",
+    messageId: "lkojmn-1",
     from: "Sexy-couple",
     fromId: "Sexy-couple",
     message:
@@ -47,6 +50,7 @@ const MESSAGES_DUMMY: ConversationMessage[] = [
   },
   {
     conversationId: "nccarp",
+    messageId: "nccarp-1",
     from: "sthlmpar08",
     fromId: "sthlmpar08",
     message: "Så roligt att höra. Vi ses gärna på lördag för en middag, kul!",
@@ -87,7 +91,7 @@ const Home: NextPage = () => {
   const { messageid } = router.query;
 
   const convoId = messageid as string;
-  console.log("message/", messageid, convoId);
+  // console.log("message/", messageid, convoId);
   const isTestConversation = convoId ? convoId.startsWith("test-") : true;
 
   // const messageApi = api.chat.getChatMessage.useQuery({
@@ -113,17 +117,18 @@ const Home: NextPage = () => {
   }
 
   function postMessageHandler({ text }: { text: string }): void {
-    console.log("postMessageHandler ", text);
+    // console.log("postMessageHandler ", text);
     if (messageIsEnabled) {
       // alert("Nu skickar vi iväg meddelandet");
       const message: ConversationMessage = {
         from: "from", // will be set on server
         fromId: "from", // will be set on server
         conversationId: messageid as string,
+        messageId: messageid as string,
         message: text,
         when: "", // will be set on server
       };
-      console.log("postMessageHandler.postChatMessage", message);
+      // console.log("postMessageHandler.postChatMessage", message);
       postChatMessage({ chatMessage: message });
     } else {
       alert(

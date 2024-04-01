@@ -269,7 +269,7 @@ class FirbaseAdminClient {
     uid: string,
     nopEvent: EventFormType
   ): Promise<string> => {
-    console.log("persist event", uid, nopEvent);
+    // console.log("persist event", uid, nopEvent);
     const eventsRef = this.firestore.collection(EVENTS_COLLECTION);
 
     const docRef = eventsRef.doc();
@@ -300,7 +300,7 @@ class FirbaseAdminClient {
 
 const eventConverter: FirestoreDataConverter<NopEvent> = {
   toFirestore: (event: NopEvent): EventFirestoreModel => {
-    console.log("toFirestore.event", event);
+    // console.log("toFirestore.event", event);
     return { ...event };
   },
   fromFirestore: (
@@ -308,7 +308,7 @@ const eventConverter: FirestoreDataConverter<NopEvent> = {
     //options: SnapshotOptions
   ): NopEvent => {
     const data = snapshot.data();
-    console.log("fromFirestore.data", data);
+    // console.log("fromFirestore.data", data);
 
     return { id: snapshot.id, ...data };
   },
