@@ -271,6 +271,7 @@ class FirbaseChatMessageClient {
     const groupRef = this.firestore
       .collection(GROUP_COLLECTION)
       .where("members", "array-contains", userId)
+      .orderBy("when", "desc")
       .withConverter(groupConverter);
 
     const allGroups: ConversationGroup[] = [];
