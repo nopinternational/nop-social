@@ -292,7 +292,7 @@ class FirbaseChatMessageClient {
       .collection(CHATMESSAGE_COLLECTION)
       .doc(messageCollection)
       .collection("messages")
-      .orderBy("when", "asc")
+      .orderBy("when", "desc")
       .withConverter(messageConverter);
 
     const snapshot = await messageCollectionRef.get();
@@ -320,7 +320,7 @@ class FirbaseChatMessageClient {
       .collection(CHATMESSAGE_COLLECTION)
       .doc(messageCollectionId)
       .collection("messages")
-      .orderBy("when", "asc")
+      .orderBy("when", "desc")
       .withConverter(messageConverter);
 
     const snapshot = await messageCollectionRef.get();
