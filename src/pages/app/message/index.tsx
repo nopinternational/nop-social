@@ -182,7 +182,6 @@ const DummyConversationsCard = () => {
 };
 
 const Conversation = ({ convo }: { convo: ConversationGroup }) => {
-
   // : string | null
   function getFirstChatmember(chatmembers: ChatMember[]): string | null {
     // (convo.chatMembers && convo.chatMembers.length > 0) ||
@@ -210,7 +209,6 @@ const Conversation = ({ convo }: { convo: ConversationGroup }) => {
         </p>
         <div className="relative">
           <p className="absolute left-0 text-xs">när: {convo.when}</p>
-          <p className="absolute right-0 text-xs">id: {convo.conversationId}</p>
         </div>
       </div>
     </>
