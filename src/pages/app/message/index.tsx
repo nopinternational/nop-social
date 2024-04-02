@@ -193,7 +193,7 @@ const Conversation = ({ convo }: { convo: ConversationGroup }) => {
     return null;
   }
   const chatMemberProfileName: string =
-    getFirstChatmember(convo.chatMembers || []) || "--unknown--";
+    getFirstChatmember(convo.chatMembers || []) || "unknown";
 
   return (
     <>
