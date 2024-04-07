@@ -94,8 +94,8 @@ const Home: NextPage = () => {
               </>
             }
           >
-            Ändra en träff och samla alla sexiga par i{" "}
-            <HighlightText>Night of Passion</HighlightText>
+            Nedan kan ni ändra er träff. Ändringarna slår igenom på en gång.
+            Glöm inte trycka spara 😀
           </Card>
 
           <Card header="Detaljer">
