@@ -51,7 +51,7 @@ export const ChatMessage = ({
     <>
       {fromMe ? (
         <div className="pl-10">
-          <p className="whitespace-pre-wrap  rounded-xl bg-white/10 p-2 italic">
+          <p className="whitespace-pre-wrap rounded-xl bg-white/10 p-2">
             {message.message}
           </p>
           <p className="text-right text-xs">{whenStr}</p>
@@ -61,7 +61,7 @@ export const ChatMessage = ({
           <p>
             <HighlightText>{message.from}</HighlightText> säger:
           </p>
-          <p className="whitespace-pre-wrap rounded-xl bg-white/10 p-2 italic">
+          <p className="whitespace-pre-wrap rounded-xl bg-white/10 p-2">
             {message.message}
           </p>
           <p className="text-right text-xs">{whenStr}</p>
