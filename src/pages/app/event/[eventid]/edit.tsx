@@ -95,7 +95,7 @@ const Home: NextPage = () => {
             }
           >
             Nedan kan ni ändra er träff. Ändringarna slår igenom på en gång.
-            Glöm inte trycka "spara" 😀
+            Glöm inte trycka spara 😀
           </Card>
 
           <Card header="Detaljer">
