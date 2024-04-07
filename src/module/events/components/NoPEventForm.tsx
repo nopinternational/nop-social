@@ -73,8 +73,8 @@ export const NoPEventForm = ({
   );
 
   const initialOptions: EventOptions = {
-    ...event?.options,
     ...DEFAULT_EVENT.options,
+    ...event?.options,
   };
 
   const [eventOptions, setEventOptions] =
