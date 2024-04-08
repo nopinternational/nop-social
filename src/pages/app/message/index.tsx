@@ -57,7 +57,7 @@ const CONVERSATION_GROUP_DUMMY: ConversationGroup[] = [
     conversationGroupName: "happy couple",
   },
 ];
-const CONVERSATION_GROUP = CONVERSATION_GROUP_DUMMY;
+const CONVERSATION_GROUP = CONVERSATION_GROUP_EMPTY;
 
 const Home: NextPage = () => {
   const messageIsEnabled = useFeature("message");
@@ -91,18 +91,6 @@ const Home: NextPage = () => {
           </Card>
           {messageIsEnabled ? (
             <>
-              <Card
-                header={
-                  <>
-                    <HighlightText>Meddelande funktionen</HighlightText> är
-                    aktiv
-                  </>
-                }
-              >
-                <div className="text-lg">
-                  Du testar just nu meddelande funktionen
-                </div>
-              </Card>
               <ConnectedConversationsCard></ConnectedConversationsCard>
             </>
           ) : (
