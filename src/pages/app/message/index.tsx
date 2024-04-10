@@ -8,6 +8,8 @@ import {
   type ChatMember,
   type ConversationGroup,
 } from "~/components/Message/ChatMessage";
+import { Spinner } from "~/components/Spinner";
+import { MessageHeaderCard } from "~/module/message/components/MessageHeaderCard";
 import { ProfilePic } from "~/module/profile/components/ProfilePic";
 import { api } from "~/utils/api";
 
@@ -72,23 +74,7 @@ const Home: NextPage = () => {
     >
       <div className="grid grid-cols-2  gap-4   sm:grid-cols-2 md:gap-8">
         <div className="col-span-2">
-          <Card
-            header={
-              <>
-                Skicka <HighlightText>meddelande</HighlightText> till andra{" "}
-                <HighlightText>profiler</HighlightText>
-              </>
-            }
-          >
-            <div className="text-lg">
-              Tjoho! Just nu arbetar vi med att göra det möjligt att skicka
-              meddelande till varandra. Bra va 😃
-            </div>
-            <div className="text-lg">
-              Som ni märker är vi inte riktigt klara... Men nedan kan ni se hur
-              vi tänkt oss.
-            </div>
-          </Card>
+          <MessageHeaderCard />
           {messageIsEnabled ? (
             <>
               <ConnectedConversationsCard></ConnectedConversationsCard>
@@ -104,26 +90,44 @@ const Home: NextPage = () => {
 
 export default Home;
 
+const NoMessagesCard = () => {
+  return (
+    <Card
+      header={
+        <>
+          Inga pågående <HighlightText>konversationer</HighlightText>
+        </>
+      }
+    >
+      <p>Här var det tomt 😏</p>
+    </Card>
+  );
+};
+const LoadingMessagesCard = () => {
+  return (
+    <Card
+      header={
+        <>
+          Laddar <HighlightText>konversationer</HighlightText>...
+        </>
+      }
+    >
+      <Spinner />
+    </Card>
+  );
+};
+
 const ConnectedConversationsCard = () => {
   const myConvoGroups = api.chat.getMyConvoGroups.useQuery();
   const myConversations = myConvoGroups.data || [];
   //const myConversations: ConversationGroup[] = [];
 
-  if (myConvoGroups.data) {
+  if (!myConvoGroups.data) {
     // console.log("myConvoGroups.data", myConvoGroups.data);
+    return <LoadingMessagesCard />;
   }
   if (myConversations && myConversations.length == 0) {
-    return (
-      <Card
-        header={
-          <>
-            Inga pågående <HighlightText>konversationer</HighlightText>
-          </>
-        }
-      >
-        <p>Här var det tomt 😏</p>
-      </Card>
-    );
+    return <NoMessagesCard />;
   }
 
   return (

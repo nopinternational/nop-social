@@ -17,6 +17,7 @@ import {
   type ConversationMessage,
 } from "~/components/Message/ChatMessage";
 import { api } from "~/utils/api";
+import { MessageHeaderCard } from "~/module/message/components/MessageHeaderCard";
 
 const MESSAGES_EMPTY: ConversationMessage[] = [];
 
@@ -170,23 +171,7 @@ const Home: NextPage = () => {
     >
       <div className="grid grid-cols-2  gap-4   sm:grid-cols-2 md:gap-8">
         <div className="col-span-2">
-          <Card
-            header={
-              <>
-                Skicka <HighlightText>meddelande</HighlightText> till andra{" "}
-                <HighlightText>profiler</HighlightText>
-              </>
-            }
-          >
-            <div className="text-lg">
-              Tjoho! Just nu arbetar vi med att göra det möjligt att skicka
-              meddelande till varandra. Bra va 😃
-            </div>
-            <div className="text-lg">
-              Som ni märker är vi inte riktigt klara... Men nedan kan ni se hur
-              vi tänkt oss.
-            </div>
-          </Card>
+          <MessageHeaderCard />
 
           <Card
             header={
