@@ -8,6 +8,7 @@ import {
   type ChatMember,
   type ConversationGroup,
 } from "~/components/Message/ChatMessage";
+import { Spinner } from "~/components/Spinner";
 import { ProfilePic } from "~/module/profile/components/ProfilePic";
 import { api } from "~/utils/api";
 
@@ -114,26 +115,44 @@ const Home: NextPage = () => {
 
 export default Home;
 
+const NoMessagesCard = () => {
+  return (
+    <Card
+      header={
+        <>
+          Inga pågående <HighlightText>konversationer</HighlightText>
+        </>
+      }
+    >
+      <p>Här var det tomt 😏</p>
+    </Card>
+  );
+};
+const LoadingMessagesCard = () => {
+  return (
+    <Card
+      header={
+        <>
+          Laddar <HighlightText>konversationer</HighlightText>...
+        </>
+      }
+    >
+      <Spinner />
+    </Card>
+  );
+};
+
 const ConnectedConversationsCard = () => {
   const myConvoGroups = api.chat.getMyConvoGroups.useQuery();
   const myConversations = myConvoGroups.data || [];
   //const myConversations: ConversationGroup[] = [];
 
-  if (myConvoGroups.data) {
+  if (!myConvoGroups.data) {
     // console.log("myConvoGroups.data", myConvoGroups.data);
+    return <LoadingMessagesCard />;
   }
   if (myConversations && myConversations.length == 0) {
-    return (
-      <Card
-        header={
-          <>
-            Inga pågående <HighlightText>konversationer</HighlightText>
-          </>
-        }
-      >
-        <p>Här var det tomt 😏</p>
-      </Card>
-    );
+    return <NoMessagesCard />;
   }
 
   return (
