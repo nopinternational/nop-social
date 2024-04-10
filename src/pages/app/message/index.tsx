@@ -81,13 +81,23 @@ const Home: NextPage = () => {
             }
           >
             <div className="text-lg">
-              Tjoho! Just nu arbetar vi med att göra det möjligt att skicka
-              meddelande till varandra. Bra va 😃
+              Tjoho! Vi har precis släppt möjligheten att skicka meddelanden
+              till varandra 😃
             </div>
             <div className="text-lg">
-              Som ni märker är vi inte riktigt klara... Men nedan kan ni se hur
-              vi tänkt oss.
+              Det kan vara lite kantigt, se konstigt ut eller tom finnas buggar
+              🙈 Vi uppskattar all form av feedback eller kommentarer hur ni
+              tycker det funkar. Sånt kan ni berätta för oss genom att maila
+              till{" "}
+              <a
+                className="text-[hsl(280,100%,70%)]"
+                href="mailto:feedback@nightofpassion.se"
+              >
+                feedback@nightofpassion.se
+              </a>
+              .
             </div>
+            <div className="text-lg">Tack så mycket 🙇</div>
           </Card>
           {messageIsEnabled ? (
             <>
