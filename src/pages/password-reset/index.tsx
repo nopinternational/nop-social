@@ -1,8 +1,10 @@
+import { sendPasswordResetEmail } from "@firebase/auth";
 import { type NextPage } from "next";
 import { useRef } from "react";
 import { Card } from "~/components/Card";
 import HighlightText from "~/components/HighlightText";
 import Layout from "~/components/Layout";
+import { auth } from "~/lib/firebase/firebase";
 
 const Home: NextPage = () => {
   //const hello = api.example.hello.useQuery({ text: "from tRPC" });
@@ -25,11 +27,10 @@ const EmailCard = () => {
   ): void => {
     //console.log("Signin.nopAuthSignIn.signinNopAuth.event", event)
     event.preventDefault();
+    const email = inputUsername.current?.value.trim();
     console.log("submitFormClick ", event);
-    console.log(
-      "reset password for email ",
-      inputUsername.current?.value.trim()
-    );
+    console.log("reset password for email ", email);
+    void sendPasswordResetEmail(auth, email || "");
   };
   return (
     <Card header="Återställ lösenord">
