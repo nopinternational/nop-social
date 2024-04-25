@@ -1,4 +1,12 @@
 import { sendPasswordResetEmail } from "@firebase/auth";
+import {
+  type ActionCodeInfo,
+  applyActionCode,
+  checkActionCode,
+  verifyPasswordResetCode,
+  confirmPasswordReset,
+  type ActionCodeSettings,
+} from "firebase/auth";
 import { type NextPage } from "next";
 import { useRef } from "react";
 import { Card } from "~/components/Card";
@@ -30,6 +38,10 @@ const EmailCard = () => {
     const email = inputUsername.current?.value.trim();
     console.log("submitFormClick ", event);
     console.log("reset password for email ", email);
+    const actionCodeSettings: ActionCodeSettings = {
+      dynamicLinkDomain: "https://nop-website-dev.firebaseapp.com",
+      url: "https://nop-website-dev.firebaseapp.com",
+    };
     void sendPasswordResetEmail(auth, email || "");
   };
   return (
@@ -63,13 +75,25 @@ const EmailCard = () => {
 
 const CodeCard = () => {
   const inputCode = useRef<HTMLInputElement>(null);
-  const submitFormClick = (
+  const submitFormClick = async (
     event: React.MouseEvent<HTMLButtonElement>
-  ): void => {
+  ): Promise<void> => {
     //console.log("Signin.nopAuthSignIn.signinNopAuth.event", event)
+    const code = inputCode.current?.value.trim() || "";
     event.preventDefault();
     console.log("submitFormClick ", event);
-    console.log("reset password with code ", inputCode.current?.value.trim());
+    console.log("reset password with code ", code);
+    const checkCodeResponse: ActionCodeInfo = await checkActionCode(auth, code);
+    console.log("CodeCard.checkCodeResponse", checkCodeResponse);
+    const verifyPasswordResetCodeResponse = await verifyPasswordResetCode(
+      auth,
+      code
+    );
+    console.log(
+      "CodeCard.verifyPasswordResetCodeResponse",
+      verifyPasswordResetCodeResponse
+    );
+    // void applyActionCode(auth, code); // throws an error
   };
   return (
     <Card header="Har ni fått en kod?">
@@ -90,7 +114,7 @@ const CodeCard = () => {
         <button
           className="mb-3 mt-4 rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
           onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
-            submitFormClick(event)
+            void submitFormClick(event)
           }
         >
           Ange kod
@@ -108,10 +132,14 @@ const PasswordCard = () => {
   ): void => {
     //console.log("Signin.nopAuthSignIn.signinNopAuth.event", event)
     event.preventDefault();
-    const p1 = inputPass1.current?.value.trim();
+    const p1 = inputPass1.current?.value.trim() || "";
     const p2 = inputPass2.current?.value.trim();
     console.log("submitFormClick ", event);
     console.log("reset password with new ", p1, p2);
+    if (p1 === p2) {
+      const code = "-Ttj6npFTuYDapM7io6n_VbPzOE0VtNZgqHVKYuCs1gAAAGPFh_-Uw";
+      void confirmPasswordReset(auth, code, p1);
+    }
   };
   return (
     <Card header="Ange nytt lösenord">
