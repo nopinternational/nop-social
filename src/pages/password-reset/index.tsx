@@ -1,14 +1,15 @@
+import { type NextPage } from "next";
+import { useSearchParams } from "next/navigation";
+import { useRef } from "react";
 import { sendPasswordResetEmail } from "@firebase/auth";
 import {
-  type ActionCodeInfo,
-  applyActionCode,
   checkActionCode,
   verifyPasswordResetCode,
   confirmPasswordReset,
   type ActionCodeSettings,
+  type ActionCodeInfo,
 } from "firebase/auth";
-import { type NextPage } from "next";
-import { useRef } from "react";
+
 import { Card } from "~/components/Card";
 import HighlightText from "~/components/HighlightText";
 import Layout from "~/components/Layout";
@@ -16,12 +17,21 @@ import { auth } from "~/lib/firebase/firebase";
 
 const Home: NextPage = () => {
   //const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  const searchParams = useSearchParams();
+
+  const code = searchParams.get("oobCode");
+  console.log("reset password code: ", code, searchParams);
 
   return (
     <Layout headingText={<HighlightText>Night of Passion</HighlightText>}>
-      <EmailCard></EmailCard>
-      <CodeCard></CodeCard>
-      <PasswordCard></PasswordCard>
+      {code ? (
+        <>
+          <CodeCard></CodeCard>
+          <PasswordCard></PasswordCard>
+        </>
+      ) : (
+        <EmailCard></EmailCard>
+      )}
     </Layout>
   );
 };
