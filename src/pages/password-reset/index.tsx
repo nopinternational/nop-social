@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
 import { useSearchParams } from "next/navigation";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { sendPasswordResetEmail } from "@firebase/auth";
 import {
   checkActionCode,
@@ -18,19 +18,26 @@ import { auth } from "~/lib/firebase/firebase";
 const Home: NextPage = () => {
   //const hello = api.example.hello.useQuery({ text: "from tRPC" });
   const searchParams = useSearchParams();
+  const [isWaitingForCode, setWaitingForCode] = useState(false);
 
   const code = searchParams.get("oobCode");
   console.log("reset password code: ", code, searchParams);
 
+  const emailSubmitted = (email: string) => {
+    console.log("Email has been submitted", email);
+    void sendPasswordResetEmail(auth, email);
+    setWaitingForCode(true);
+  };
+
   return (
     <Layout headingText={<HighlightText>Night of Passion</HighlightText>}>
-      {code ? (
+      {code || isWaitingForCode ? (
         <>
           <CodeCard></CodeCard>
           <PasswordCard></PasswordCard>
         </>
       ) : (
-        <EmailCard></EmailCard>
+        <EmailCard emailSubmitted={emailSubmitted}></EmailCard>
       )}
     </Layout>
   );
@@ -38,21 +45,25 @@ const Home: NextPage = () => {
 
 export default Home;
 
-const EmailCard = () => {
+const EmailCard = ({
+  emailSubmitted,
+}: {
+  emailSubmitted?: (email: string) => void;
+}) => {
   const inputUsername = useRef<HTMLInputElement>(null);
   const submitFormClick = (
     event: React.MouseEvent<HTMLButtonElement>
   ): void => {
     //console.log("Signin.nopAuthSignIn.signinNopAuth.event", event)
     event.preventDefault();
-    const email = inputUsername.current?.value.trim();
+    const email = inputUsername.current?.value.trim() || "";
     console.log("submitFormClick ", event);
     console.log("reset password for email ", email);
     const actionCodeSettings: ActionCodeSettings = {
       dynamicLinkDomain: "https://nop-website-dev.firebaseapp.com",
       url: "https://nop-website-dev.firebaseapp.com",
     };
-    void sendPasswordResetEmail(auth, email || "");
+    emailSubmitted && emailSubmitted(email);
   };
   return (
     <Card header="Återställ lösenord">
