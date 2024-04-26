@@ -1,7 +1,7 @@
 import { sendPasswordResetEmail } from "firebase/auth";
 import { type NextPage } from "next";
 import { useRouter } from "next/navigation";
-import { type FormEvent, useRef } from "react";
+import { type FormEvent, useRef, useState } from "react";
 
 import { Card } from "~/components/Card";
 import HighlightText from "~/components/HighlightText";
@@ -10,26 +10,27 @@ import { auth } from "~/lib/firebase/firebase";
 
 const Home: NextPage = () => {
   const router = useRouter();
+  const [isEmailSent, setEmailSent] = useState(false);
 
   const emailSubmitted = (email: string) => {
     console.log("Email has been submitted", email);
     void sendPasswordResetEmail(auth, email);
-    navigateToCodePage();
+    setEmailSent(true);
+    // navigateToCodePage();
   };
 
-  const navigateToCodePage = () => {
-    console.log("navigateToCodePage");
-    router.push("/password-reset/code");
-  };
+  // const navigateToCodePage = () => {
+  //   console.log("navigateToCodePage");
+  //   router.push("/password-reset/code");
+  // };
 
   return (
     <Layout headingText={<HighlightText>Night of Passion</HighlightText>}>
-      <EmailCard
-        emailSubmitted={emailSubmitted}
-        gotoCodeInputClicked={() => {
-          navigateToCodePage();
-        }}
-      ></EmailCard>
+      {isEmailSent ? (
+        <EmailSentCard></EmailSentCard>
+      ) : (
+        <EmailCard emailSubmitted={emailSubmitted}></EmailCard>
+      )}
     </Layout>
   );
 };
@@ -78,22 +79,19 @@ const EmailCard = ({
           </button>
         </form>
       </Card>
-      <Card header="Har ni fått en kod?">
+    </>
+  );
+};
+
+const EmailSentCard = () => {
+  return (
+    <>
+      <Card header="Kolla er email">
         <div className="text-lg">
-          Har ni redan fått en kod skickad till er, klicka här så kan ni direkt
-          ange den.
+          Vi har skickat ett email till adressen ni angav. I den finns en länk
+          ni behöver klicka (eller kopiera in i er webbläsare) för att
+          återställa ert lösenord.
         </div>
-        <form className="p-2">
-          <button
-            className="mb-3 mt-4 rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-            onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-              event.preventDefault();
-              gotoCodeInputClicked && gotoCodeInputClicked();
-            }}
-          >
-            Ange kod
-          </button>
-        </form>
       </Card>
     </>
   );
