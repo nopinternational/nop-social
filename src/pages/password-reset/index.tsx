@@ -1,5 +1,5 @@
 import { type NextPage } from "next";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useRef, useState } from "react";
 import { sendPasswordResetEmail } from "@firebase/auth";
 import {
@@ -18,6 +18,7 @@ import { auth } from "~/lib/firebase/firebase";
 const Home: NextPage = () => {
   //const hello = api.example.hello.useQuery({ text: "from tRPC" });
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const code = searchParams.get("oobCode");
   console.log("reset password code: ", code, searchParams);
@@ -30,6 +31,7 @@ const Home: NextPage = () => {
 
   const navigateToCodePage = () => {
     console.log("navigateToCodePage");
+    router.push("/password-reset/code");
   };
 
   return (
