@@ -1,6 +1,5 @@
 import { sendPasswordResetEmail } from "firebase/auth";
 import { type NextPage } from "next";
-import { useRouter } from "next/navigation";
 import { type FormEvent, useRef, useState } from "react";
 
 import { Card } from "~/components/Card";
@@ -9,20 +8,13 @@ import Layout from "~/components/Layout";
 import { auth } from "~/lib/firebase/firebase";
 
 const Home: NextPage = () => {
-  const router = useRouter();
   const [isEmailSent, setEmailSent] = useState(false);
 
   const emailSubmitted = (email: string) => {
     console.log("Email has been submitted", email);
     void sendPasswordResetEmail(auth, email);
     setEmailSent(true);
-    // navigateToCodePage();
   };
-
-  // const navigateToCodePage = () => {
-  //   console.log("navigateToCodePage");
-  //   router.push("/password-reset/code");
-  // };
 
   return (
     <Layout headingText={<HighlightText>Night of Passion</HighlightText>}>
@@ -39,12 +31,12 @@ export default Home;
 
 const EmailCard = ({
   emailSubmitted,
-  gotoCodeInputClicked,
 }: {
   emailSubmitted?: (email: string) => void;
   gotoCodeInputClicked?: () => void;
 }) => {
   const inputEmail = useRef<HTMLInputElement>(null);
+
   const submitFormClick = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
     const email = inputEmail.current?.value.trim() || "";
