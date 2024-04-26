@@ -13,6 +13,7 @@ import { Card } from "~/components/Card";
 import HighlightText from "~/components/HighlightText";
 import Layout from "~/components/Layout";
 import { auth } from "~/lib/firebase/firebase";
+import { Spinner } from "~/components/Spinner";
 
 const Home: NextPage = () => {
   //const hello = api.example.hello.useQuery({ text: "from tRPC" });
@@ -21,16 +22,29 @@ const Home: NextPage = () => {
 
   const code = searchParams.get("oobCode");
   console.log("reset password code: ", code, searchParams);
+  searchParams.forEach((p) =>
+    console.log("SearchParam", p, searchParams.get(p))
+  );
 
   return (
     <Layout headingText={<HighlightText>Night of Passion</HighlightText>}>
-      <CodeCard></CodeCard>
+      <VerifyingCode></VerifyingCode>
+
       <PasswordCard></PasswordCard>
     </Layout>
   );
 };
 
 export default Home;
+
+const VerifyingCode = () => {
+  return (
+    <Card header="Verifierar kod">
+      <div className="text-lg">Vänligen vänta medans vi verifierar koden</div>
+      <Spinner />
+    </Card>
+  );
+};
 
 const CodeCard = () => {
   const inputCode = useRef<HTMLInputElement>(null);
@@ -96,8 +110,7 @@ const PasswordCard = () => {
     console.log("submitFormClick ", event);
     console.log("reset password with new ", p1, p2);
     if (p1 === p2) {
-      const code = "-Ttj6npFTuYDapM7io6n_VbPzOE0VtNZgqHVKYuCs1gAAAGPFh_-Uw";
-      void confirmPasswordReset(auth, code, p1);
+      //void confirmPasswordReset(auth, code, p1);
     }
   };
   return (
