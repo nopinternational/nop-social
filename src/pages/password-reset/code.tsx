@@ -91,14 +91,20 @@ const Home: NextPage = () => {
 
   if (isSuccessful) {
     return (
-      <Layout headingText={<HighlightText>Night of Passion</HighlightText>}>
+      <Layout
+        includeSigninSignoutButton={false}
+        headingText={<HighlightText>Night of Passion</HighlightText>}
+      >
         <SuccessfulCard />
       </Layout>
     );
   }
 
   return (
-    <Layout headingText={<HighlightText>Night of Passion</HighlightText>}>
+    <Layout
+      includeSigninSignoutButton={false}
+      headingText={<HighlightText>Night of Passion</HighlightText>}
+    >
       {isCodeOK == null ? (
         <VerifyingCode
           showPendingMessage={isVeryingCodeTimeout}
@@ -159,12 +165,18 @@ const VerifyingCode = ({
     </Card>
   );
 };
+
 const SuccessfulCard = () => {
   return (
     <Card header="Lösenordet är ändrat">
       <div className="text-lg">
         Nu är lösenordet ändrat. Vänligen logga in igen med det nya lösenordet.
       </div>
+      <Link href="/signin">
+        <button className="mb-3 mt-4 rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
+          Logga in
+        </button>
+      </Link>
     </Card>
   );
 };
