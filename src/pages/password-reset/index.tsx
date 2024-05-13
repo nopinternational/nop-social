@@ -17,7 +17,10 @@ const Home: NextPage = () => {
   };
 
   return (
-    <Layout headingText={<HighlightText>Night of Passion</HighlightText>}>
+    <Layout
+      includeSigninSignoutButton={false}
+      headingText={<HighlightText>Night of Passion</HighlightText>}
+    >
       {isEmailSent ? (
         <EmailSentCard></EmailSentCard>
       ) : (
