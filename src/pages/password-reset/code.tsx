@@ -21,6 +21,7 @@ const Home: NextPage = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [isCodeOK, setCodeOk] = useState<boolean | null>(null);
+  const [isSuccessful, setSuccessful] = useState(false);
   const [isVeryingCodeTimeout, setVerifyingCodeTimeout] = useState(false);
   const [timeoutRef, setTimeoutRef] = useState<NodeJS.Timeout | null>(null);
 
@@ -84,9 +85,17 @@ const Home: NextPage = () => {
   );
 
   const onPasswordChange = (password: string) => {
-    alert("password: " + password + " code: " + (code || ""));
     void confirmPasswordReset(auth, code as string, password);
+    setSuccessful(true);
   };
+
+  if (isSuccessful) {
+    return (
+      <Layout headingText={<HighlightText>Night of Passion</HighlightText>}>
+        <SuccessfulCard />
+      </Layout>
+    );
+  }
 
   return (
     <Layout headingText={<HighlightText>Night of Passion</HighlightText>}>
@@ -133,13 +142,29 @@ const VerifyingCode = ({
       <div className="text-lg">Vänligen vänta medans vi verifierar koden</div>
       <Spinner />
       {showPendingMessage ? (
-        <div className="text-lg">
-          <HighlightText>
-            Har ni klickat på länken i mailet eller klistrat in den korrekt i er
-            webbläsare?
-          </HighlightText>
-        </div>
+        <>
+          <div className="text-lg">
+            <HighlightText>
+              Har ni klickat på länken i mailet eller klistrat in den korrekt i
+              er webbläsare?
+            </HighlightText>
+          </div>
+          <Link href="/password-reset">
+            <button className="mb-3 mt-4 rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
+              Försök igen
+            </button>
+          </Link>
+        </>
       ) : null}
+    </Card>
+  );
+};
+const SuccessfulCard = () => {
+  return (
+    <Card header="Lösenordet är ändrat">
+      <div className="text-lg">
+        Nu är lösenordet ändrat. Vänligen logga in igen med det nya lösenordet.
+      </div>
     </Card>
   );
 };
