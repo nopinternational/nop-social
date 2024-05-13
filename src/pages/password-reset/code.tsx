@@ -38,24 +38,17 @@ const Home: NextPage = () => {
     () => {
       if (code) {
         const checkCode = async (code: string) => {
-          console.log("call firebase to verify code");
           const actionCodeInfo = await checkActionCode(auth, code);
-          console.log("check code -- actionCodeInfo", actionCodeInfo);
         };
 
-        console.log("xxxxxxx -- lets verify the code");
 
         if (timeoutRef) {
-          console.log("xxxxxxx -- clear timeout");
-
           clearTimeout(timeoutRef);
         } else {
-          console.log("xxxxxxx -- no timeout to clear");
         }
         //checkCode(code).catch(console.error);
         checkActionCode(auth, code)
           .then((result) => {
-            console.log("code is verified", result);
             setCodeOk(true);
           })
           .catch((error) => {
@@ -63,7 +56,6 @@ const Home: NextPage = () => {
             console.error(error);
           });
       } else {
-        console.log("xxxxxxx -- code is null, do nothing");
       }
     },
     [code, timeoutRef] // [code]
@@ -80,9 +72,6 @@ const Home: NextPage = () => {
     };
   }, []);
 
-  searchParams.forEach((p) =>
-    console.log("SearchParam", p, searchParams.get(p))
-  );
 
   const onPasswordChange = (password: string) => {
     void confirmPasswordReset(auth, code as string, password);

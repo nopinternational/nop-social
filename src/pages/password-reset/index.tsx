@@ -11,7 +11,6 @@ const Home: NextPage = () => {
   const [isEmailSent, setEmailSent] = useState(false);
 
   const emailSubmitted = (email: string) => {
-    console.log("Email has been submitted", email);
     void sendPasswordResetEmail(auth, email);
     setEmailSent(true);
   };

@@ -23,7 +23,6 @@ export const PasswordCard = ({ onPasswordChange }: PasswordCardProps) => {
     const newState: PasswordState = { ...getPass };
     newState[k] = v;
     setPass(newState);
-    console.log("newState", newState);
   };
 
   const submitFormClick = (
@@ -38,12 +37,9 @@ export const PasswordCard = ({ onPasswordChange }: PasswordCardProps) => {
       return;
     }
     const passwordMatches = p1 === p2 && p1 != "";
-    console.log("submitFormClick ", event);
-    console.log("reset password with new ", p1, p2, passwordMatches);
 
     if (passwordMatches) {
       onPasswordChange && onPasswordChange(p1);
-      console.log("new password is set to ", p1);
     } else {
       setErrorText("Lösenorden matchar inte");
     }

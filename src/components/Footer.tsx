@@ -35,11 +35,6 @@ type FooterProps = {
 const Footer: React.FC<FooterProps> = ({
   includeSigninSignoutButton = true,
 }: FooterProps) => {
-  console.log(
-    "foopropss.includeSigninSignoutButton",
-    includeSigninSignoutButton
-  );
-  //   const includeSigninSignoutButton = fopropsss.includeSigninSignoutButton;
   const { data: sessionData } = useSession();
 
   const renderNotLoggedIn = () => {
