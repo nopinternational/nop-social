@@ -210,7 +210,7 @@ const CodeCard = () => {
   );
 };
 
-const PasswordCard = ({
+export const PasswordCard = ({
   code,
   onPasswordChange,
 }: {
