@@ -55,7 +55,7 @@ export const PasswordCard = ({ onPasswordChange }: PasswordCardProps) => {
         <input
           className="w-full rounded-lg px-3 py-3 text-center text-black"
           name="password1"
-          //   ref={inputPass1}
+          type="password"
           value={getPass["password1"]}
           onChange={onChangePass}
         ></input>
@@ -64,7 +64,7 @@ export const PasswordCard = ({ onPasswordChange }: PasswordCardProps) => {
         <input
           className="w-full rounded-lg px-3 py-3 text-center text-black"
           name="password2"
-          //   ref={inputPass2}
+          type="password"
           value={getPass["password2"]}
           onChange={onChangePass}
         ></input>
