@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { useRef, useState } from "react";
+import { type RefObject, useRef, useState } from "react";
 import { type GetServerSidePropsContext } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -23,20 +23,6 @@ const Signin = ({ providers }: SigninPageProps) => {
   const router = useRouter();
   const { error, callbackUrl } = router.query;
 
-  const [type, setType] = useState("password");
-  const [icon, setIcon] = useState<object>(eyeOff);
-
-  const handleEyeToggle = () => {
-    if (type === "password") {
-      setIcon(eye);
-      setType("text");
-    } else {
-      setIcon(eyeOff);
-      setType("password");
-    }
-  };
-
-  //console.log("Signin.router.quert:", router.query)
   const inputUsername = useRef<HTMLInputElement>(null);
   const inputPassword = useRef<HTMLInputElement>(null);
 
@@ -44,7 +30,6 @@ const Signin = ({ providers }: SigninPageProps) => {
     const nopSigninProvider = Object.values(providers).filter(
       (provider) => provider.id == "nop-auth"
     )[0];
-    //console.log("nopAuthSignIn.nopSigninProvider: ", nopSigninProvider)
 
     if (!nopSigninProvider) return <div>no nop</div>;
 
@@ -79,20 +64,8 @@ const Signin = ({ providers }: SigninPageProps) => {
           ></input>
           <br />
           <div className="m-2">lösenord</div>
-          <div className="mb-4 flex">
-            <input
-              className="w-full rounded-lg px-3 py-3 text-center text-black"
-              name="password"
-              type={type}
-              ref={inputPassword}
-            />
-            <span
-              className="flex items-center justify-around text-black"
-              onClick={handleEyeToggle}
-            >
-              <Icon className="absolute mr-10" icon={icon} size={25} />
-            </span>
-          </div>
+
+          <PasswordInput passwordRef={inputPassword}></PasswordInput>
           <br />
           <button
             className="mb-3 mt-4 rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
@@ -133,6 +106,41 @@ const Signin = ({ providers }: SigninPageProps) => {
   );
 };
 
+const PasswordInput = ({
+  passwordRef,
+}: {
+  passwordRef: RefObject<HTMLInputElement>;
+}) => {
+  const [type, setType] = useState("password");
+  const [icon, setIcon] = useState<object>(eyeOff);
+
+  const handleEyeToggle = () => {
+    if (type === "password") {
+      setIcon(eye);
+      setType("text");
+    } else {
+      setIcon(eyeOff);
+      setType("password");
+    }
+  };
+
+  return (
+    <div className="mb-4 flex">
+      <input
+        className="w-full rounded-lg px-3 py-3 text-center text-black"
+        name="password"
+        type={type}
+        ref={passwordRef}
+      />
+      <span
+        className="flex items-center justify-around text-black"
+        onClick={handleEyeToggle}
+      >
+        <Icon className="absolute mr-10" icon={icon} size={25} />
+      </span>
+    </div>
+  );
+};
 export default Signin;
 
 export const getServerSideProps = async (
