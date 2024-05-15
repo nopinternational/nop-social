@@ -106,6 +106,8 @@ const Signin = ({ providers }: SigninPageProps) => {
   );
 };
 
+export default Signin;
+
 const PasswordInput = ({
   passwordRef,
 }: {
@@ -141,7 +143,6 @@ const PasswordInput = ({
     </div>
   );
 };
-export default Signin;
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext

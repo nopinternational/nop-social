@@ -1,5 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { type ChangeEvent, useState } from "react";
 import { Card } from "~/components/Card";
+import { Icon } from "react-icons-kit";
+import { eyeOff } from "react-icons-kit/feather/eyeOff";
+import { eye } from "react-icons-kit/feather/eye";
 
 type PasswordCardProps = {
   onPasswordChange?: (password: string) => void;
@@ -17,11 +21,11 @@ export const PasswordCard = ({ onPasswordChange }: PasswordCardProps) => {
   });
   const [errorText, setErrorText] = useState<string | null>(null);
 
-  const onChangePass = (e: ChangeEvent<HTMLInputElement>) => {
-    const k = e.target.name as keyof PasswordState;
+  const onChangePass = (name: string, e: ChangeEvent<HTMLInputElement>) => {
+    // const k = e.target.name as keyof PasswordState;
     const v = e.target.value || "";
     const newState: PasswordState = { ...getPass };
-    newState[k] = v;
+    newState[name as keyof PasswordState] = v;
     setPass(newState);
   };
 
@@ -52,22 +56,17 @@ export const PasswordCard = ({ onPasswordChange }: PasswordCardProps) => {
       </div>
       <form className="p-2">
         <div className="m-2">Lösenord</div>
-        <input
-          className="w-full rounded-lg px-3 py-3 text-center text-black"
-          name="password1"
-          type="password"
+        <PasswordInput
           value={getPass["password1"]}
-          onChange={onChangePass}
-        ></input>
+          onChange={(e) => onChangePass("password1", e)}
+        />
         <br />
         <div className="m-2">Repetera lösenordet</div>
-        <input
-          className="w-full rounded-lg px-3 py-3 text-center text-black"
-          name="password2"
-          type="password"
+        <PasswordInput
           value={getPass["password2"]}
-          onChange={onChangePass}
-        ></input>
+          onChange={(e) => onChangePass("password2", e)}
+        />
+
         <br />
         {errorText ? <p>{errorText}</p> : null}
 
@@ -82,5 +81,42 @@ export const PasswordCard = ({ onPasswordChange }: PasswordCardProps) => {
         </button>
       </form>
     </Card>
+  );
+};
+
+type PasswordInputProps = {
+  value: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+};
+
+const PasswordInput = (passwordInputProps: PasswordInputProps) => {
+  const [type, setType] = useState("password");
+  const [icon, setIcon] = useState(eyeOff);
+
+  const handleEyeToggle = () => {
+    if (type === "password") {
+      setIcon(eye);
+      setType("text");
+    } else {
+      setIcon(eyeOff);
+      setType("password");
+    }
+  };
+  return (
+    <div className="mb-4 flex">
+      <input
+        className="w-full rounded-lg px-3 py-3 text-center text-black"
+        name="password"
+        type={type}
+        value={passwordInputProps.value}
+        onChange={passwordInputProps.onChange}
+      />
+      <span
+        className="flex items-center justify-around text-black"
+        onClick={handleEyeToggle}
+      >
+        <Icon className="absolute mr-10" icon={icon} size={25} />
+      </span>
+    </div>
   );
 };
