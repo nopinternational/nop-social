@@ -138,7 +138,7 @@ const PasswordInput = ({
         className="flex items-center justify-around text-black"
         onClick={handleEyeToggle}
       >
-        <Icon className="absolute mr-10" icon={icon} size={25} />
+        <Icon className="absolute mr-14" icon={icon} size={25} />
       </span>
     </div>
   );
