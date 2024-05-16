@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { useRef } from "react";
+import { type RefObject, useRef, useState } from "react";
 import { type GetServerSidePropsContext } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -11,6 +11,9 @@ import { getServerSession } from "next-auth/next";
 import type { Provider } from "next-auth/providers";
 import HighlightText from "~/components/HighlightText";
 import Layout from "~/components/Layout";
+import { Icon } from "react-icons-kit";
+import { eyeOff } from "react-icons-kit/feather/eyeOff";
+import { eye } from "react-icons-kit/feather/eye";
 
 type SigninPageProps = {
   providers: Provider[];
@@ -20,7 +23,6 @@ const Signin = ({ providers }: SigninPageProps) => {
   const router = useRouter();
   const { error, callbackUrl } = router.query;
 
-  //console.log("Signin.router.quert:", router.query)
   const inputUsername = useRef<HTMLInputElement>(null);
   const inputPassword = useRef<HTMLInputElement>(null);
 
@@ -28,7 +30,6 @@ const Signin = ({ providers }: SigninPageProps) => {
     const nopSigninProvider = Object.values(providers).filter(
       (provider) => provider.id == "nop-auth"
     )[0];
-    //console.log("nopAuthSignIn.nopSigninProvider: ", nopSigninProvider)
 
     if (!nopSigninProvider) return <div>no nop</div>;
 
@@ -37,11 +38,13 @@ const Signin = ({ providers }: SigninPageProps) => {
     ): void => {
       //console.log("Signin.nopAuthSignIn.signinNopAuth.event", event)
       event.preventDefault();
+      const u = inputUsername.current?.value.trim();
+      const p = inputPassword.current?.value.trim();
       void signIn("nop-auth", {
         //redirect: true,
         callbackUrl: (callbackUrl as string) || "/app/welcome",
-        username: inputUsername.current?.value.trim(),
-        password: inputPassword.current?.value.trim(),
+        username: u,
+        password: p,
       });
     };
 
@@ -61,12 +64,8 @@ const Signin = ({ providers }: SigninPageProps) => {
           ></input>
           <br />
           <div className="m-2">lösenord</div>
-          <input
-            className="w-full rounded-lg px-3 py-3 text-center text-black"
-            name="password"
-            type="password"
-            ref={inputPassword}
-          ></input>
+
+          <PasswordInput passwordRef={inputPassword}></PasswordInput>
           <br />
           <button
             className="mb-3 mt-4 rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
@@ -108,6 +107,42 @@ const Signin = ({ providers }: SigninPageProps) => {
 };
 
 export default Signin;
+
+const PasswordInput = ({
+  passwordRef,
+}: {
+  passwordRef: RefObject<HTMLInputElement>;
+}) => {
+  const [type, setType] = useState("password");
+  const [icon, setIcon] = useState<object>(eyeOff);
+
+  const handleEyeToggle = () => {
+    if (type === "password") {
+      setIcon(eye);
+      setType("text");
+    } else {
+      setIcon(eyeOff);
+      setType("password");
+    }
+  };
+
+  return (
+    <div className="mb-4 flex">
+      <input
+        className="w-full rounded-lg px-3 py-3 text-center text-black"
+        name="password"
+        type={type}
+        ref={passwordRef}
+      />
+      <span
+        className="flex items-center justify-around text-black"
+        onClick={handleEyeToggle}
+      >
+        <Icon className="absolute mr-10" icon={icon} size={25} />
+      </span>
+    </div>
+  );
+};
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext

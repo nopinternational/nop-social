@@ -1,12 +1,7 @@
 import { type NextPage } from "next";
 import { useSearchParams } from "next/navigation";
 import { useDeferredValue, useEffect, useState } from "react";
-import {
-  checkActionCode,
-  verifyPasswordResetCode,
-  confirmPasswordReset,
-  type ActionCodeInfo,
-} from "firebase/auth";
+import { checkActionCode, confirmPasswordReset } from "firebase/auth";
 
 import { Card } from "~/components/Card";
 import HighlightText from "~/components/HighlightText";
@@ -41,7 +36,6 @@ const Home: NextPage = () => {
           const actionCodeInfo = await checkActionCode(auth, code);
         };
 
-
         if (timeoutRef) {
           clearTimeout(timeoutRef);
         } else {
@@ -71,7 +65,6 @@ const Home: NextPage = () => {
       clearTimeout(ref);
     };
   }, []);
-
 
   const onPasswordChange = (password: string) => {
     void confirmPasswordReset(auth, code as string, password);

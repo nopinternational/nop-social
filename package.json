@@ -37,6 +37,7 @@
     "react-dom": "18.2.0",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.43.9",
+    "react-icons-kit": "^2.0.0",
     "react-image-file-resizer": "^0.4.8",
     "react-tailwindcss-datepicker": "^1.5.1",
     "superjson": "1.12.2",
