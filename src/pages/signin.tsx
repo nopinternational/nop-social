@@ -66,6 +66,11 @@ const Signin = ({ providers }: SigninPageProps) => {
           <div className="m-2">lösenord</div>
 
           <PasswordInput passwordRef={inputPassword}></PasswordInput>
+          <div className="m-2 ">
+            <HighlightText>
+              <Link href="/password-reset">Glömt lösenord?</Link>
+            </HighlightText>
+          </div>
           <br />
           <button
             className="mb-3 mt-4 rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
