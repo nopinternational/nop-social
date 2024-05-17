@@ -11,7 +11,7 @@ interface ProfileDbModel extends DocumentData {
   person1: PersonDbModel;
   person2: PersonDbModel;
   description: string;
-  avatar: string;
+  avatar?: string;
 }
 interface PersonDbModel extends DocumentData {
   name: string;
@@ -158,6 +158,7 @@ const profileConverter: FirestoreDataConverter<Profile> = {
         born: profile.person2.born,
       },
       description: profile.description,
+      avatar: profile.avatar,
     };
   },
   fromFirestore: (
