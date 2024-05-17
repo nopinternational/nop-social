@@ -1,18 +1,31 @@
-import couplePic from "./couple_icon_square.png"
-import Image from 'next/image'
+import defaultCouplePic from "./couple_icon_square.png";
+import Image, { type StaticImageData } from "next/image";
 
-export const ProfilePic = ({ variant }: { variant?: string }) => {
-    if (variant === "small")
-        return <Image
-            priority={true}
-            className="min-w-fill min-h-fill w-14 h-14 sm:w-32 sm:h-32  bg-yellow-50 rounded-full shadow max-w-full align-middle border-4 border-[hsl(280,100%,70%)]"
-            src={couplePic}
-            alt="John Doe" />
+type ProfilePicProps = { variant?: string; url?: string };
+export const ProfilePic = ({ variant, url }: ProfilePicProps) => {
+  const couplePic: string | StaticImageData = url || defaultCouplePic;
 
-    return <Image
+  console.log("url: ", url, couplePic);
+  if (variant === "small")
+    return (
+      <Image
         priority={true}
-        className="min-w-fill min-h-fill h-32 w-32 sm:w-32 sm:h-32  bg-yellow-50 rounded-full shadow max-w-full align-middle border-4 border-[hsl(280,100%,70%)]"
+        className="min-w-fill min-h-fill h-14 w-14 max-w-full rounded-full  border-4 border-[hsl(280,100%,70%)] bg-yellow-50 align-middle shadow sm:h-32 sm:w-32"
         src={couplePic}
-        alt="John Doe" />
+        width={500}
+        height={500}
+        alt="John Doe"
+      />
+    );
 
-}
+  return (
+    <Image
+      priority={true}
+      className="rounded-full aspect-square object-cover h-32 w-32 border-4 border-[hsl(280,100%,70%)] bg-yellow-50 align-middle shadow sm:h-32 sm:w-32"
+      src={couplePic}
+      width={500}
+      height={500}
+      alt="John Doe"
+    />
+  );
+};
