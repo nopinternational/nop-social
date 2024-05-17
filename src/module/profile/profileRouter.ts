@@ -12,6 +12,7 @@ export type Profile = {
   person2: Person;
   description: string;
   id: string;
+  avatar?: string;
 };
 
 export type Person = {
