@@ -1,7 +1,6 @@
 import { type NextPage } from "next";
 import Link from "next/link";
 import { Card } from "~/components/Card";
-import { useFeature } from "~/components/FeatureFlag";
 import HighlightText from "~/components/HighlightText";
 import Layout from "~/components/Layout";
 import {
@@ -62,7 +61,6 @@ const CONVERSATION_GROUP_DUMMY: ConversationGroup[] = [
 const CONVERSATION_GROUP = CONVERSATION_GROUP_EMPTY;
 
 const Home: NextPage = () => {
-  const messageIsEnabled = useFeature("message");
 
   return (
     <Layout
@@ -75,13 +73,7 @@ const Home: NextPage = () => {
       <div className="grid grid-cols-2  gap-4   sm:grid-cols-2 md:gap-8">
         <div className="col-span-2">
           <MessageHeaderCard />
-          {messageIsEnabled ? (
-            <>
-              <ConnectedConversationsCard></ConnectedConversationsCard>
-            </>
-          ) : (
-            <DummyConversationsCard></DummyConversationsCard>
-          )}
+          <ConnectedConversationsCard></ConnectedConversationsCard>
         </div>
       </div>
     </Layout>

@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
 import { Card } from "~/components/Card";
-import { useFeature } from "~/components/FeatureFlag";
 import HighlightText from "~/components/HighlightText";
 import Layout from "~/components/Layout";
 import {
@@ -85,7 +84,6 @@ const CONVO_WITH_MESSAGES: ConvoWithMessages = {
 };
 
 const Home: NextPage = () => {
-  const messageIsEnabled = useFeature("message");
   const session = useSession();
 
   const router = useRouter();
@@ -118,24 +116,18 @@ const Home: NextPage = () => {
   }
 
   function postMessageHandler({ text }: { text: string }): void {
-    // console.log("postMessageHandler ", text);
-    if (messageIsEnabled) {
-      // alert("Nu skickar vi iväg meddelandet");
-      const message: ConversationMessage = {
-        from: "from", // will be set on server
-        fromId: "from", // will be set on server
-        conversationId: messageid as string,
-        messageId: messageid as string,
-        message: text,
-        when: "", // will be set on server
-      };
-      // console.log("postMessageHandler.postChatMessage", message);
-      postChatMessage({ chatMessage: message });
-    } else {
-      alert(
-        "tack för att du vill testa att skicka ett meddelande, men det är inget som fungerar ännu 😟"
-      );
-    }
+  // console.log("postMessageHandler ", text);
+    // alert("Nu skickar vi iväg meddelandet");
+    const message: ConversationMessage = {
+      from: "from", // will be set on server
+      fromId: "from", // will be set on server
+      conversationId: messageid as string,
+      messageId: messageid as string,
+      message: text,
+      when: "", // will be set on server
+    };
+    // console.log("postMessageHandler.postChatMessage", message);
+    postChatMessage({ chatMessage: message });
   }
 
   function getDummyConvoWithMessages(): ConvoWithMessages {

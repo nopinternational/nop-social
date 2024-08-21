@@ -13,12 +13,10 @@ import {
   type MessageToUser,
   SendChatMessageForm,
 } from "~/components/Message/ChatMessage";
-import { useFeature } from "~/components/FeatureFlag";
 import { type ConversationMessage } from "~/components/Message/ChatMessage";
 
 const Home: NextPage = () => {
   const router = useRouter();
-  const isMessageFeatureEnabled = useFeature("message");
 
   const { profileid } = router.query;
   const pid = profileid as string;
@@ -70,14 +68,7 @@ const Home: NextPage = () => {
   }
 
   function postMessageHandler({ text }: { text: string }): void {
-    if (isMessageFeatureEnabled) {
-      // console.log("postMessageHandler.MessageFeatureEnabled", text);
-      sendMessageToUser(text);
-    } else {
-      alert(
-        "tack för att du vill testa att skicka ett meddelande, men det är inget som fungerar ännu 😟"
-      );
-    }
+    sendMessageToUser(text);
   }
 
   const sendMessageToUser = (message: string) => {
