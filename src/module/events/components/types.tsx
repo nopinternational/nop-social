@@ -26,6 +26,10 @@ export type ConfirmedUser = {
   username?: string;
 };
 
+export type EventSignupsAndAttendes = {
+  allowed: string[]
+  confirmed: ConfirmedUser[]
+}
 export interface EventFirestoreModel extends DocumentData {
   name: string;
   title: string;

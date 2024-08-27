@@ -9,11 +9,13 @@ import {
     postEventMessage as postEventMessageFirebase,
     persistEvent,
     updateEvent,
-    getMyEventStatus
+    getMyEventStatus,
+    getEventSignupsAndAttendes
 } from "~/module/events/eventsFirebase";
 import { type EventFormType } from "~/module/events/components/NoPEventForm";
 import { postEventMessage } from "./components/types";
 import { TRPCError } from "@trpc/server";
+
 
 
 
@@ -95,6 +97,17 @@ export const eventRouter = createTRPCRouter({
                 return getEventMessages(ctx.session.user.id, input.eventId)
             }),
 
+    getEventSignupsAndAttendes:
+        protectedProcedure
+            .input(z.object({
+                eventId: z.string()
+            }))
+            .query(({ input, ctx }) => {
+                // console.log("------------getEventAttendes.input", input)
+                const return_v = getEventSignupsAndAttendes(ctx.session.user.id, input.eventId)
+                console.log("return_v", return_v)
+                return return_v
+            }), 
     postEventMessage:
         protectedProcedure
             .input(postEventMessage)

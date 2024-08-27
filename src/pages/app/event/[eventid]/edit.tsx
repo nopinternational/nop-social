@@ -11,6 +11,8 @@ import {
   type EventFormType,
   NoPEventForm,
 } from "~/module/events/components/NoPEventForm";
+import { EventAttendes } from "~/module/events/components/EventAttendes";
+import { getEventAttendes } from "~/module/events/eventsFirebase";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -104,6 +106,8 @@ const Home: NextPage = () => {
               onCreateHandler={saveNewEvent}
             ></NoPEventForm>
           </Card>
+
+          <AttendesCard eventId={eventid}> </AttendesCard>
         </div>
       </div>
     </Layout>
@@ -111,3 +115,75 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+const AttendesCard = ({ eventId }: { eventId: string }) => {
+  const attendes = api.event.getEventSignupsAndAttendes.useQuery({
+    eventId: eventId,
+  });
+
+  if (attendes.isLoading || false) {
+    return <p>laddar deltagare...</p>;
+  }
+
+  if (!attendes.data) {
+    return <p>hittar ingen deltagare...</p>;
+  }
+
+  if (attendes.data.length == 0) {
+    return (
+      <div>
+        <p>Ni måste vara deltagare på träffen för att s vilka som kommer.</p>
+        <p>
+          Har ni betalat nyligen så kommer vi strax lägga till er som deltagare,
+          ha tålamod 😉
+        </p>
+      </div>
+    );
+  }
+  console.log("attendes", attendes.data);
+  const eventAttendes = attendes.data;
+  const allowed = eventAttendes.allowed;
+  const confirmed = eventAttendes.confirmed;
+
+  return (
+    <Card header="Deltagare">
+      <p>Deltar i event {eventId}</p>
+      <Participants allowed={allowed}></Participants>
+
+      <p>
+        confirmed:
+        {confirmed
+          .map((confirmedAttende) => {
+            return (
+              "[" +
+              confirmedAttende.id +
+              " " +
+              confirmedAttende.name +
+              " username:" +
+              (confirmedAttende.username || "foo") +
+              "]"
+            );
+          })
+          .join(", ")}
+      </p>
+    </Card>
+  );
+};
+
+const Participants = ({ allowed }: { allowed: string[] }) => {
+  const renderParticipants = (participants: string[]) => {
+    return (
+      <>
+        {participants.map((userId) => (
+          <p key={userId}>{userId}</p>
+        ))}
+      </>
+    );
+  };
+  return (
+    <>
+      <p>Participants: {allowed.join("-")}</p>
+      {renderParticipants(allowed)}
+    </>
+  );
+};

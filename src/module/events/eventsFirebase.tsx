@@ -4,15 +4,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 import { firestoreAdmin } from "~/server/api/firebaseAdmin";
-import {
-  type QueryDocumentSnapshot,
-} from "firebase-admin/firestore";
+import { type QueryDocumentSnapshot } from "firebase-admin/firestore";
 
 import {
   type NopEvent,
   type ConfirmedUser,
   type EventFirestoreModel,
   type EventMessage,
+  type EventSignupsAndAttendes,
 } from "./components/types";
 import {
   type CollectionReference,
@@ -45,6 +44,14 @@ export const getEventAttendes = async (iam_userid: string, eventid: string) => {
 export const getEventMessages = async (iam_userid: string, eventid: string) => {
   const db = new FirbaseAdminClient(firestore);
   return db.getEventMessages(iam_userid, eventid);
+};
+
+export const getEventSignupsAndAttendes = async (
+  iam_userid: string,
+  eventid: string
+) => {
+  const db = new FirbaseAdminClient(firestore);
+  return db.getEventSignupsAndAttendes(iam_userid, eventid);
 };
 
 export const persistEvent = async ({
@@ -192,6 +199,44 @@ class FirbaseAdminClient {
       console.log("No event attendes for id ", eventid);
     }
     return [];
+  };
+
+  getEventSignupsAndAttendes = async (
+    iam_userid: string,
+    eventid: string
+  ): Promise<EventSignupsAndAttendes | null> => {
+    //events / REdvBu1tM2iI5GHEur8F / signups / attendes
+    // console.log("FirbaseAdminClient.getEvent for id", eventid)
+    const eventsRef = this.firestore.collection(EVENTS_COLLECTION);
+    const eventRef = eventsRef.doc(eventid);
+
+    const fullEventObject = (await eventRef.get()).data();
+    console.log("fullEventObject", fullEventObject);
+
+    const signupsCollectionRef = eventRef.collection("signups");
+    const participantsCollectionRef = eventRef.collection("participants");
+
+    const participantsDocs = await participantsCollectionRef.listDocuments();
+    participantsDocs.forEach((doc) => {
+      void (async () => {
+        const p = (await doc.get()).data();
+        console.log("participants", doc.id, p);
+      })();
+    });
+
+    const attendesRef = signupsCollectionRef.doc("attendes");
+    const snapshot = await attendesRef.get();
+
+    if (snapshot.exists) {
+      // console.log("getEventSignupsAndAttendes", snapshot.data());
+      const dta = snapshot.data() as EventSignupsAndAttendes;
+      // console.log("getEventSignupsAndAttendes", dta);
+      return dta;
+    } else {
+      // docSnap.data() will be undefined in this case
+      console.log("No event attendes for id ", eventid);
+    }
+    return null;
   };
 
   getEventMessages = async (iam_userid: string, eventid: string) => {
