@@ -24,6 +24,7 @@ export type ConfirmedUser = {
   name: string;
   id: string;
   username?: string;
+  vip?: boolean;
 };
 
 export interface EventFirestoreModel extends DocumentData {
