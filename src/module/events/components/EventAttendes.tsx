@@ -1,11 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { type FC } from "react";
-import Image from "next/image";
 import HighlightText from "~/components/HighlightText";
 import { ProfileLink } from "~/module/profile/components/ProfileLink";
 import { api } from "~/utils/api";
-// import vip_image from "./VIP.svg";
-import vip_image from "./vip2.svg";
 
 export const EventAttendes: FC<{ eventid: string }> = ({ eventid }) => {
   const attendes = api.event.getEventAttendes.useQuery({ eventId: eventid });
