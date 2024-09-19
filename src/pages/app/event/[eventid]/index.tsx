@@ -192,28 +192,33 @@ const AttendingToSkargardsParty = () => {
       <div className="col-span-2">
         <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
           <h3 className="text-2xl font-bold">
-            <HighlightText>Snart klart...</HighlightText>
+            <HighlightText>Er anmälan är registrerad</HighlightText>
           </h3>
           <div className="whitespace-pre-wrap text-lg">
             Vad kul att ni vill hänga med på skärgårdsfest 🎉🍸🍾
           </div>
           <div className="whitespace-pre-wrap text-lg">
-            Ännu går det inte riktigt att anmäla sig på vår site. Istället så
-            får skicka ett mail till{" "}
+            Vi har nu registrerat er anmälan att ni vill vara med. Vi
+            eftersträvar att få en bra blandning på paren, så att alla ska känna
+            sig trygga och bekväma. Det gör att det kan dröja innan vi bekräftar
+            er plats. From söndagen 29/9 kommer vi att börja bjuda in par som
+            anmält sitt intresse.
+          </div>
+          <div className="whitespace-pre-wrap text-lg">
+            Vi kommer att använda den email som ni använder för att logga in på
+            Night of Passion för att skicka en ev inbjudan. Där finns även
+            instruktioner för hur festavgiften om 3500kr ska betalas.
+          </div>
+          <div className="whitespace-pre-wrap text-lg">
+            Har ni frågor eller funderingar så kan ni skicka ett mail till{" "}
             <a
               className="text-[hsl(280,100%,70%)]"
               href="mailto:fest@nightofpassion.se"
             >
               fest@nightofpassion.se
-            </a>{" "}
-            och anmäla er 😀
+            </a>
           </div>
-          <div className="whitespace-pre-wrap text-lg">
-            Vänta inte med att skicka in er anmälan. Det är inte först till
-            kvarn, vi försöker hitta en bra blandning på paren som gör att alla
-            ska trivas ihop på festen. Det gör att det kan dröja innan vi
-            bekräftar er plats.
-          </div>
+
           <div className="whitespace-pre-wrap text-lg">
             Kram på er så länge 😘
           </div>
