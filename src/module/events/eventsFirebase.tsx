@@ -4,7 +4,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 import { firestoreAdmin } from "~/server/api/firebaseAdmin";
-import { type QueryDocumentSnapshot } from "firebase-admin/firestore";
+import {
+  type DocumentData,
+  type QueryDocumentSnapshot,
+} from "firebase-admin/firestore";
 
 import {
   type NopEvent,
@@ -157,8 +160,8 @@ class FirbaseAdminClient {
     const eventParticipantsRef = this.firestore
       .collection(EVENTS_COLLECTION)
       .doc(eventid)
-      .collection(EVENT_PARTICIPANTS);
-    //.withConverter(eventParticipantsConverter);
+      .collection(EVENT_PARTICIPANTS)
+      .withConverter(eventParticipantsConverter);
 
     const snapshot = await eventParticipantsRef.get();
     console.log("getEventParticipants.snapshot");
@@ -166,9 +169,17 @@ class FirbaseAdminClient {
       console.log("No matching documents participants.");
       return null;
     }
+    const particpants: EventParticipant[] = [];
     snapshot.forEach((doc) => {
-      console.log(doc.id, "=>", doc.data());
+      console.log("snapshot.doc", doc.data());
+      //console.log(doc.id, "=>", doc.data());
+      particpants.push(doc.data());
     });
+
+    const foo = snapshot.docs.map((d) => {
+      return { id: d.data().id, when: d.data().when };
+    });
+    console.log("snapshot.docs.map", foo);
     //console.log("FirbaseAdminClient.getEvent -> snapshot", snapshot)
     // if (snapshot.exists) {
     //   //console.log("FirbaseAdminClient.getEvent -> snapshot.data()", snapshot.data())
@@ -178,10 +189,7 @@ class FirbaseAdminClient {
     //   // console.log("No such event!", eventid);
     // }
 
-    return [
-      { id: "7K7PxXthSmblBF8uJIQN2zWMCyw1", when: "2024-01-28T17:16:49.172Z" },
-      { id: "foo", when: "2022-01-01T01:01:01172Z'" },
-    ];
+    return particpants;
   };
 
   getMyEventStatus = async (
@@ -354,5 +362,25 @@ const eventConverter: FirestoreDataConverter<NopEvent> = {
     // console.log("fromFirestore.data", data);
 
     return { id: snapshot.id, ...data };
+  },
+};
+
+const eventParticipantsConverter: FirestoreDataConverter<EventParticipant> = {
+  // toFirestore: (event: NopEvent): EventFirestoreModel => {
+  //   // console.log("toFirestore.event", event);
+  //   return { ...event };
+  // },
+  toFirestore: (event: EventParticipant): DocumentData => {
+    console.log("toFirestore.event", event);
+    return { ...event };
+  },
+  fromFirestore: (
+    snapshot: QueryDocumentSnapshot
+    //options: SnapshotOptions
+  ): EventParticipant => {
+    const data = snapshot.data();
+    console.log("fromFirestore.data", data, snapshot.id);
+
+    return { id: snapshot.id, when: data.when };
   },
 };
