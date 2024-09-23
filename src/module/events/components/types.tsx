@@ -20,6 +20,11 @@ const nopEvent = z.object({
 
 export type NopEvent = z.infer<typeof nopEvent>;
 
+export type EventParticipant = {
+  id: string;
+  when: string;
+};
+
 export type ConfirmedUser = {
   name: string;
   id: string;

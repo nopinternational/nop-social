@@ -5,6 +5,7 @@
 
 import { firestoreAdmin } from "~/server/api/firebaseAdmin";
 import {
+  type DocumentData,
   type QueryDocumentSnapshot,
 } from "firebase-admin/firestore";
 
@@ -13,6 +14,7 @@ import {
   type ConfirmedUser,
   type EventFirestoreModel,
   type EventMessage,
+  type EventParticipant,
 } from "./components/types";
 import {
   type CollectionReference,
@@ -28,10 +30,19 @@ export const getAllEventsFromFirestore = async (): Promise<NopEvent[]> => {
   const db = new FirbaseAdminClient(firestore);
   return await db.getAllEventsFromFirestore();
 };
+
 export const getEvent = async (eventid: string): Promise<NopEvent | null> => {
   const db = new FirbaseAdminClient(firestore);
   return await db.getEvent(eventid);
 };
+
+export const getEventParticipants = async (
+  eventid: string
+): Promise<EventParticipant[] | null> => {
+  const db = new FirbaseAdminClient(firestore);
+  return await db.getEventParticipants(eventid);
+};
+
 export const getMyEventStatus = async (iam_userid: string, eventid: string) => {
   const db = new FirbaseAdminClient(firestore);
   return await db.getMyEventStatus(iam_userid, eventid);
@@ -86,6 +97,7 @@ export const signupToEvent = async (eventId: string, userid: string) => {
 };
 
 const EVENTS_COLLECTION = "events";
+const EVENT_PARTICIPANTS = "participants";
 class FirbaseAdminClient {
   firestore: FirebaseFirestore.Firestore;
   constructor(firestoreApp: FirebaseFirestore.Firestore) {
@@ -139,6 +151,45 @@ class FirbaseAdminClient {
       // console.log("No such event!", eventid);
     }
     return null;
+  };
+
+  getEventParticipants = async (
+    eventid: string
+  ): Promise<EventParticipant[] | null> => {
+    console.log("FirbaseAdminClient.getEventParticipants for id", eventid);
+    const eventParticipantsRef = this.firestore
+      .collection(EVENTS_COLLECTION)
+      .doc(eventid)
+      .collection(EVENT_PARTICIPANTS)
+      .withConverter(eventParticipantsConverter);
+
+    const snapshot = await eventParticipantsRef.get();
+    console.log("getEventParticipants.snapshot");
+    if (snapshot.empty) {
+      console.log("No matching documents participants.");
+      return null;
+    }
+    const particpants: EventParticipant[] = [];
+    snapshot.forEach((doc) => {
+      console.log("snapshot.doc", doc.data());
+      //console.log(doc.id, "=>", doc.data());
+      particpants.push(doc.data());
+    });
+
+    const foo = snapshot.docs.map((d) => {
+      return { id: d.data().id, when: d.data().when };
+    });
+    console.log("snapshot.docs.map", foo);
+    //console.log("FirbaseAdminClient.getEvent -> snapshot", snapshot)
+    // if (snapshot.exists) {
+    //   //console.log("FirbaseAdminClient.getEvent -> snapshot.data()", snapshot.data())
+    //   return snapshot.data() as NopEvent;
+    // } else {
+    //   // docSnap.data() will be undefined in this case
+    //   // console.log("No such event!", eventid);
+    // }
+
+    return particpants;
   };
 
   getMyEventStatus = async (
@@ -311,5 +362,25 @@ const eventConverter: FirestoreDataConverter<NopEvent> = {
     // console.log("fromFirestore.data", data);
 
     return { id: snapshot.id, ...data };
+  },
+};
+
+const eventParticipantsConverter: FirestoreDataConverter<EventParticipant> = {
+  // toFirestore: (event: NopEvent): EventFirestoreModel => {
+  //   // console.log("toFirestore.event", event);
+  //   return { ...event };
+  // },
+  toFirestore: (event: EventParticipant): DocumentData => {
+    console.log("toFirestore.event", event);
+    return { ...event };
+  },
+  fromFirestore: (
+    snapshot: QueryDocumentSnapshot
+    //options: SnapshotOptions
+  ): EventParticipant => {
+    const data = snapshot.data();
+    console.log("fromFirestore.data", data, snapshot.id);
+
+    return { id: snapshot.id, when: data.when };
   },
 };
