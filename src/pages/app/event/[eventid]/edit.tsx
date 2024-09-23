@@ -11,6 +11,7 @@ import {
   type EventFormType,
   NoPEventForm,
 } from "~/module/events/components/NoPEventForm";
+import { type EventParticipant } from "~/module/events/components/types";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -104,6 +105,7 @@ const Home: NextPage = () => {
               onCreateHandler={saveNewEvent}
             ></NoPEventForm>
           </Card>
+          <ParticipantsListCard eventId={e.id} />
         </div>
       </div>
     </Layout>
@@ -111,3 +113,53 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+// export const EventMessa = ({ eventid }: { eventid: string }) => {
+
+const ParticipantsListCard = ({ eventId }: { eventId: string }) => {
+  console.log("eventId", eventId);
+  const { data: sessionData } = useSession();
+  const queryInput = { eventId: eventId };
+
+  const eventParticipants = api.event.getEventParticipants.useQuery(
+    queryInput,
+    {
+      enabled: sessionData?.user !== undefined,
+    }
+  );
+
+  const participants = eventParticipants.data;
+  if (!participants) {
+    return (
+      <Card header="Anmälda par">
+        <p>Eventid: </p>
+        <p>finns inga anmälda par</p>
+      </Card>
+    );
+  }
+  console.log("participants: ", participants);
+
+  const foo = (participants: EventParticipant[]) => {
+    console.log("foo.participants: ", participants);
+
+    return (
+      <ul>
+        {participants.map((p) => {
+          console.log("render", p);
+          return (
+            <li key={p.id}>
+              {p.id} -- {p.when}
+            </li>
+          );
+        })}
+      </ul>
+    );
+  };
+
+  return (
+    <Card header="Anmälda par">
+      <p>Eventid: {eventId}</p>
+      <p>Lista över anmälda par:</p>
+      {foo(participants)}
+    </Card>
+  );
+};
