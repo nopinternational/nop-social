@@ -139,16 +139,17 @@ const ParticipantsListCard = ({ eventId }: { eventId: string }) => {
   console.log("participants: ", participants);
 
   const foo = (participants: EventParticipant[]) => {
-    console.log("foo.participants: ", participants);
-
     return (
       <ul>
         {participants.map((p) => {
           console.log("render", p);
           return (
-            <li key={p.id}>
-              {p.id} -- {p.when}
-            </li>
+            <>
+              <li key={p.id}>
+                <Participant eventParticipant={p}></Participant>
+                {/* {p.id} -- {p.when} */}
+              </li>
+            </>
           );
         })}
       </ul>
@@ -157,9 +158,43 @@ const ParticipantsListCard = ({ eventId }: { eventId: string }) => {
 
   return (
     <Card header="Anmälda par">
-      <p>Eventid: {eventId}</p>
       <p>Lista över anmälda par:</p>
       {foo(participants)}
     </Card>
+  );
+};
+
+type ParticipantType = { eventParticipant: EventParticipant };
+
+const Participant = ({ eventParticipant }: ParticipantType) => {
+  const profileApi = api.profile.getProfileById.useQuery({
+    id: eventParticipant.id,
+  });
+
+  console.log("loading profile", eventParticipant.id);
+  if (profileApi.isLoading) {
+    return <>Laddar profil {eventParticipant.id}</>;
+  }
+
+  const profile = profileApi.data;
+  console.log("laddad profil: ", profile);
+
+  const dateString = eventParticipant.when
+    ? new Date(eventParticipant.when).toLocaleString()
+    : "";
+  if (profile) {
+    return (
+      <>
+        {profile.person1.name} & {profile.person2.name} (
+        <HighlightText>{profile.username}</HighlightText>) - anmälda{" "}
+        {dateString}
+      </>
+    );
+  }
+
+  return (
+    <>
+      Kan inte ladda <HighlightText>{eventParticipant.id}</HighlightText>
+    </>
   );
 };
