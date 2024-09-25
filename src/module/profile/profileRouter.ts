@@ -25,10 +25,10 @@ export const profileRouter = createTRPCRouter({
     return await getAllProfilesFromFirestore();
   }),
 
-  getProfile: protectedProcedure
-    .input(z.object({ profileid: z.string() }))
+  getProfileByProfileName: protectedProcedure
+    .input(z.object({ profilename: z.string() }))
     .query(async ({ input }) => {
-      return await getProfileFromFirestore(input.profileid);
+      return await getProfileFromFirestore(input.profilename);
     }),
 
   getMyProfile: protectedProcedure.query(async ({ ctx }) => {

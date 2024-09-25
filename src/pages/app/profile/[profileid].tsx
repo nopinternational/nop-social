@@ -25,8 +25,8 @@ const Home: NextPage = () => {
   // console.log("useParams()", useParams())
   const { data: sessionData } = useSession();
   //const { mutate: sendChatMessage } = api.chat.sendChatMessage.useMutation();
-  const profile = api.profile.getProfile.useQuery(
-    { profileid: pid },
+  const profile = api.profile.getProfileByProfileName.useQuery(
+    { profilename: pid },
     { enabled: sessionData?.user !== undefined }
   );
   const { mutate: postChatMessage, mutateAsync: postChatMessageAsync } =
