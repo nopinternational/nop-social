@@ -172,8 +172,8 @@ const ParticipantsListCard = ({ eventId }: { eventId: string }) => {
 type ParticipantType = { eventParticipant: EventParticipant };
 
 const Participant = ({ eventParticipant }: ParticipantType) => {
-  const profileApi = api.profile.getProfileByProfileName.useQuery({
-    profilename: eventParticipant.id,
+  const profileApi = api.profile.getProfileById.useQuery({
+    id: eventParticipant.id,
   });
 
   console.log("loading profile", eventParticipant.id);

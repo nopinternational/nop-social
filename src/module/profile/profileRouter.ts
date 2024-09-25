@@ -2,7 +2,8 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../../server/api/trpc";
 import {
   getAllProfilesFromFirestore,
-  getProfileFromFirestore,
+  getProfileByIdFromFirestore,
+  getProfileByProfileNameFromFirestore,
   mergeToProfile,
 } from "~/module/profile/firebaseProfiles";
 
@@ -25,10 +26,16 @@ export const profileRouter = createTRPCRouter({
     return await getAllProfilesFromFirestore();
   }),
 
+  getProfileById: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ input }) => {
+      return await getProfileByIdFromFirestore(input.id);
+    }),
+    
   getProfileByProfileName: protectedProcedure
     .input(z.object({ profilename: z.string() }))
     .query(async ({ input }) => {
-      return await getProfileFromFirestore(input.profilename);
+      return await getProfileByProfileNameFromFirestore(input.profilename);
     }),
 
   getMyProfile: protectedProcedure.query(async ({ ctx }) => {
@@ -37,7 +44,7 @@ export const profileRouter = createTRPCRouter({
     // console.log("getMyProfile.ctx.session", ctx.session)
     //console.log("getMyProfile.ctx.session.user.", ctx.session.user)
     // console.log("getMyProfilectx.session.user.name", ctx.session.user.name)
-    return await getProfileFromFirestore(ctx.session.user.name || "");
+    return await getProfileByProfileNameFromFirestore(ctx.session.user.name || "");
   }),
 
   mergeProfile: protectedProcedure
