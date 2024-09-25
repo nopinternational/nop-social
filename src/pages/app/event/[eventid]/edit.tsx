@@ -139,6 +139,7 @@ const ParticipantsListCard = ({ eventId }: { eventId: string }) => {
   console.log("participants: ", participants);
 
   const foo = (participants: EventParticipant[]) => {
+    participants.sort((a, b) => Date.parse(a.when) - Date.parse(b.when));
     return (
       <ul>
         {participants.map((p) => {
