@@ -139,10 +139,6 @@ const ParticipantsListCard = ({ eventId }: { eventId: string }) => {
   console.log("participants: ", participants);
 
   const foo = (participants: EventParticipant[]) => {
-    console.log("foo.participants: ", participants);
-    participants.push({ id: "sthlmpar08", when: "2202" });
-    console.log("foo.participants: ", participants);
-
     return (
       <ul>
         {participants.map((p) => {
@@ -162,7 +158,6 @@ const ParticipantsListCard = ({ eventId }: { eventId: string }) => {
 
   return (
     <Card header="Anmälda par">
-      <p>Eventid: {eventId}</p>
       <p>Lista över anmälda par:</p>
       {foo(participants)}
     </Card>
@@ -185,8 +180,18 @@ const Participant = ({ eventParticipant }: ParticipantType) => {
   console.log("laddad profil: ", profile);
 
   if (profile) {
-    return <>Laddad profil: {profile.username}</>;
+    return (
+      <>
+        {profile.person1.name} & {profile.person2.name} (
+        <HighlightText>{profile.username}</HighlightText>) - anmälda{" "}
+        {eventParticipant.when}
+      </>
+    );
   }
 
-  return <>Kan inte ladda {eventParticipant.id}</>;
+  return (
+    <>
+      Kan inte ladda <HighlightText>{eventParticipant.id}</HighlightText>
+    </>
+  );
 };
