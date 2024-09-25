@@ -138,7 +138,7 @@ const ParticipantsListCard = ({ eventId }: { eventId: string }) => {
   }
   console.log("participants: ", participants);
 
-  const foo = (participants: EventParticipant[]) => {
+  const renderParticipants = (participants: EventParticipant[]) => {
     participants.sort((a, b) => Date.parse(a.when) - Date.parse(b.when));
     return (
       <ul>
@@ -156,13 +156,8 @@ const ParticipantsListCard = ({ eventId }: { eventId: string }) => {
       </ul>
     );
   };
-
-  return (
-    <Card header="Anmälda par">
-      <p>Lista över anmälda par:</p>
-      {foo(participants)}
-    </Card>
-  );
+  const cardHeader = `Anmälda par - ${participants.length}st`;
+  return <Card header={cardHeader}>{renderParticipants(participants)}</Card>;
 };
 
 type ParticipantType = { eventParticipant: EventParticipant };
