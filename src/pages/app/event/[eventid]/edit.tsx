@@ -179,12 +179,15 @@ const Participant = ({ eventParticipant }: ParticipantType) => {
   const profile = profileApi.data;
   console.log("laddad profil: ", profile);
 
+  const dateString = eventParticipant.when
+    ? new Date(eventParticipant.when).toLocaleString()
+    : "";
   if (profile) {
     return (
       <>
         {profile.person1.name} & {profile.person2.name} (
         <HighlightText>{profile.username}</HighlightText>) - anmälda{" "}
-        {eventParticipant.when}
+        {dateString}
       </>
     );
   }
