@@ -40,25 +40,36 @@ export const getAllProfilesFromFirestore = async (): Promise<Profile[]> => {
 export const getProfileByIdFromFirestore = async (
   profileid: string
 ): Promise<Profile | null> => {
-  const profilesRef = firestoreAdmin
+  const profileRef = firestoreAdmin
     .collection("profiles")
+    .doc(profileid)
     .withConverter(profileConverter);
 
-  const queryRef = profilesRef.where("username", "==", profileid);
+  // const queryRef = profilesRef.where("username", "==", profileid);
 
-  const querySnapshot = await queryRef.get();
-
-  if (querySnapshot.docs.length > 0) {
-    const profile = querySnapshot.docs[0]?.data();
-    //console.log("getProfileFromFirestore", profile);
-    return Promise.resolve(profile as Profile);
+  const doc = await profileRef.get();
+  if (!doc.exists) {
+    console.log("No such document!");
+  } else {
+    // console.log("Document data:", doc.data());
+    return doc.data() as Profile;
   }
 
-  console.error(
-    "getProfileFromFirestore, found nothing for profileid",
-    profileid
-  );
   return null;
+
+  // const querySnapshot = await queryRef.get();
+
+  // if (querySnapshot.docs.length > 0) {
+  //   const profile = querySnapshot.docs[0]?.data();
+  //   //console.log("getProfileFromFirestore", profile);
+  //   return Promise.resolve(profile as Profile);
+  // }
+
+  // console.error(
+  //   "getProfileFromFirestore, found nothing for profileid",
+  //   profileid
+  // );
+  // return null;
 };
 
 export const getProfileByProfileNameFromFirestore = async (

@@ -164,30 +164,14 @@ class FirbaseAdminClient {
       .withConverter(eventParticipantsConverter);
 
     const snapshot = await eventParticipantsRef.get();
-    console.log("getEventParticipants.snapshot");
     if (snapshot.empty) {
       console.log("No matching documents participants.");
       return null;
     }
     const particpants: EventParticipant[] = [];
     snapshot.forEach((doc) => {
-      console.log("snapshot.doc", doc.data());
-      //console.log(doc.id, "=>", doc.data());
       particpants.push(doc.data());
     });
-
-    const foo = snapshot.docs.map((d) => {
-      return { id: d.data().id, when: d.data().when };
-    });
-    console.log("snapshot.docs.map", foo);
-    //console.log("FirbaseAdminClient.getEvent -> snapshot", snapshot)
-    // if (snapshot.exists) {
-    //   //console.log("FirbaseAdminClient.getEvent -> snapshot.data()", snapshot.data())
-    //   return snapshot.data() as NopEvent;
-    // } else {
-    //   // docSnap.data() will be undefined in this case
-    //   // console.log("No such event!", eventid);
-    // }
 
     return particpants;
   };
@@ -379,7 +363,7 @@ const eventParticipantsConverter: FirestoreDataConverter<EventParticipant> = {
     //options: SnapshotOptions
   ): EventParticipant => {
     const data = snapshot.data();
-    console.log("fromFirestore.data", data, snapshot.id);
+    // console.log("fromFirestore.data", data, snapshot.id);
 
     return { id: snapshot.id, when: data.when };
   },
