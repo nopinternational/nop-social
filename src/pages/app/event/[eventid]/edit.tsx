@@ -107,7 +107,7 @@ const Home: NextPage = () => {
             ></NoPEventForm>
           </Card>
           <ParticipantsListCard eventId={e.id} />
-          <AttendesListCard />
+          <AttendesListCard eventid={e.id} />
         </div>
       </div>
     </Layout>
