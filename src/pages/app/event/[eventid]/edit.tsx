@@ -12,6 +12,7 @@ import {
   NoPEventForm,
 } from "~/module/events/components/NoPEventForm";
 import { type EventParticipant } from "~/module/events/components/types";
+import { AttendesListCard } from "~/module/events/components/edit/AttendesListCard";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -106,6 +107,7 @@ const Home: NextPage = () => {
             ></NoPEventForm>
           </Card>
           <ParticipantsListCard eventId={e.id} />
+          <AttendesListCard />
         </div>
       </div>
     </Layout>
