@@ -11,7 +11,10 @@ import {
   type EventFormType,
   NoPEventForm,
 } from "~/module/events/components/NoPEventForm";
-import { type EventParticipant } from "~/module/events/components/types";
+import {
+  type ConfirmedUser,
+  type EventParticipant,
+} from "~/module/events/components/types";
 import { AttendesListCard } from "~/module/events/components/edit/AttendesListCard";
 
 const Home: NextPage = () => {
@@ -25,6 +28,17 @@ const Home: NextPage = () => {
   const event = api.event.getEvent.useQuery(queryInput, {
     enabled: sessionData?.user !== undefined,
   });
+  console.log("events/{eventid}/edit");
+  const attendes = api.event.getEventAttendes.useQuery({
+    eventId: eventid as string,
+  });
+
+  // useEffect(() => {
+  //   console.log("useEffect");
+
+  //   setAttendes(attendes.data || null);
+  //   console.log("attendes.data", attendes.data);
+  // }, []);
 
   const saveNewEvent = (nopEvent: EventFormType): void => {
     // console.log(nopEvent)
@@ -106,7 +120,14 @@ const Home: NextPage = () => {
               onCreateHandler={saveNewEvent}
             ></NoPEventForm>
           </Card>
-          <ParticipantsListCard eventId={e.id} />
+          <ParticipantsListCard
+            eventId={e.id}
+            attendesList={attendes.data || []}
+          />
+          {/* <KorvCard
+            ids={["123", "abc"]}
+            attendesList={attendes.data || []}
+          ></KorvCard> */}
           <AttendesListCard eventid={e.id} />
         </div>
       </div>
@@ -117,10 +138,17 @@ const Home: NextPage = () => {
 export default Home;
 // export const EventMessa = ({ eventid }: { eventid: string }) => {
 
-const ParticipantsListCard = ({ eventId }: { eventId: string }) => {
+const ParticipantsListCard = ({
+  eventId,
+  attendesList,
+}: {
+  eventId: string;
+  attendesList: ConfirmedUser[];
+}) => {
   console.log("eventId", eventId);
   const { data: sessionData } = useSession();
   const queryInput = { eventId: eventId };
+  const attendesListId = new Set(attendesList.map((user) => user.id));
 
   const eventParticipants = api.event.getEventParticipants.useQuery(
     queryInput,
@@ -145,14 +173,15 @@ const ParticipantsListCard = ({ eventId }: { eventId: string }) => {
     return (
       <ul>
         {participants.map((p) => {
-          console.log("render", p);
+          // console.log("render", p);
           return (
-            <>
-              <li key={p.id}>
-                <Participant eventParticipant={p}></Participant>
-                {/* {p.id} -- {p.when} */}
-              </li>
-            </>
+            <li key={p.id}>
+              <Participant
+                eventParticipant={p}
+                isAttending={attendesListId.has(p.id)}
+              ></Participant>
+              {/* {p.id} -- {p.when} */}
+            </li>
           );
         })}
       </ul>
@@ -162,20 +191,23 @@ const ParticipantsListCard = ({ eventId }: { eventId: string }) => {
   return <Card header={cardHeader}>{renderParticipants(participants)}</Card>;
 };
 
-type ParticipantType = { eventParticipant: EventParticipant };
+type ParticipantType = {
+  eventParticipant: EventParticipant;
+  isAttending: boolean;
+};
 
-const Participant = ({ eventParticipant }: ParticipantType) => {
+const Participant = ({ eventParticipant, isAttending }: ParticipantType) => {
   const profileApi = api.profile.getProfileById.useQuery({
     id: eventParticipant.id,
   });
 
-  console.log("loading profile", eventParticipant.id);
+  // console.log("loading profile", eventParticipant.id);
   if (profileApi.isLoading) {
     return <>Laddar profil {eventParticipant.id}</>;
   }
 
   const profile = profileApi.data;
-  console.log("laddad profil: ", profile);
+  // console.log("laddad profil: ", profile);
 
   const dateString = eventParticipant.when
     ? new Date(eventParticipant.when).toLocaleString()
@@ -183,7 +215,8 @@ const Participant = ({ eventParticipant }: ParticipantType) => {
   if (profile) {
     return (
       <>
-        {profile.person1.name} & {profile.person2.name} (
+        {isAttending ? <OkIcon /> : <NokIcon />} {profile.person1.name} &{" "}
+        {profile.person2.name} (
         <HighlightText>{profile.username}</HighlightText>) - anmälda{" "}
         {dateString}
       </>
@@ -194,5 +227,59 @@ const Participant = ({ eventParticipant }: ParticipantType) => {
     <>
       Kan inte ladda <HighlightText>{eventParticipant.id}</HighlightText>
     </>
+  );
+};
+
+const OkIcon = () => {
+  return (
+    <svg
+      className="inline"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width={24}
+      height={24}
+      color={"#32b65c"}
+      fill={"none"}
+    >
+      <path
+        d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M8 12.75C8 12.75 9.6 13.6625 10.4 15C10.4 15 12.8 9.75 16 8"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+};
+
+const NokIcon = () => {
+  return (
+    <svg
+      className="inline"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width="24"
+      height="24"
+      color="#b63234"
+      fill="none"
+    >
+      <path
+        d="M14.9994 15L9 9M9.00064 15L15 9"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z"
+        stroke="currentColor"
+        stroke-width="1.5"
+      />
+    </svg>
   );
 };
