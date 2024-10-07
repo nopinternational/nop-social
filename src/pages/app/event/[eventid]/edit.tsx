@@ -206,6 +206,9 @@ const Participant = ({ eventParticipant, isAttending }: ParticipantType) => {
     return <>Laddar profil {eventParticipant.id}</>;
   }
 
+  const korv = () => {
+    alert("klickat!");
+  };
   const profile = profileApi.data;
   // console.log("laddad profil: ", profile);
 
@@ -215,8 +218,8 @@ const Participant = ({ eventParticipant, isAttending }: ParticipantType) => {
   if (profile) {
     return (
       <>
-        {isAttending ? <OkIcon /> : <NokIcon />} {profile.person1.name} &{" "}
-        {profile.person2.name} (
+        {isAttending ? <OkIcon /> : <NokIcon onclick={korv} />}{" "}
+        {profile.person1.name} & {profile.person2.name} (
         <HighlightText>{profile.username}</HighlightText>) - anmälda{" "}
         {dateString}
       </>
@@ -257,9 +260,10 @@ const OkIcon = () => {
   );
 };
 
-const NokIcon = () => {
+const NokIcon = ({ onclick }: { onclick?: () => void }) => {
   return (
     <svg
+      onClick={onclick || undefined}
       className="inline"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
