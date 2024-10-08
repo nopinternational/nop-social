@@ -16,6 +16,8 @@ import {
   type EventParticipant,
 } from "~/module/events/components/types";
 import { AttendesListCard } from "~/module/events/components/edit/AttendesListCard";
+import { useState } from "react";
+import { type Profile } from "~/module/profile/profileRouter";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -197,6 +199,8 @@ type ParticipantType = {
 };
 
 const Participant = ({ eventParticipant, isAttending }: ParticipantType) => {
+  const [showForm, setShowForm] = useState(false);
+
   const profileApi = api.profile.getProfileById.useQuery({
     id: eventParticipant.id,
   });
@@ -206,9 +210,10 @@ const Participant = ({ eventParticipant, isAttending }: ParticipantType) => {
     return <>Laddar profil {eventParticipant.id}</>;
   }
 
-  const korv = () => {
-    alert("klickat!");
+  const toggleForm = () => {
+    setShowForm((showForm) => !showForm);
   };
+
   const profile = profileApi.data;
   // console.log("laddad profil: ", profile);
 
@@ -218,10 +223,15 @@ const Participant = ({ eventParticipant, isAttending }: ParticipantType) => {
   if (profile) {
     return (
       <>
-        {isAttending ? <OkIcon /> : <NokIcon onclick={korv} />}{" "}
-        {profile.person1.name} & {profile.person2.name} (
-        <HighlightText>{profile.username}</HighlightText>) - anmälda{" "}
-        {dateString}
+        <div>
+          {isAttending ? <OkIcon /> : <NokIcon onclick={toggleForm} />}{" "}
+          {profile.person1.name} & {profile.person2.name} (
+          <HighlightText>{profile.username}</HighlightText>) - anmälda{" "}
+          {dateString}
+        </div>
+        {showForm ? (
+          <AddAsAttendeForm profile={profile}></AddAsAttendeForm>
+        ) : null}
       </>
     );
   }
@@ -230,6 +240,29 @@ const Participant = ({ eventParticipant, isAttending }: ParticipantType) => {
     <>
       Kan inte ladda <HighlightText>{eventParticipant.id}</HighlightText>
     </>
+  );
+};
+
+const AddAsAttendeForm = ({ profile }: { profile: Profile }) => {
+  const profileNames = `${profile.person1.name} & ${profile.person2.name}`;
+  return (
+    <div className="rounded-md bg-white/10 p-2">
+      <p>Lägg till par till träff. Ange deras namn</p>
+      <form>
+        <input
+          className="w-full rounded-lg px-3 py-3 text-black"
+          type="text"
+          value={profileNames}
+        ></input>
+        {/* <input type="submit">Skicka</input> */}
+        <button
+          className="mb-3 mt-4 rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+          onClick={(event) => alert(profile)}
+        >
+          Lägg till
+        </button>
+      </form>
+    </div>
   );
 };
 
