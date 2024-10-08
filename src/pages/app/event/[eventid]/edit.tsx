@@ -179,6 +179,7 @@ const ParticipantsListCard = ({
           return (
             <li key={p.id}>
               <Participant
+                eventId={eventId}
                 eventParticipant={p}
                 isAttending={attendesListId.has(p.id)}
               ></Participant>
@@ -194,11 +195,16 @@ const ParticipantsListCard = ({
 };
 
 type ParticipantType = {
+  eventId: string;
   eventParticipant: EventParticipant;
   isAttending: boolean;
 };
 
-const Participant = ({ eventParticipant, isAttending }: ParticipantType) => {
+const Participant = ({
+  eventId,
+  eventParticipant,
+  isAttending,
+}: ParticipantType) => {
   const [showForm, setShowForm] = useState(false);
 
   const profileApi = api.profile.getProfileById.useQuery({
@@ -230,7 +236,10 @@ const Participant = ({ eventParticipant, isAttending }: ParticipantType) => {
           {dateString}
         </div>
         {showForm ? (
-          <AddAsAttendeForm profile={profile}></AddAsAttendeForm>
+          <AddAsAttendeForm
+            eventId={eventId}
+            profile={profile}
+          ></AddAsAttendeForm>
         ) : null}
       </>
     );
@@ -243,8 +252,27 @@ const Participant = ({ eventParticipant, isAttending }: ParticipantType) => {
   );
 };
 
-const AddAsAttendeForm = ({ profile }: { profile: Profile }) => {
+const AddAsAttendeForm = ({
+  eventId,
+  profile,
+}: {
+  eventId: string;
+  profile: Profile;
+}) => {
   const profileNames = `${profile.person1.name} & ${profile.person2.name}`;
+  const { mutateAsync: addAttendesToEvent } =
+    api.event.addAttendesToEvent.useMutation();
+
+  const addAsAttendes = () => {
+    addAttendesToEvent({ eventId: eventId, profile: profile })
+      .then(() => {
+        console.log("added :)");
+      })
+      .catch((error) => {
+        console.error("error while addAttendesToEvent", error);
+      });
+  };
+
   return (
     <div className="rounded-md bg-white/10 p-2">
       <p>Lägg till par till träff. Ange deras namn</p>
@@ -257,7 +285,12 @@ const AddAsAttendeForm = ({ profile }: { profile: Profile }) => {
         {/* <input type="submit">Skicka</input> */}
         <button
           className="mb-3 mt-4 rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-          onClick={(event) => alert(profile)}
+          onClick={(event) => {
+            addAsAttendes();
+            alert(profileNames);
+            event.preventDefault();
+            return null;
+          }}
         >
           Lägg till
         </button>
