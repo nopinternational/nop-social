@@ -259,12 +259,21 @@ const AddAsAttendeForm = ({
   eventId: string;
   profile: Profile;
 }) => {
-  const profileNames = `${profile.person1.name} & ${profile.person2.name}`;
+  const [profileNames, setProfileName] = useState(
+    `${profile.person1.name} & ${profile.person2.name}`
+  );
+  //const profileNames = `${profile.person1.name} & ${profile.person2.name}`;
+
   const { mutateAsync: addAttendesToEvent } =
     api.event.addAttendesToEvent.useMutation();
 
   const addAsAttendes = () => {
-    addAttendesToEvent({ eventId: eventId, profile: profile })
+    addAttendesToEvent({
+      eventId: eventId,
+      name: profileNames,
+      id: profile.id,
+      username: profile.username,
+    })
       .then(() => {
         console.log("added :)");
       })
@@ -281,6 +290,7 @@ const AddAsAttendeForm = ({
           className="w-full rounded-lg px-3 py-3 text-black"
           type="text"
           value={profileNames}
+          onChange={(e) => setProfileName(e.target.value)}
         ></input>
         {/* <input type="submit">Skicka</input> */}
         <button
