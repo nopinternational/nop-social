@@ -220,6 +220,11 @@ const Participant = ({
     setShowForm((showForm) => !showForm);
   };
 
+  const profileAdded = () => {
+    setShowForm(false);
+    
+  };
+
   const profile = profileApi.data;
   // console.log("laddad profil: ", profile);
 
@@ -239,6 +244,7 @@ const Participant = ({
           <AddAsAttendeForm
             eventId={eventId}
             profile={profile}
+            addedListener={profileAdded}
           ></AddAsAttendeForm>
         ) : null}
       </>
@@ -255,9 +261,11 @@ const Participant = ({
 const AddAsAttendeForm = ({
   eventId,
   profile,
+  addedListener,
 }: {
   eventId: string;
   profile: Profile;
+  addedListener: () => void;
 }) => {
   const [profileNames, setProfileName] = useState(
     `${profile.person1.name} & ${profile.person2.name}`
@@ -297,8 +305,8 @@ const AddAsAttendeForm = ({
           className="mb-3 mt-4 rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
           onClick={(event) => {
             addAsAttendes();
-            alert(profileNames);
             event.preventDefault();
+            addedListener && addedListener();
             return null;
           }}
         >

@@ -11,6 +11,7 @@ import {
   updateEvent,
   getMyEventStatus,
   getEventParticipants,
+  addAsAttendes,
 } from "~/module/events/eventsFirebase";
 import { type EventFormType } from "~/module/events/components/NoPEventForm";
 import { postEventMessage } from "./components/types";
@@ -87,6 +88,7 @@ export const eventRouter = createTRPCRouter({
         input.username,
         input.name
       );
+      return addAsAttendes({ ...input });
     }),
   signupForEvent: protectedProcedure
     .input(z.object({ eventId: z.string() }))
