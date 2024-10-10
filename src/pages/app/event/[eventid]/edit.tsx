@@ -267,7 +267,9 @@ const AddAsAttendeForm = ({
       id: profile.id,
       username: profile.username,
     })
-      .then(() => {})
+      .then(() => {
+        //do nothing
+      })
       .catch((error) => {
         console.error("error while addAttendesToEvent", error);
       });
