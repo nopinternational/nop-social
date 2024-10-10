@@ -31,7 +31,6 @@ export const EventAttendes: FC<{ eventid: string }> = ({ eventid }) => {
       <p>Vi säger välkomna till:</p>
       <div className="rounded-md bg-white/10 p-2">
         {attendes.data.map((attende) => {
-          console.log("attende", attende);
           return (
             <>
               <Attende
@@ -53,7 +52,6 @@ const Attende: FC<{
   username?: string;
   isVIP: boolean;
 }> = ({ profilename, username, isVIP }) => {
-  // console.log("Attende.profilename", profilename)
 
   const renderVIP = (isVIP: boolean) => {
     const pillClass =

@@ -16,6 +16,8 @@ import {
   type EventParticipant,
 } from "~/module/events/components/types";
 import { AttendesListCard } from "~/module/events/components/edit/AttendesListCard";
+import { useState } from "react";
+import { type Profile } from "~/module/profile/profileRouter";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -28,25 +30,11 @@ const Home: NextPage = () => {
   const event = api.event.getEvent.useQuery(queryInput, {
     enabled: sessionData?.user !== undefined,
   });
-  console.log("events/{eventid}/edit");
   const attendes = api.event.getEventAttendes.useQuery({
     eventId: eventid as string,
   });
 
-  // useEffect(() => {
-  //   console.log("useEffect");
-
-  //   setAttendes(attendes.data || null);
-  //   console.log("attendes.data", attendes.data);
-  // }, []);
-
   const saveNewEvent = (nopEvent: EventFormType): void => {
-    // console.log(nopEvent)
-    // persistEvent(nopEvent).then((id: string) => {
-    //     router.push(`/app/event/${id}`)
-    // }).catch((error) => {
-    //     console.error("saveNewEvent ended with an error", error)
-    // });
     updateEvent({ nopEvent, eventId: eventid as string })
       .then(() => {
         return;
@@ -145,7 +133,6 @@ const ParticipantsListCard = ({
   eventId: string;
   attendesList: ConfirmedUser[];
 }) => {
-  console.log("eventId", eventId);
   const { data: sessionData } = useSession();
   const queryInput = { eventId: eventId };
   const attendesListId = new Set(attendesList.map((user) => user.id));
@@ -166,17 +153,16 @@ const ParticipantsListCard = ({
       </Card>
     );
   }
-  console.log("participants: ", participants);
 
   const renderParticipants = (participants: EventParticipant[]) => {
     participants.sort((a, b) => Date.parse(a.when) - Date.parse(b.when));
     return (
       <ul>
         {participants.map((p) => {
-          // console.log("render", p);
           return (
             <li key={p.id}>
               <Participant
+                eventId={eventId}
                 eventParticipant={p}
                 isAttending={attendesListId.has(p.id)}
               ></Participant>
@@ -192,22 +178,35 @@ const ParticipantsListCard = ({
 };
 
 type ParticipantType = {
+  eventId: string;
   eventParticipant: EventParticipant;
   isAttending: boolean;
 };
 
-const Participant = ({ eventParticipant, isAttending }: ParticipantType) => {
+const Participant = ({
+  eventId,
+  eventParticipant,
+  isAttending,
+}: ParticipantType) => {
+  const [showForm, setShowForm] = useState(false);
+
   const profileApi = api.profile.getProfileById.useQuery({
     id: eventParticipant.id,
   });
 
-  // console.log("loading profile", eventParticipant.id);
   if (profileApi.isLoading) {
     return <>Laddar profil {eventParticipant.id}</>;
   }
 
+  const toggleForm = () => {
+    setShowForm((showForm) => !showForm);
+  };
+
+  const profileAdded = () => {
+    setShowForm(false);
+  };
+
   const profile = profileApi.data;
-  // console.log("laddad profil: ", profile);
 
   const dateString = eventParticipant.when
     ? new Date(eventParticipant.when).toLocaleString()
@@ -215,10 +214,19 @@ const Participant = ({ eventParticipant, isAttending }: ParticipantType) => {
   if (profile) {
     return (
       <>
-        {isAttending ? <OkIcon /> : <NokIcon />} {profile.person1.name} &{" "}
-        {profile.person2.name} (
-        <HighlightText>{profile.username}</HighlightText>) - anmälda{" "}
-        {dateString}
+        <div>
+          {isAttending ? <OkIcon /> : <NokIcon onclick={toggleForm} />}{" "}
+          {profile.person1.name} & {profile.person2.name} (
+          <HighlightText>{profile.username}</HighlightText>) - anmälda{" "}
+          {dateString}
+        </div>
+        {showForm ? (
+          <AddAsAttendeForm
+            eventId={eventId}
+            profile={profile}
+            addedListener={profileAdded}
+          ></AddAsAttendeForm>
+        ) : null}
       </>
     );
   }
@@ -227,6 +235,70 @@ const Participant = ({ eventParticipant, isAttending }: ParticipantType) => {
     <>
       Kan inte ladda <HighlightText>{eventParticipant.id}</HighlightText>
     </>
+  );
+};
+
+const AddAsAttendeForm = ({
+  eventId,
+  profile,
+  addedListener,
+}: {
+  eventId: string;
+  profile: Profile;
+  addedListener: () => void;
+}) => {
+  const [profileNames, setProfileName] = useState(
+    `${profile.person1.name} & ${profile.person2.name}`
+  );
+  //const profileNames = `${profile.person1.name} & ${profile.person2.name}`;
+  const utils = api.useContext();
+
+  const { mutateAsync: addAttendesToEvent } =
+    api.event.addAttendesToEvent.useMutation({
+      onSuccess: () => {
+        void utils.event.getEventAttendes.invalidate();
+      },
+    });
+
+  const addAsAttendes = () => {
+    addAttendesToEvent({
+      eventId: eventId,
+      name: profileNames,
+      id: profile.id,
+      username: profile.username,
+    })
+      .then(() => {
+        //do nothing
+      })
+      .catch((error) => {
+        console.error("error while addAttendesToEvent", error);
+      });
+  };
+
+  return (
+    <div className="rounded-md bg-white/10 p-2">
+      <p>Lägg till par till träff. Ange deras namn</p>
+      <form>
+        <input
+          className="w-full rounded-lg px-3 py-3 text-black"
+          type="text"
+          value={profileNames}
+          onChange={(e) => setProfileName(e.target.value)}
+        ></input>
+        {/* <input type="submit">Skicka</input> */}
+        <button
+          className="mb-3 mt-4 rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+          onClick={(event) => {
+            addAsAttendes();
+            event.preventDefault();
+            addedListener && addedListener();
+            return null;
+          }}
+        >
+          Lägg till
+        </button>
+      </form>
+    </div>
   );
 };
 
@@ -257,9 +329,10 @@ const OkIcon = () => {
   );
 };
 
-const NokIcon = () => {
+const NokIcon = ({ onclick }: { onclick?: () => void }) => {
   return (
     <svg
+      onClick={onclick || undefined}
       className="inline"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"

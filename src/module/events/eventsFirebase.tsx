@@ -69,6 +69,20 @@ export const persistEvent = async ({
   return db.persistEvent(uid, nopEvent);
 };
 
+export const addAsAttendes = async ({
+  eventId,
+  id,
+  name,
+  username,
+}: {
+  eventId: string;
+  id: string;
+  name: string;
+  username: string;
+}) => {
+  const db = new FirbaseAdminClient(firestore);
+  return db.addAsAttendes(eventId, id, name, username);
+};
 export const updateEvent = async ({
   nopEvent,
   uid,
@@ -98,6 +112,11 @@ export const signupToEvent = async (eventId: string, userid: string) => {
 
 const EVENTS_COLLECTION = "events";
 const EVENT_PARTICIPANTS = "participants";
+const EVENT_SIGNUPS = "signups";
+const EVENT_ATTENDES = "attendes";
+const ATTENDES_ALLOWED = "allowed";
+const ATTENDES_CONFIRMED = "confirmed";
+
 class FirbaseAdminClient {
   firestore: FirebaseFirestore.Firestore;
   constructor(firestoreApp: FirebaseFirestore.Firestore) {
@@ -184,7 +203,7 @@ class FirbaseAdminClient {
     const eventStatusRef = this.firestore
       .collection(EVENTS_COLLECTION)
       .doc(eventid)
-      .collection("participants")
+      .collection(EVENT_PARTICIPANTS)
       .doc(iam_userid);
 
     const snapshot = await eventStatusRef.get();
@@ -263,7 +282,7 @@ class FirbaseAdminClient {
     // console.log("FirbaseAdminClient.signupToEvent for id", eventId, userId)
     const eventsRef = this.firestore.collection(EVENTS_COLLECTION);
     const eventRef = eventsRef.doc(eventId);
-    const participantsCollectionRef = eventRef.collection("participants");
+    const participantsCollectionRef = eventRef.collection(EVENT_PARTICIPANTS);
     await participantsCollectionRef
       .doc(userId)
       .set({ when: new Date().toISOString() });
@@ -311,6 +330,38 @@ class FirbaseAdminClient {
     await docRef.set({ ...nopEvent, owner: uid }, { merge: true });
 
     return docRef.id;
+  };
+
+  addAsAttendes = async (
+    eventId: string,
+    id: string,
+    name: string,
+    username: string
+  ): Promise<string | null> => {
+    const eventsRef = this.firestore.collection(EVENTS_COLLECTION);
+    const attendesRef = eventsRef
+      .doc(eventId)
+      .collection(EVENT_SIGNUPS)
+      .doc(EVENT_ATTENDES);
+
+    const foo = await attendesRef.get();
+    const foo_data = foo.data();
+    console.log("foo_data", foo_data, attendesRef.path);
+
+    const response = await attendesRef.update({
+      confirmed: FieldValue.arrayUnion({ id, name, username }),
+    });
+    console.log("update response", response);
+
+    // const documentSnapshot = await docRef.get();
+    // const event = documentSnapshot.data() as EventFirestoreModel;
+
+    // if (event.owner === uid) {
+    //   await docRef.set({ ...nopEvent, owner: uid }, { merge: true });
+    //   return docRef.id;
+    // }
+
+    return null;
   };
 
   updateEvent = async (
