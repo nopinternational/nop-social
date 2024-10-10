@@ -30,25 +30,11 @@ const Home: NextPage = () => {
   const event = api.event.getEvent.useQuery(queryInput, {
     enabled: sessionData?.user !== undefined,
   });
-  console.log("events/{eventid}/edit");
   const attendes = api.event.getEventAttendes.useQuery({
     eventId: eventid as string,
   });
 
-  // useEffect(() => {
-  //   console.log("useEffect");
-
-  //   setAttendes(attendes.data || null);
-  //   console.log("attendes.data", attendes.data);
-  // }, []);
-
   const saveNewEvent = (nopEvent: EventFormType): void => {
-    // console.log(nopEvent)
-    // persistEvent(nopEvent).then((id: string) => {
-    //     router.push(`/app/event/${id}`)
-    // }).catch((error) => {
-    //     console.error("saveNewEvent ended with an error", error)
-    // });
     updateEvent({ nopEvent, eventId: eventid as string })
       .then(() => {
         return;
@@ -147,7 +133,6 @@ const ParticipantsListCard = ({
   eventId: string;
   attendesList: ConfirmedUser[];
 }) => {
-  console.log("eventId", eventId);
   const { data: sessionData } = useSession();
   const queryInput = { eventId: eventId };
   const attendesListId = new Set(attendesList.map((user) => user.id));
@@ -168,14 +153,12 @@ const ParticipantsListCard = ({
       </Card>
     );
   }
-  console.log("participants: ", participants);
 
   const renderParticipants = (participants: EventParticipant[]) => {
     participants.sort((a, b) => Date.parse(a.when) - Date.parse(b.when));
     return (
       <ul>
         {participants.map((p) => {
-          // console.log("render", p);
           return (
             <li key={p.id}>
               <Participant
@@ -211,7 +194,6 @@ const Participant = ({
     id: eventParticipant.id,
   });
 
-  // console.log("loading profile", eventParticipant.id);
   if (profileApi.isLoading) {
     return <>Laddar profil {eventParticipant.id}</>;
   }
@@ -222,11 +204,9 @@ const Participant = ({
 
   const profileAdded = () => {
     setShowForm(false);
-    
   };
 
   const profile = profileApi.data;
-  // console.log("laddad profil: ", profile);
 
   const dateString = eventParticipant.when
     ? new Date(eventParticipant.when).toLocaleString()
@@ -271,9 +251,14 @@ const AddAsAttendeForm = ({
     `${profile.person1.name} & ${profile.person2.name}`
   );
   //const profileNames = `${profile.person1.name} & ${profile.person2.name}`;
+  const utils = api.useContext();
 
   const { mutateAsync: addAttendesToEvent } =
-    api.event.addAttendesToEvent.useMutation();
+    api.event.addAttendesToEvent.useMutation({
+      onSuccess: () => {
+        void utils.event.getEventAttendes.invalidate();
+      },
+    });
 
   const addAsAttendes = () => {
     addAttendesToEvent({
@@ -282,9 +267,7 @@ const AddAsAttendeForm = ({
       id: profile.id,
       username: profile.username,
     })
-      .then(() => {
-        console.log("added :)");
-      })
+      .then(() => {})
       .catch((error) => {
         console.error("error while addAttendesToEvent", error);
       });
