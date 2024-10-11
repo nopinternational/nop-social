@@ -88,7 +88,7 @@ const Home: NextPage = () => {
 
   const router = useRouter();
   const { messageid } = router.query;
-
+  const apiUtil = api.useContext();
   const convoId = messageid as string;
   // console.log("message/", messageid, convoId);
   const isTestConversation = convoId ? convoId.startsWith("test-") : true;
@@ -102,13 +102,17 @@ const Home: NextPage = () => {
   });
 
   const { mutate: postChatMessage } =
-    api.chat.postChatMessageToConvo.useMutation();
+    api.chat.postChatMessageToConvo.useMutation({
+      onSuccess: () => {
+        void apiUtil.chat.getConvoAndChatMessages.invalidate();
+      },
+    });
 
   function renderMessage(message: ConversationMessage) {
     const myUserId = isTestConversation ? "sthlmpar08" : session.data?.user.id;
     return (
       <ChatMessage
-        key={message.conversationId}
+        key={message.messageId}
         message={message}
         fromMe={message.fromId === myUserId}
       />
@@ -116,7 +120,7 @@ const Home: NextPage = () => {
   }
 
   function postMessageHandler({ text }: { text: string }): void {
-  // console.log("postMessageHandler ", text);
+    // console.log("postMessageHandler ", text);
     // alert("Nu skickar vi iväg meddelandet");
     const message: ConversationMessage = {
       from: "from", // will be set on server
