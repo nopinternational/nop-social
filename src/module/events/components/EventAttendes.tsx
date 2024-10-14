@@ -52,7 +52,6 @@ const Attende: FC<{
   username?: string;
   isVIP: boolean;
 }> = ({ profilename, username, isVIP }) => {
-
   const renderVIP = (isVIP: boolean) => {
     const pillClass =
       "relative -end-2 -top-2 inline-flex h-4 items-center justify-center rounded-full bg-[hsl(280,100%,70%)] p-2 text-xs font-bold text-white dark:border-gray-900";
@@ -62,19 +61,22 @@ const Attende: FC<{
 
   if (username) {
     return (
-      <p>
-        {profilename} (
-        <HighlightText>
-          <ProfileLink username={username} />
-        </HighlightText>
-        ){renderVIP(isVIP)}
-      </p>
+      <div>
+        <p className="inline">
+          {profilename} (
+          <HighlightText>
+            <ProfileLink username={username} />
+          </HighlightText>
+          )
+        </p>
+        {renderVIP(isVIP)}
+      </div>
     );
   }
   return (
-    <p>
-      {profilename}
+    <div>
+      <p className="inline">{profilename}</p>
       {renderVIP(isVIP)}
-    </p>
+    </div>
   );
 };
