@@ -33,14 +33,12 @@ export const EventAttendes: FC<{ eventid: string }> = ({ eventid }) => {
       <div className="rounded-md bg-white/10 p-2">
         {attendes.data.map((attende) => {
           return (
-            <>
-              <Attende
-                key={attende.id}
-                profilename={attende.name}
-                username={attende.username}
-                isVIP={attende.vip || false}
-              ></Attende>
-            </>
+            <Attende
+              key={attende.id}
+              profilename={attende.name}
+              username={attende.username}
+              isVIP={attende.vip || false}
+            />
           );
         })}
       </div>
