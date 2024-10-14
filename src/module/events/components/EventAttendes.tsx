@@ -3,6 +3,7 @@ import { type FC } from "react";
 import HighlightText from "~/components/HighlightText";
 import { ProfileLink } from "~/module/profile/components/ProfileLink";
 import { api } from "~/utils/api";
+import { VIPBadge } from "./Badge";
 
 export const EventAttendes: FC<{ eventid: string }> = ({ eventid }) => {
   const attendes = api.event.getEventAttendes.useQuery({ eventId: eventid });
@@ -32,14 +33,12 @@ export const EventAttendes: FC<{ eventid: string }> = ({ eventid }) => {
       <div className="rounded-md bg-white/10 p-2">
         {attendes.data.map((attende) => {
           return (
-            <>
-              <Attende
-                key={attende.id}
-                profilename={attende.name}
-                username={attende.username}
-                isVIP={attende.vip || false}
-              ></Attende>
-            </>
+            <Attende
+              key={attende.id}
+              profilename={attende.name}
+              username={attende.username}
+              isVIP={attende.vip || false}
+            />
           );
         })}
       </div>
@@ -52,29 +51,24 @@ const Attende: FC<{
   username?: string;
   isVIP: boolean;
 }> = ({ profilename, username, isVIP }) => {
-
-  const renderVIP = (isVIP: boolean) => {
-    const pillClass =
-      "relative -end-2 -top-2 inline-flex h-4 items-center justify-center rounded-full bg-[hsl(280,100%,70%)] p-2 text-xs font-bold text-white dark:border-gray-900";
-    //"relative -end-2 -top-2 inline-flex h-6 items-center justify-center rounded-full border-white bg-[hsl(280,100%,70%)] p-2 text-xs font-bold text-white dark:border-gray-900";
-    return isVIP ? <div className={pillClass}>VIP</div> : null;
-  };
-
   if (username) {
     return (
-      <p>
-        {profilename} (
-        <HighlightText>
-          <ProfileLink username={username} />
-        </HighlightText>
-        ){renderVIP(isVIP)}
-      </p>
+      <div>
+        <p className="inline">
+          {profilename} (
+          <HighlightText>
+            <ProfileLink username={username} />
+          </HighlightText>
+          )
+        </p>
+        <VIPBadge isVIP={isVIP} />
+      </div>
     );
   }
   return (
-    <p>
-      {profilename}
-      {renderVIP(isVIP)}
-    </p>
+    <div>
+      <p className="inline">{profilename}</p>
+      <VIPBadge isVIP={isVIP} />
+    </div>
   );
 };
