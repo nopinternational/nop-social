@@ -3,7 +3,7 @@ import { type FC } from "react";
 import HighlightText from "~/components/HighlightText";
 import { ProfileLink } from "~/module/profile/components/ProfileLink";
 import { api } from "~/utils/api";
-import { Badge, VIPBadge } from "./Badge";
+import { VIPBadge } from "./Badge";
 
 export const EventAttendes: FC<{ eventid: string }> = ({ eventid }) => {
   const attendes = api.event.getEventAttendes.useQuery({ eventId: eventid });
