@@ -61,7 +61,6 @@ const CONVERSATION_GROUP_DUMMY: ConversationGroup[] = [
 const CONVERSATION_GROUP = CONVERSATION_GROUP_EMPTY;
 
 const Home: NextPage = () => {
-
   return (
     <Layout
       headingText={
@@ -179,6 +178,10 @@ const Conversation = ({ convo }: { convo: ConversationGroup }) => {
   const chatMemberProfileName: string =
     getFirstChatmember(convo.chatMembers || []) || "unknown";
 
+  const whenDate = new Date(convo.when);
+  const whenFormatted =
+    whenDate.toLocaleDateString() + " - " + whenDate.toLocaleTimeString();
+
   return (
     <>
       <div className="col-span-1 flex items-center justify-center pt-2">
@@ -192,7 +195,7 @@ const Conversation = ({ convo }: { convo: ConversationGroup }) => {
           {convo.lastMessage || "inget har sagts ännu"}
         </p>
         <div className="relative">
-          <p className="absolute left-0 text-xs">när: {convo.when}</p>
+          <p className="absolute left-0 text-xs">när: {whenFormatted}</p>
         </div>
       </div>
     </>
