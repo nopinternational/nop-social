@@ -14,6 +14,7 @@ import {
 import { getProfileByUserIdFromFirestore } from "../profile/firebaseProfiles";
 import { type Profile } from "../profile/profileRouter";
 import { type APIMessageToUser } from "./types";
+import { type Timestamp } from "firebase/firestore";
 
 export type MessageFirestoreModel = {
   chatConvoId: string;
@@ -277,12 +278,47 @@ class FirbaseChatMessageClient {
     const allGroups: ConversationGroup[] = [];
 
     const snapshot = await groupRef.get();
-    snapshot.forEach((groupDoc) => allGroups.push(groupDoc.data()));
+    snapshot.forEach((groupDoc) => {
+      const dataOriginal = groupDoc.data();
+      const dataConverted = groupDoc.data();
+      console.log("----------------------------------", userId, groupDoc.id);
+      console.log("getGroups - original", dataOriginal);
+      console.log("getGroups - converted", dataConverted);
+      console.log("++++++++++++++++++++++++++++++++++");
+      this.getLastRead(groupDoc.id, userId)
+        .then((lr) => {
+          dataConverted.lastread = lr;
+        })
+        .catch((err) => console.error(err));
+
+      allGroups.push(dataConverted);
+    });
 
     // console.log("allgroups befor getuser", allGroups);
     // console.log("----------------------getGroups return: ", allGroups);
 
     return allGroups;
+  };
+
+  getLastRead = async (
+    convoId: string,
+    userId: string
+  ): Promise<Date | null> => {
+    const lastReaRef = this.firestore
+      .collection(GROUP_COLLECTION)
+      .doc(convoId)
+      .collection("readstatus")
+      .doc(userId)
+      .withConverter(lastReadForUserConverter);
+
+    const lastReadDoc = await lastReaRef.get();
+    if (lastReadDoc.exists) {
+      const data = lastReadDoc.data();
+      //  ?["lastread"] as Date
+      console.log("data -- ", data);
+      return data["lastread"] as Date;
+    }
+    return null;
   };
 
   getChatMessages = async (
@@ -391,6 +427,25 @@ const groupConverter: FirestoreDataConverter<ConversationGroup> = {
       members: data.members,
       when: data.when,
       conversationGroupName: "",
+      lastread: null,
+    };
+  },
+};
+type ReadstatusFirestoreModel = {
+  lastread: Timestamp;
+};
+type Readstatus = {
+  lastread: Date | null;
+};
+const lastReadForUserConverter = {
+  fromFirestore: (
+    snapshot: QueryDocumentSnapshot<ReadstatusFirestoreModel>
+  ): Readstatus => {
+    console.log("lastReadForUserConverter.snapshot", snapshot);
+    console.log("lastReadForUserConverter.snapshot.data()", snapshot.data());
+
+    return {
+      lastread: snapshot.data().lastread.toDate(),
     };
   },
 };
@@ -421,4 +476,36 @@ const messageConverter: FirestoreDataConverter<ConversationMessage> = {
       when: data.when,
     };
   },
+};
+
+const messageConverterForUser = (
+  userid: string
+): FirestoreDataConverter<ConversationMessage> => {
+  return {
+    toFirestore: (message: ConversationMessage): MessageFirestoreModel => {
+      return {
+        fromUserId: message.fromId,
+        fromUser: message.from,
+        chatConvoId: message.conversationId,
+        chatMessage: message.message,
+        when: message.when,
+      };
+    },
+    fromFirestore: (
+      snapshot: QueryDocumentSnapshot<MessageFirestoreModel>
+      //options: SnapshotOptions
+    ): ConversationMessage => {
+      const data = snapshot.data();
+
+      // return { id: snapshot.id, ...data };
+      return {
+        from: data.fromUser || data.fromUserId,
+        fromId: data.fromUserId,
+        conversationId: snapshot.id,
+        messageId: snapshot.id,
+        message: data.chatMessage + "userid: - " + userid,
+        when: data.when,
+      };
+    },
+  };
 };

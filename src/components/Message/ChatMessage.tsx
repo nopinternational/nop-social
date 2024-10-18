@@ -24,6 +24,7 @@ export type ConversationGroup = {
   when: string;
   chatMembers?: ChatMember[];
   conversationGroupName: string;
+  lastread: Date | null;
 };
 
 export type ChatMember = {

@@ -120,7 +120,6 @@ const ConnectedConversationsCard = () => {
   if (myConversations && myConversations.length == 0) {
     return <NoMessagesCard />;
   }
-
   return (
     <Card
       header={
@@ -182,6 +181,8 @@ const Conversation = ({ convo }: { convo: ConversationGroup }) => {
   const whenFormatted =
     whenDate.toLocaleDateString() + " - " + whenDate.toLocaleTimeString();
 
+  const isUnread = convo.lastread;
+
   return (
     <>
       <div className="col-span-1 flex items-center justify-center pt-2">
@@ -195,7 +196,11 @@ const Conversation = ({ convo }: { convo: ConversationGroup }) => {
           {convo.lastMessage || "inget har sagts ännu"}
         </p>
         <div className="relative">
-          <p className="absolute left-0 text-xs">när: {whenFormatted}</p>
+          <p className="left-0 text-xs">när: {whenFormatted}</p>
+        </div>
+
+        <div>
+          <p className="left-0 text-xs">unread? {new String(isUnread)}</p>
         </div>
       </div>
     </>
