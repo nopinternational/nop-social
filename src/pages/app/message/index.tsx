@@ -181,14 +181,29 @@ const Conversation = ({ convo }: { convo: ConversationGroup }) => {
   const whenFormatted =
     whenDate.toLocaleDateString() + " - " + whenDate.toLocaleTimeString();
 
-  const isUnread = convo.lastread;
+  const convoLastread = convo.lastread;
 
+  const now = new Date();
+  const when = new Date(convo.when);
+  const isRead = convoLastread < when;
+  const css = isRead ? "bg-lime-500" : "";
+
+  console.log("-----------------------");
+  console.log("when", when);
+  console.log("last read", convoLastread);
+  console.log("isRead", isRead);
+  console.log("-----------------------");
+  const dateReadString = convoLastread
+    ? convoLastread.toLocaleDateString() +
+      " - " +
+      convoLastread.toLocaleDateString()
+    : "aldrig 😢";
   return (
     <>
       <div className="col-span-1 flex items-center justify-center pt-2">
         <ProfilePic variant="small" />
       </div>
-      <div className="col-span-3">
+      <div className={"col-span-3 " + css}>
         <h3 className="text-2xl font-bold">
           <HighlightText>{chatMemberProfileName}</HighlightText>
         </h3>
@@ -200,7 +215,7 @@ const Conversation = ({ convo }: { convo: ConversationGroup }) => {
         </div>
 
         <div>
-          <p className="left-0 text-xs">unread? {new String(isUnread)}</p>
+          <p className="left-0 text-xs">convoread? {dateReadString}</p>
         </div>
       </div>
     </>
