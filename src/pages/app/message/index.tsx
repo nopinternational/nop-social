@@ -164,6 +164,7 @@ const DummyConversationsCard = () => {
 };
 
 const Conversation = ({ convo }: { convo: ConversationGroup }) => {
+  const featureIsRead = false;
   // : string | null
   function getFirstChatmember(chatmembers: ChatMember[]): string | null {
     // (convo.chatMembers && convo.chatMembers.length > 0) ||
@@ -183,10 +184,9 @@ const Conversation = ({ convo }: { convo: ConversationGroup }) => {
 
   const convoLastread = convo.lastread;
 
-  const now = new Date();
   const when = new Date(convo.when);
-  const isRead = convoLastread < when;
-  const css = isRead ? "bg-lime-500" : "";
+  const isRead = convoLastread === null ? true : convoLastread < when;
+  const css = isRead && featureIsRead ? "bg-lime-500" : "";
 
   console.log("-----------------------");
   console.log("when", when);
@@ -213,10 +213,11 @@ const Conversation = ({ convo }: { convo: ConversationGroup }) => {
         <div className="relative">
           <p className="left-0 text-xs">när: {whenFormatted}</p>
         </div>
-
-        <div>
-          <p className="left-0 text-xs">convoread? {dateReadString}</p>
-        </div>
+        {featureIsRead ? (
+          <div>
+            <p className="left-0 text-xs">convoread? {dateReadString}</p>
+          </div>
+        ) : null}
       </div>
     </>
   );
