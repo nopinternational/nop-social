@@ -5,7 +5,6 @@ type ProfilePicProps = { variant?: string; url?: string };
 export const ProfilePic = ({ variant, url }: ProfilePicProps) => {
   const couplePic: string | StaticImageData = url || defaultCouplePic;
 
-  console.log("url: ", url, couplePic);
   if (variant === "small")
     return (
       <Image
