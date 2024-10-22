@@ -85,6 +85,11 @@ export const persistChatMessage = async (message: ConversationMessage) => {
   return db.storeChatMessage(message);
 };
 
+export const updateConvoMarkAsRead = (convoId: string, userId: string) => {
+  const db = new FirbaseChatMessageClient(firestore);
+  db.updateConvoMarkAsRead(convoId, userId);
+};
+
 export const persistChatMessageToUser = async (message: APIMessageToUser) => {
   const db = new FirbaseChatMessageClient(firestore);
   return db.persistChatMessageToUser(message);
@@ -92,6 +97,9 @@ export const persistChatMessageToUser = async (message: APIMessageToUser) => {
 
 const CHATMESSAGE_COLLECTION = "message";
 const GROUP_COLLECTION = "group";
+const READSTATUS_COLLECTION = "readstatus";
+
+const LASTREAD_FIELD = "lastread";
 
 type CreateConversationGroup = {
   createdBy: string;
@@ -110,7 +118,6 @@ class FirbaseChatMessageClient {
   storeChatMessage = async (
     message: ConversationMessage
   ): Promise<ConversationMessage> => {
-
     // first: update group meta
     const groupRef = this.firestore
       .collection(GROUP_COLLECTION)
@@ -133,6 +140,16 @@ class FirbaseChatMessageClient {
 
     message.messageId = messageCollectionRef.id;
     return message;
+  };
+
+  updateConvoMarkAsRead = (convoId: string, userId: string) => {
+    const readstatusDocRef = this.firestore
+      .collection(GROUP_COLLECTION)
+      .doc(convoId)
+      .collection(READSTATUS_COLLECTION)
+      .doc(userId);
+
+    void readstatusDocRef.set({ lastread: new Date() }, { merge: true });
   };
 
   createGroup = async (
@@ -174,7 +191,6 @@ class FirbaseChatMessageClient {
       message.toProfileId,
     ]);
 
-
     if (existingGroup) {
       return existingGroup;
     } else {
@@ -192,7 +208,6 @@ class FirbaseChatMessageClient {
   persistChatMessageToUser = async (
     apiMessage: APIMessageToUser
   ): Promise<ConversationMessage> => {
-
     // get conversation if exist
     const group = await this.getOrCreateGroup(apiMessage);
 
@@ -273,7 +288,6 @@ class FirbaseChatMessageClient {
       allGroups.push(dataConverted);
     });
 
-
     return allGroups;
   };
 
@@ -284,7 +298,7 @@ class FirbaseChatMessageClient {
     const lastReaRef = this.firestore
       .collection(GROUP_COLLECTION)
       .doc(convoId)
-      .collection("readstatus")
+      .collection(READSTATUS_COLLECTION)
       .doc(userId)
       .withConverter(lastReadForUserConverter);
 
@@ -412,7 +426,6 @@ const lastReadForUserConverter = {
   fromFirestore: (
     snapshot: QueryDocumentSnapshot<ReadstatusFirestoreModel>
   ): Readstatus => {
-    
     return {
       lastread: snapshot.data().lastread.toDate(),
     };
