@@ -82,6 +82,17 @@ export const chatRouter = createTRPCRouter({
       return await persistChatMessage(input.chatMessage);
     }),
 
+  updateConvoMarkAsRead: protectedProcedure
+    .input(
+      z.object({
+        chatConvoId: z.string(),
+      })
+    )
+    .mutation(({ input, ctx }) => {
+      console.log("updateConvoMarkAsRead convo", input.chatConvoId);
+      console.log("updateConvoMarkAsRead userid", ctx.session.user.id);
+    }),
+
   postChatMessageToUser: protectedProcedure
     .input(z.object({ chatMessage: z.custom<MessageToUser>() }))
     .mutation(async ({ input, ctx }) => {

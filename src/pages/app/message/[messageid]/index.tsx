@@ -17,7 +17,7 @@ import {
 } from "~/components/Message/ChatMessage";
 import { api } from "~/utils/api";
 import { MessageHeaderCard } from "~/module/message/components/MessageHeaderCard";
-
+import { useEffect } from "react";
 
 const Home: NextPage = () => {
   const session = useSession();
@@ -36,6 +36,17 @@ const Home: NextPage = () => {
   const messageApiConvoAndMessages = api.chat.getConvoAndChatMessages.useQuery({
     chatConvoId: convoId,
   });
+
+  const { mutateAsync: updateConvo } =
+    api.chat.updateConvoMarkAsRead.useMutation();
+
+  useEffect(() => {
+    console.log("useEffect - convoid", convoId);
+
+    if (convoId) {
+      void updateConvo({ chatConvoId: convoId });
+    }
+  }, [convoId]);
 
   const { mutate: postChatMessage } =
     api.chat.postChatMessageToConvo.useMutation({
@@ -144,7 +155,6 @@ const Home: NextPage = () => {
 
 export default Home;
 
-
 const MESSAGES_EMPTY: ConversationMessage[] = [];
 
 const MESSAGES_DUMMY: ConversationMessage[] = [
@@ -194,7 +204,7 @@ const CONVERSTAION_GROUP_DUMMY: ConversationGroup = {
   members: ["123", "456"],
   chatMembers: [{ profileid: "222", profilename: "Sexy-couple" }],
   conversationGroupName: "Sexy-couple",
-  lastread: null
+  lastread: null,
 };
 const CONVERSTAION_GROUP_EMPTY: ConversationGroup = {
   conversationId: "",
@@ -204,11 +214,10 @@ const CONVERSTAION_GROUP_EMPTY: ConversationGroup = {
   members: [],
   chatMembers: [],
   conversationGroupName: "",
-  lastread: null
+  lastread: null,
 };
 
 const CONVO_WITH_MESSAGES: ConvoWithMessages = {
   messages: MESSAGES,
   conversation: CONVERSTAION_GROUP_DUMMY,
 };
-
