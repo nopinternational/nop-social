@@ -13,7 +13,7 @@ import { ProfilePic } from "~/module/profile/components/ProfilePic";
 import { api } from "~/utils/api";
 
 const CONVERSATION_GROUP_EMPTY: ConversationGroup[] = [];
-const CONVERSATION_GROUP_DUMMY: ConversationGroup[] = [
+/* const CONVERSATION_GROUP_DUMMY: ConversationGroup[] = [
   {
     conversationId: "test-e36db886ceadadf6e26678b57222a6d0",
     username: "sthlmpar08",
@@ -57,7 +57,7 @@ const CONVERSATION_GROUP_DUMMY: ConversationGroup[] = [
     chatMembers: [{ profileid: "happy couple", profilename: "happy couple" }],
     conversationGroupName: "happy couple",
   },
-];
+];*/
 const CONVERSATION_GROUP = CONVERSATION_GROUP_EMPTY;
 
 const Home: NextPage = () => {
@@ -141,6 +141,7 @@ const ConnectedConversationsCard = () => {
   );
 };
 
+/*
 const DummyConversationsCard = () => {
   return (
     <Card
@@ -161,7 +162,7 @@ const DummyConversationsCard = () => {
       ))}
     </Card>
   );
-};
+};*/
 
 const Conversation = ({ convo }: { convo: ConversationGroup }) => {
   const featureIsRead = false;

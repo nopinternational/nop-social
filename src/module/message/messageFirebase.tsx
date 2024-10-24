@@ -3,18 +3,18 @@ import { firestoreAdmin } from "~/server/api/firebaseAdmin";
 const firestore: FirebaseFirestore.Firestore = firestoreAdmin;
 
 import {
-  type QueryDocumentSnapshot,
   type FirestoreDataConverter,
+  type QueryDocumentSnapshot,
 } from "firebase-admin/firestore";
+import { Timestamp } from "firebase/firestore";
 import {
-  type ConvoWithMessages,
   type ConversationGroup,
   type ConversationMessage,
+  type ConvoWithMessages,
 } from "~/components/Message/ChatMessage";
 import { getProfileByUserIdFromFirestore } from "../profile/firebaseProfiles";
 import { type Profile } from "../profile/profileRouter";
 import { type APIMessageToUser } from "./types";
-import { type Timestamp } from "firebase/firestore";
 
 export type MessageFirestoreModel = {
   chatConvoId: string;
@@ -304,7 +304,7 @@ class FirbaseChatMessageClient {
 
     const lastReadDoc = await lastReaRef.get();
     if (lastReadDoc.exists) {
-      const data = lastReadDoc.data();
+      const data = lastReadDoc.data() as Readstatus;
       //  ?["lastread"] as Date
       console.log("data -- ", data);
       return data["lastread"] as Date;
@@ -369,15 +369,15 @@ class FirbaseChatMessageClient {
         profilename: profile?.username || "",
       };
     });
-    const conversation_dummy: ConversationGroup = {
-      conversationId: "convoid",
-      lastMessage: "lastmessage",
-      username: "username",
-      when: "2024-03-03T11:43:06.626Z",
-      members: ["123", "456"],
-      chatMembers: [{ profileid: "222", profilename: "cyklop" }],
-      conversationGroupName: "cyklop",
-    };
+    // const conversation_dummy: ConversationGroup = {
+    //   conversationId: "convoid",
+    //   lastMessage: "lastmessage",
+    //   username: "username",
+    //   when: "2024-03-03T11:43:06.626Z",
+    //   members: ["123", "456"],
+    //   chatMembers: [{ profileid: "222", profilename: "cyklop" }],
+    //   conversationGroupName: "cyklop",
+    // };
 
     const convoWithMessages: ConvoWithMessages = {
       messages: messages,
@@ -422,7 +422,14 @@ type ReadstatusFirestoreModel = {
 type Readstatus = {
   lastread: Date | null;
 };
-const lastReadForUserConverter = {
+const lastReadForUserConverter: FirestoreDataConverter<Readstatus> = {
+  toFirestore: (readstatus: Readstatus): ReadstatusFirestoreModel => {
+    /* TODO implement*/
+
+    return {
+      lastread: Timestamp.fromDate(readstatus.lastread || new Date()),
+    };
+  },
   fromFirestore: (
     snapshot: QueryDocumentSnapshot<ReadstatusFirestoreModel>
   ): Readstatus => {
