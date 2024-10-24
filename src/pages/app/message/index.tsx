@@ -13,7 +13,7 @@ import { ProfilePic } from "~/module/profile/components/ProfilePic";
 import { api } from "~/utils/api";
 
 const CONVERSATION_GROUP_EMPTY: ConversationGroup[] = [];
-const CONVERSATION_GROUP_DUMMY: ConversationGroup[] = [
+/* const CONVERSATION_GROUP_DUMMY: ConversationGroup[] = [
   {
     conversationId: "test-e36db886ceadadf6e26678b57222a6d0",
     username: "sthlmpar08",
@@ -57,11 +57,10 @@ const CONVERSATION_GROUP_DUMMY: ConversationGroup[] = [
     chatMembers: [{ profileid: "happy couple", profilename: "happy couple" }],
     conversationGroupName: "happy couple",
   },
-];
+];*/
 const CONVERSATION_GROUP = CONVERSATION_GROUP_EMPTY;
 
 const Home: NextPage = () => {
-
   return (
     <Layout
       headingText={
@@ -121,7 +120,6 @@ const ConnectedConversationsCard = () => {
   if (myConversations && myConversations.length == 0) {
     return <NoMessagesCard />;
   }
-
   return (
     <Card
       header={
@@ -143,6 +141,7 @@ const ConnectedConversationsCard = () => {
   );
 };
 
+/*
 const DummyConversationsCard = () => {
   return (
     <Card
@@ -163,9 +162,10 @@ const DummyConversationsCard = () => {
       ))}
     </Card>
   );
-};
+};*/
 
 const Conversation = ({ convo }: { convo: ConversationGroup }) => {
+  const featureIsRead = false;
   // : string | null
   function getFirstChatmember(chatmembers: ChatMember[]): string | null {
     // (convo.chatMembers && convo.chatMembers.length > 0) ||
@@ -179,12 +179,32 @@ const Conversation = ({ convo }: { convo: ConversationGroup }) => {
   const chatMemberProfileName: string =
     getFirstChatmember(convo.chatMembers || []) || "unknown";
 
+  const whenDate = new Date(convo.when);
+  const whenFormatted =
+    whenDate.toLocaleDateString() + " - " + whenDate.toLocaleTimeString();
+
+  const convoLastread = convo.lastread;
+
+  const when = new Date(convo.when);
+  const isRead = convoLastread === null ? true : convoLastread < when;
+  const css = isRead && featureIsRead ? "bg-lime-500" : "";
+
+  console.log("-----------------------");
+  console.log("when", when);
+  console.log("last read", convoLastread);
+  console.log("isRead", isRead);
+  console.log("-----------------------");
+  const dateReadString = convoLastread
+    ? convoLastread.toLocaleDateString() +
+      " - " +
+      convoLastread.toLocaleDateString()
+    : "aldrig 😢";
   return (
     <>
       <div className="col-span-1 flex items-center justify-center pt-2">
         <ProfilePic variant="small" />
       </div>
-      <div className="col-span-3">
+      <div className={"col-span-3 " + css}>
         <h3 className="text-2xl font-bold">
           <HighlightText>{chatMemberProfileName}</HighlightText>
         </h3>
@@ -192,8 +212,13 @@ const Conversation = ({ convo }: { convo: ConversationGroup }) => {
           {convo.lastMessage || "inget har sagts ännu"}
         </p>
         <div className="relative">
-          <p className="absolute left-0 text-xs">när: {convo.when}</p>
+          <p className="left-0 text-xs">när: {whenFormatted}</p>
         </div>
+        {featureIsRead ? (
+          <div>
+            <p className="left-0 text-xs">convoread? {dateReadString}</p>
+          </div>
+        ) : null}
       </div>
     </>
   );

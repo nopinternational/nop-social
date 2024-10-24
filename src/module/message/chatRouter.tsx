@@ -6,6 +6,7 @@ import {
   getGroups,
   persistChatMessage,
   persistChatMessageToUser,
+  updateConvoMarkAsRead,
 } from "./messageFirebase";
 
 // import { type MessageFirestoreModel } from "~/module/message/messageFirebase";
@@ -80,6 +81,18 @@ export const chatRouter = createTRPCRouter({
       input.chatMessage.when = new Date().toISOString();
       // console.log("postChatMessage", input);
       return await persistChatMessage(input.chatMessage);
+    }),
+
+  updateConvoMarkAsRead: protectedProcedure
+    .input(
+      z.object({
+        chatConvoId: z.string(),
+      })
+    )
+    .mutation(({ input, ctx }) => {
+      console.log("updateConvoMarkAsRead convo", input.chatConvoId);
+      console.log("updateConvoMarkAsRead userid", ctx.session.user.id);
+      updateConvoMarkAsRead(input.chatConvoId, ctx.session.user.id)
     }),
 
   postChatMessageToUser: protectedProcedure
