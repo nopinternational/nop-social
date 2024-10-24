@@ -26,16 +26,15 @@ const Home: NextPage = () => {
   const { messageid } = router.query;
   const apiUtil = api.useContext();
   const convoId = messageid as string;
-  // console.log("message/", messageid, convoId);
   const isTestConversation = convoId ? convoId.startsWith("test-") : true;
 
-  // const messageApi = api.chat.getChatMessage.useQuery({
-  //   chatConvoId: convoId,
-  // });
 
-  const messageApiConvoAndMessages = api.chat.getConvoAndChatMessages.useQuery({
-    chatConvoId: convoId,
-  });
+  const messageApiConvoAndMessages = api.chat.getConvoAndChatMessages.useQuery(
+    {
+      chatConvoId: convoId,
+    },
+    { enabled: !!convoId }
+  );
 
   const { mutateAsync: updateConvo } =
     api.chat.updateConvoMarkAsRead.useMutation();
