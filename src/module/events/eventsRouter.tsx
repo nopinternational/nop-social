@@ -82,14 +82,6 @@ export const eventRouter = createTRPCRouter({
       })
     )
     .mutation(({ input}) => {
-      console.log(
-        "addAttendesToEvent: event - profile",
-        input.eventId,
-        input.id,
-        input.username,
-        input.name,
-        input.addAsAllowed
-      );
       return addAsAttende({ ...input });
     }),
 
