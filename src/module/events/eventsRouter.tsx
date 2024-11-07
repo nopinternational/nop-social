@@ -96,7 +96,6 @@ export const eventRouter = createTRPCRouter({
   signupForEvent: protectedProcedure
     .input(z.object({ eventId: z.string() }))
     .mutation(({ input, ctx }) => {
-      // console.log("------------signupForEvent.input", input)
       return signupToEvent(input.eventId, ctx.session.user.id);
     }),
   getEventAttendes: protectedProcedure
@@ -106,25 +105,18 @@ export const eventRouter = createTRPCRouter({
       })
     )
     .query(({ input, ctx }) => {
-      // console.log("------------getEventAttendes.input", input)
       return getEventAttendes(ctx.session.user.id, input.eventId);
     }),
 
   getEventMessages: protectedProcedure
     .input(z.object({ eventId: z.string() }))
     .query(({ input, ctx }) => {
-      // console.log("------------getEventAttendes.input", input)
       return getEventMessages(ctx.session.user.id, input.eventId);
     }),
 
   postEventMessage: protectedProcedure
     .input(postEventMessage)
     .mutation(({ input, ctx }) => {
-      // console.log("------------postEventMessage.input", input)
-      // console.log("ctx", ctx)
-      // console.log("ctx.session", ctx.session)
-      // console.log("ctx.session.user.", ctx.session.user)
-      // console.log("ctx.session.user.name", ctx.session.user.name)
       return postEventMessageFirebase(
         input.eventId,
         input.wallmessage,

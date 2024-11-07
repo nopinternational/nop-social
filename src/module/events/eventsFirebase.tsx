@@ -125,7 +125,6 @@ class FirbaseAdminClient {
     this.firestore = firestoreApp;
   }
   getAllEventsFromFirestore = async (): Promise<NopEvent[]> => {
-    // console.log("FirbaseAdminClient.getAllEventsFromFirestore")
     const eventRef = this.firestore
       .collection(EVENTS_COLLECTION)
       .orderBy("order", "desc")
@@ -141,35 +140,22 @@ class FirbaseAdminClient {
       const eventDoc = doc.data();
       const options = eventDoc.options;
 
-      //console.log("doc.options", options)
       if (options.active) {
         objects.push({ ...eventDoc });
       }
     });
-    //const querySnapshot = await getDocs(collection(this.firestore, EVENTS_COLLECTION).withConverter(eventConverter));
-
-    // querySnapshot.forEach((eventDoc) => {
-    //     console.log("getAllEventsFromFirestore", eventDoc)
-    //     objects.push(eventDoc.data())
-    // });
-    // console.log("FirbaseAdminClient.getAllEventsFromFirestore:", objects)
     return objects;
   };
 
   getEvent = async (eventid: string): Promise<NopEvent | null> => {
-    //console.log("FirbaseAdminClient.getEvent for id", eventid)
     const eventRef = this.firestore
       .collection(EVENTS_COLLECTION)
       .doc(eventid)
       .withConverter(eventConverter);
     const snapshot = await eventRef.get();
-    //console.log("FirbaseAdminClient.getEvent -> snapshot", snapshot)
     if (snapshot.exists) {
-      //console.log("FirbaseAdminClient.getEvent -> snapshot.data()", snapshot.data())
       return snapshot.data() as NopEvent;
     } else {
-      // docSnap.data() will be undefined in this case
-      // console.log("No such event!", eventid);
     }
     return null;
   };
@@ -367,13 +353,7 @@ class FirbaseAdminClient {
     if (addAsAllowed) {
       void this.addUserAsAllowed(eventId, userId)
     }
-    // const documentSnapshot = await docRef.get();
-    // const event = documentSnapshot.data() as EventFirestoreModel;
 
-    // if (event.owner === uid) {
-    //   await docRef.set({ ...nopEvent, owner: uid }, { merge: true });
-    //   return docRef.id;
-    // }
 
     return null;
   };
@@ -414,27 +394,18 @@ class FirbaseAdminClient {
 
 const eventConverter: FirestoreDataConverter<NopEvent> = {
   toFirestore: (event: NopEvent): EventFirestoreModel => {
-    // console.log("toFirestore.event", event);
     return { ...event };
   },
   fromFirestore: (
     snapshot: QueryDocumentSnapshot<EventFirestoreModel>
-    //options: SnapshotOptions
   ): NopEvent => {
     const data = snapshot.data();
-    // console.log("fromFirestore.data", data);
-
     return { id: snapshot.id, ...data };
   },
 };
 
 const eventParticipantsConverter: FirestoreDataConverter<EventParticipant> = {
-  // toFirestore: (event: NopEvent): EventFirestoreModel => {
-  //   // console.log("toFirestore.event", event);
-  //   return { ...event };
-  // },
   toFirestore: (event: EventParticipant): DocumentData => {
-    console.log("toFirestore.event", event);
     return { ...event };
   },
   fromFirestore: (
@@ -442,8 +413,6 @@ const eventParticipantsConverter: FirestoreDataConverter<EventParticipant> = {
     //options: SnapshotOptions
   ): EventParticipant => {
     const data = snapshot.data();
-    // console.log("fromFirestore.data", data, snapshot.id);
-
     return { id: snapshot.id, when: data.when };
   },
 };
