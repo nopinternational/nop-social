@@ -357,7 +357,7 @@ class FirbaseAdminClient {
     console.log("update response", response);
 
     if (addAsAllowed) {
-      this.addUserAsAllowed(eventId, userId)
+      void this.addUserAsAllowed(eventId, userId)
     }
     // const documentSnapshot = await docRef.get();
     // const event = documentSnapshot.data() as EventFirestoreModel;

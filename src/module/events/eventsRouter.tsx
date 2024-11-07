@@ -16,7 +16,6 @@ import {
 import { type EventFormType } from "~/module/events/components/NoPEventForm";
 import { postEventMessage } from "./components/types";
 import { TRPCError } from "@trpc/server";
-import { type Profile } from "../profile/profileRouter";
 
 export const eventRouter = createTRPCRouter({
   getAllEvents: protectedProcedure.query(async () => {
@@ -81,7 +80,7 @@ export const eventRouter = createTRPCRouter({
         addAsAllowed: z.boolean()
       })
     )
-    .mutation(({ input, ctx }) => {
+    .mutation(({ input}) => {
       console.log(
         "addAttendesToEvent: event - profile",
         input.eventId,
