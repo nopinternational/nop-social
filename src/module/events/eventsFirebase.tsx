@@ -74,14 +74,16 @@ export const addAsAttendes = async ({
   id,
   name,
   username,
+  addAsAllowed,
 }: {
   eventId: string;
   id: string;
   name: string;
   username: string;
+  addAsAllowed: boolean;
 }) => {
   const db = new FirbaseAdminClient(firestore);
-  return db.addAsAttendes(eventId, id, name, username);
+  return db.addAsAttendes(eventId, id, name, username, addAsAllowed);
 };
 export const updateEvent = async ({
   nopEvent,
@@ -334,9 +336,10 @@ class FirbaseAdminClient {
 
   addAsAttendes = async (
     eventId: string,
-    id: string,
+    userId: string,
     name: string,
-    username: string
+    username: string,
+    addAsAllowed: boolean
   ): Promise<string | null> => {
     const eventsRef = this.firestore.collection(EVENTS_COLLECTION);
     const attendesRef = eventsRef
@@ -349,10 +352,13 @@ class FirbaseAdminClient {
     console.log("foo_data", foo_data, attendesRef.path);
 
     const response = await attendesRef.update({
-      confirmed: FieldValue.arrayUnion({ id, name, username }),
+      confirmed: FieldValue.arrayUnion({ id: userId, name, username }),
     });
     console.log("update response", response);
 
+    if (addAsAllowed) {
+      this.addUserAsAllowed(eventId, userId)
+    }
     // const documentSnapshot = await docRef.get();
     // const event = documentSnapshot.data() as EventFirestoreModel;
 
@@ -363,6 +369,26 @@ class FirbaseAdminClient {
 
     return null;
   };
+
+  addUserAsAllowed = async (eventId: string, userId:string): Promise<string|null> => {
+        const eventsRef = this.firestore.collection(EVENTS_COLLECTION);
+    const attendesRef = eventsRef
+      .doc(eventId)
+      .collection(EVENT_SIGNUPS)
+      .doc(EVENT_ATTENDES);
+
+    const foo = await attendesRef.get();
+    const foo_data = foo.data();
+    console.log("foo_data", foo_data, attendesRef.path);
+
+    const response = await attendesRef.update({
+      allowed: FieldValue.arrayUnion(userId),
+    });
+    console.log("update response", response);
+
+    return null;
+  }
+
 
   updateEvent = async (
     uid: string,

@@ -18,6 +18,7 @@ import {
 import { AttendesListCard } from "~/module/events/components/edit/AttendesListCard";
 import { useState } from "react";
 import { type Profile } from "~/module/profile/profileRouter";
+import { Toggle } from "~/components/Toogle";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -250,6 +251,8 @@ const AddAsAttendeForm = ({
   const [profileNames, setProfileName] = useState(
     `${profile.person1.name} & ${profile.person2.name}`
   );
+
+  const [toggleAllowedChecked, setToggleAllowedChecked] = useState(true);
   //const profileNames = `${profile.person1.name} & ${profile.person2.name}`;
   const utils = api.useContext();
 
@@ -260,12 +263,16 @@ const AddAsAttendeForm = ({
       },
     });
 
+    const toggleAllowedClick = () => {
+      setToggleAllowedChecked((oldState) => {return !oldState})
+    }
   const addAsAttendes = () => {
     addAttendesToEvent({
       eventId: eventId,
       name: profileNames,
       id: profile.id,
       username: profile.username,
+      addAsAllowed: toggleAllowedChecked,
     })
       .then(() => {
         //do nothing
@@ -285,9 +292,19 @@ const AddAsAttendeForm = ({
           value={profileNames}
           onChange={(e) => setProfileName(e.target.value)}
         ></input>
-        {/* <input type="submit">Skicka</input> */}
+        <div
+        className="my-3">
+        <Toggle
+          name="allowed"
+          optionText="Lägg till som Allowed"
+          checked={toggleAllowedChecked}
+          onClick={toggleAllowedClick}
+          />
+          </div>
+          {/* 
+      <input type="submit">Skicka</input> */}
         <button
-          className="mb-3 mt-4 rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+          className="block mb-3 mt-4 rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
           onClick={(event) => {
             addAsAttendes();
             event.preventDefault();

@@ -78,6 +78,7 @@ export const eventRouter = createTRPCRouter({
         name: z.string(),
         id: z.string(),
         username: z.string(),
+        addAsAllowed: z.boolean()
       })
     )
     .mutation(({ input, ctx }) => {
@@ -86,7 +87,8 @@ export const eventRouter = createTRPCRouter({
         input.eventId,
         input.id,
         input.username,
-        input.name
+        input.name,
+        input.addAsAllowed
       );
       return addAsAttendes({ ...input });
     }),
