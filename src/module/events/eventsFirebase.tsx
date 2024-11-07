@@ -58,7 +58,7 @@ export const getEventMessages = async (iam_userid: string, eventid: string) => {
   return db.getEventMessages(iam_userid, eventid);
 };
 
-export const persistEvent = async ({
+export const createEvent = async ({
   nopEvent,
   uid,
 }: {
@@ -66,10 +66,10 @@ export const persistEvent = async ({
   uid: string;
 }) => {
   const db = new FirbaseAdminClient(firestore);
-  return db.persistEvent(uid, nopEvent);
+  return db.createEvent(uid, nopEvent);
 };
 
-export const addAsAttendes = async ({
+export const addAsAttende = async ({
   eventId,
   id,
   name,
@@ -83,7 +83,7 @@ export const addAsAttendes = async ({
   addAsAllowed: boolean;
 }) => {
   const db = new FirbaseAdminClient(firestore);
-  return db.addAsAttendes(eventId, id, name, username, addAsAllowed);
+  return db.addAsAttende(eventId, id, name, username, addAsAllowed);
 };
 export const updateEvent = async ({
   nopEvent,
@@ -125,7 +125,6 @@ class FirbaseAdminClient {
     this.firestore = firestoreApp;
   }
   getAllEventsFromFirestore = async (): Promise<NopEvent[]> => {
-    // console.log("FirbaseAdminClient.getAllEventsFromFirestore")
     const eventRef = this.firestore
       .collection(EVENTS_COLLECTION)
       .orderBy("order", "desc")
@@ -141,35 +140,22 @@ class FirbaseAdminClient {
       const eventDoc = doc.data();
       const options = eventDoc.options;
 
-      //console.log("doc.options", options)
       if (options.active) {
         objects.push({ ...eventDoc });
       }
     });
-    //const querySnapshot = await getDocs(collection(this.firestore, EVENTS_COLLECTION).withConverter(eventConverter));
-
-    // querySnapshot.forEach((eventDoc) => {
-    //     console.log("getAllEventsFromFirestore", eventDoc)
-    //     objects.push(eventDoc.data())
-    // });
-    // console.log("FirbaseAdminClient.getAllEventsFromFirestore:", objects)
     return objects;
   };
 
   getEvent = async (eventid: string): Promise<NopEvent | null> => {
-    //console.log("FirbaseAdminClient.getEvent for id", eventid)
     const eventRef = this.firestore
       .collection(EVENTS_COLLECTION)
       .doc(eventid)
       .withConverter(eventConverter);
     const snapshot = await eventRef.get();
-    //console.log("FirbaseAdminClient.getEvent -> snapshot", snapshot)
     if (snapshot.exists) {
-      //console.log("FirbaseAdminClient.getEvent -> snapshot.data()", snapshot.data())
       return snapshot.data() as NopEvent;
     } else {
-      // docSnap.data() will be undefined in this case
-      // console.log("No such event!", eventid);
     }
     return null;
   };
@@ -177,7 +163,6 @@ class FirbaseAdminClient {
   getEventParticipants = async (
     eventid: string
   ): Promise<EventParticipant[] | null> => {
-    console.log("FirbaseAdminClient.getEventParticipants for id", eventid);
     const eventParticipantsRef = this.firestore
       .collection(EVENTS_COLLECTION)
       .doc(eventid)
@@ -321,7 +306,7 @@ class FirbaseAdminClient {
     return eventsCollection.doc();
   }
 
-  persistEvent = async (
+  createEvent = async (
     uid: string,
     nopEvent: EventFormType
   ): Promise<string> => {
@@ -329,12 +314,19 @@ class FirbaseAdminClient {
     const eventsRef = this.firestore.collection(EVENTS_COLLECTION);
 
     const docRef = eventsRef.doc();
-    await docRef.set({ ...nopEvent, owner: uid }, { merge: true });
+    await docRef.set({ ...nopEvent, owner: uid });
 
-    return docRef.id;
+    const createdEventId = docRef.id; 
+
+    const eventAttendes = docRef.collection(EVENT_SIGNUPS).doc(EVENT_ATTENDES);
+    await eventAttendes.set({allowed: []})
+    await eventAttendes.set({confirmed: []})
+    await this.signupToEvent(createdEventId, uid);
+    await this.addUserAsAllowed(createdEventId, uid);
+    return createdEventId;
   };
 
-  addAsAttendes = async (
+  addAsAttende = async (
     eventId: string,
     userId: string,
     name: string,
@@ -347,25 +339,21 @@ class FirbaseAdminClient {
       .collection(EVENT_SIGNUPS)
       .doc(EVENT_ATTENDES);
 
-    const foo = await attendesRef.get();
-    const foo_data = foo.data();
-    console.log("foo_data", foo_data, attendesRef.path);
+    const attendesDoc = await attendesRef.get();
 
-    const response = await attendesRef.update({
-      confirmed: FieldValue.arrayUnion({ id: userId, name, username }),
-    });
-    console.log("update response", response);
+    if (attendesDoc.exists){
+      await attendesRef.update({
+        confirmed: FieldValue.arrayUnion({ id: userId, name, username }),
+      });
+    } else {
+
+      await attendesRef.set({confirmed: [{ id: userId, name, username }]})
+    }
 
     if (addAsAllowed) {
       void this.addUserAsAllowed(eventId, userId)
     }
-    // const documentSnapshot = await docRef.get();
-    // const event = documentSnapshot.data() as EventFirestoreModel;
 
-    // if (event.owner === uid) {
-    //   await docRef.set({ ...nopEvent, owner: uid }, { merge: true });
-    //   return docRef.id;
-    // }
 
     return null;
   };
@@ -377,18 +365,12 @@ class FirbaseAdminClient {
       .collection(EVENT_SIGNUPS)
       .doc(EVENT_ATTENDES);
 
-    const foo = await attendesRef.get();
-    const foo_data = foo.data();
-    console.log("foo_data", foo_data, attendesRef.path);
-
-    const response = await attendesRef.update({
+    await attendesRef.update({
       allowed: FieldValue.arrayUnion(userId),
     });
-    console.log("update response", response);
 
     return null;
   }
-
 
   updateEvent = async (
     uid: string,
@@ -412,27 +394,18 @@ class FirbaseAdminClient {
 
 const eventConverter: FirestoreDataConverter<NopEvent> = {
   toFirestore: (event: NopEvent): EventFirestoreModel => {
-    // console.log("toFirestore.event", event);
     return { ...event };
   },
   fromFirestore: (
     snapshot: QueryDocumentSnapshot<EventFirestoreModel>
-    //options: SnapshotOptions
   ): NopEvent => {
     const data = snapshot.data();
-    // console.log("fromFirestore.data", data);
-
     return { id: snapshot.id, ...data };
   },
 };
 
 const eventParticipantsConverter: FirestoreDataConverter<EventParticipant> = {
-  // toFirestore: (event: NopEvent): EventFirestoreModel => {
-  //   // console.log("toFirestore.event", event);
-  //   return { ...event };
-  // },
   toFirestore: (event: EventParticipant): DocumentData => {
-    console.log("toFirestore.event", event);
     return { ...event };
   },
   fromFirestore: (
@@ -440,8 +413,6 @@ const eventParticipantsConverter: FirestoreDataConverter<EventParticipant> = {
     //options: SnapshotOptions
   ): EventParticipant => {
     const data = snapshot.data();
-    // console.log("fromFirestore.data", data, snapshot.id);
-
     return { id: snapshot.id, when: data.when };
   },
 };

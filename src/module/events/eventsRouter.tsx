@@ -7,11 +7,11 @@ import {
   getEventMessages,
   signupToEvent,
   postEventMessage as postEventMessageFirebase,
-  persistEvent,
+  createEvent,
   updateEvent,
   getMyEventStatus,
   getEventParticipants,
-  addAsAttendes,
+  addAsAttende,
 } from "~/module/events/eventsFirebase";
 import { type EventFormType } from "~/module/events/components/NoPEventForm";
 import { postEventMessage } from "./components/types";
@@ -49,7 +49,7 @@ export const eventRouter = createTRPCRouter({
         nopEvent: input.nopEvent,
         uid: ctx.session.user.id,
       };
-      return await persistEvent(persistNopEvent);
+      return await createEvent(persistNopEvent);
     }),
 
   updateEvent: protectedProcedure
@@ -70,7 +70,8 @@ export const eventRouter = createTRPCRouter({
       if (updatedDocId) return updatedDocId;
       throw new TRPCError({ code: "FORBIDDEN", message: "Not owner of event" });
     }),
-  addAttendesToEvent: protectedProcedure
+
+  addAttendeToEvent: protectedProcedure
     .input(
       z.object({
         eventId: z.string(),
@@ -81,20 +82,12 @@ export const eventRouter = createTRPCRouter({
       })
     )
     .mutation(({ input}) => {
-      console.log(
-        "addAttendesToEvent: event - profile",
-        input.eventId,
-        input.id,
-        input.username,
-        input.name,
-        input.addAsAllowed
-      );
-      return addAsAttendes({ ...input });
+      return addAsAttende({ ...input });
     }),
+
   signupForEvent: protectedProcedure
     .input(z.object({ eventId: z.string() }))
     .mutation(({ input, ctx }) => {
-      // console.log("------------signupForEvent.input", input)
       return signupToEvent(input.eventId, ctx.session.user.id);
     }),
   getEventAttendes: protectedProcedure
@@ -104,25 +97,18 @@ export const eventRouter = createTRPCRouter({
       })
     )
     .query(({ input, ctx }) => {
-      // console.log("------------getEventAttendes.input", input)
       return getEventAttendes(ctx.session.user.id, input.eventId);
     }),
 
   getEventMessages: protectedProcedure
     .input(z.object({ eventId: z.string() }))
     .query(({ input, ctx }) => {
-      // console.log("------------getEventAttendes.input", input)
       return getEventMessages(ctx.session.user.id, input.eventId);
     }),
 
   postEventMessage: protectedProcedure
     .input(postEventMessage)
     .mutation(({ input, ctx }) => {
-      // console.log("------------postEventMessage.input", input)
-      // console.log("ctx", ctx)
-      // console.log("ctx.session", ctx.session)
-      // console.log("ctx.session.user.", ctx.session.user)
-      // console.log("ctx.session.user.name", ctx.session.user.name)
       return postEventMessageFirebase(
         input.eventId,
         input.wallmessage,

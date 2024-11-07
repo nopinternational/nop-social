@@ -29,10 +29,13 @@ const Home: NextPage = () => {
   const { mutateAsync: updateEvent } = api.event.updateEvent.useMutation();
 
   const event = api.event.getEvent.useQuery(queryInput, {
-    enabled: sessionData?.user !== undefined,
+    enabled: sessionData?.user !== undefined &&  !!eventid,
   });
+
   const attendes = api.event.getEventAttendes.useQuery({
     eventId: eventid as string,
+  }, {
+    enabled: !!eventid
   });
 
   const saveNewEvent = (nopEvent: EventFormType): void => {
@@ -257,7 +260,7 @@ const AddAsAttendeForm = ({
   const utils = api.useContext();
 
   const { mutateAsync: addAttendesToEvent } =
-    api.event.addAttendesToEvent.useMutation({
+    api.event.addAttendeToEvent.useMutation({
       onSuccess: () => {
         void utils.event.getEventAttendes.invalidate();
       },
