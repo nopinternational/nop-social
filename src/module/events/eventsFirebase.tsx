@@ -177,7 +177,6 @@ class FirbaseAdminClient {
   getEventParticipants = async (
     eventid: string
   ): Promise<EventParticipant[] | null> => {
-    console.log("FirbaseAdminClient.getEventParticipants for id", eventid);
     const eventParticipantsRef = this.firestore
       .collection(EVENTS_COLLECTION)
       .doc(eventid)
@@ -329,9 +328,16 @@ class FirbaseAdminClient {
     const eventsRef = this.firestore.collection(EVENTS_COLLECTION);
 
     const docRef = eventsRef.doc();
-    await docRef.set({ ...nopEvent, owner: uid }, { merge: true });
+    await docRef.set({ ...nopEvent, owner: uid });
 
-    return docRef.id;
+    const createdEventId = docRef.id; 
+
+    const eventAttendes = docRef.collection(EVENT_SIGNUPS).doc(EVENT_ATTENDES);
+    await eventAttendes.set({allowed: []})
+    await eventAttendes.set({confirmed: []})
+    await this.signupToEvent(createdEventId, uid);
+    await this.addUserAsAllowed(createdEventId, uid);
+    return createdEventId;
   };
 
   addAsAttende = async (
@@ -347,14 +353,16 @@ class FirbaseAdminClient {
       .collection(EVENT_SIGNUPS)
       .doc(EVENT_ATTENDES);
 
-    const foo = await attendesRef.get();
-    const foo_data = foo.data();
-    console.log("foo_data", foo_data, attendesRef.path);
+    const attendesDoc = await attendesRef.get();
 
-    const response = await attendesRef.update({
-      confirmed: FieldValue.arrayUnion({ id: userId, name, username }),
-    });
-    console.log("update response", response);
+    if (attendesDoc.exists){
+      await attendesRef.update({
+        confirmed: FieldValue.arrayUnion({ id: userId, name, username }),
+      });
+    } else {
+
+      await attendesRef.set({confirmed: [{ id: userId, name, username }]})
+    }
 
     if (addAsAllowed) {
       void this.addUserAsAllowed(eventId, userId)
@@ -377,18 +385,12 @@ class FirbaseAdminClient {
       .collection(EVENT_SIGNUPS)
       .doc(EVENT_ATTENDES);
 
-    const foo = await attendesRef.get();
-    const foo_data = foo.data();
-    console.log("foo_data", foo_data, attendesRef.path);
-
-    const response = await attendesRef.update({
+    await attendesRef.update({
       allowed: FieldValue.arrayUnion(userId),
     });
-    console.log("update response", response);
 
     return null;
   }
-
 
   updateEvent = async (
     uid: string,
