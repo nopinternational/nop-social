@@ -58,7 +58,7 @@ export const getEventMessages = async (iam_userid: string, eventid: string) => {
   return db.getEventMessages(iam_userid, eventid);
 };
 
-export const persistEvent = async ({
+export const createEvent = async ({
   nopEvent,
   uid,
 }: {
@@ -66,7 +66,7 @@ export const persistEvent = async ({
   uid: string;
 }) => {
   const db = new FirbaseAdminClient(firestore);
-  return db.persistEvent(uid, nopEvent);
+  return db.createEvent(uid, nopEvent);
 };
 
 export const addAsAttende = async ({
@@ -321,7 +321,7 @@ class FirbaseAdminClient {
     return eventsCollection.doc();
   }
 
-  persistEvent = async (
+  createEvent = async (
     uid: string,
     nopEvent: EventFormType
   ): Promise<string> => {

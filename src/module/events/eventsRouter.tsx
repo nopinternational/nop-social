@@ -7,7 +7,7 @@ import {
   getEventMessages,
   signupToEvent,
   postEventMessage as postEventMessageFirebase,
-  persistEvent,
+  createEvent,
   updateEvent,
   getMyEventStatus,
   getEventParticipants,
@@ -49,7 +49,7 @@ export const eventRouter = createTRPCRouter({
         nopEvent: input.nopEvent,
         uid: ctx.session.user.id,
       };
-      return await persistEvent(persistNopEvent);
+      return await createEvent(persistNopEvent);
     }),
 
   updateEvent: protectedProcedure
