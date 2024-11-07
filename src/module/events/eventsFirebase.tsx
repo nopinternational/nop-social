@@ -69,7 +69,7 @@ export const persistEvent = async ({
   return db.persistEvent(uid, nopEvent);
 };
 
-export const addAsAttendes = async ({
+export const addAsAttende = async ({
   eventId,
   id,
   name,
@@ -83,7 +83,7 @@ export const addAsAttendes = async ({
   addAsAllowed: boolean;
 }) => {
   const db = new FirbaseAdminClient(firestore);
-  return db.addAsAttendes(eventId, id, name, username, addAsAllowed);
+  return db.addAsAttende(eventId, id, name, username, addAsAllowed);
 };
 export const updateEvent = async ({
   nopEvent,
@@ -334,7 +334,7 @@ class FirbaseAdminClient {
     return docRef.id;
   };
 
-  addAsAttendes = async (
+  addAsAttende = async (
     eventId: string,
     userId: string,
     name: string,

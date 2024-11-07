@@ -257,7 +257,7 @@ const AddAsAttendeForm = ({
   const utils = api.useContext();
 
   const { mutateAsync: addAttendesToEvent } =
-    api.event.addAttendesToEvent.useMutation({
+    api.event.addAttendeToEvent.useMutation({
       onSuccess: () => {
         void utils.event.getEventAttendes.invalidate();
       },

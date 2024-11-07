@@ -11,7 +11,7 @@ import {
   updateEvent,
   getMyEventStatus,
   getEventParticipants,
-  addAsAttendes,
+  addAsAttende,
 } from "~/module/events/eventsFirebase";
 import { type EventFormType } from "~/module/events/components/NoPEventForm";
 import { postEventMessage } from "./components/types";
@@ -70,7 +70,8 @@ export const eventRouter = createTRPCRouter({
       if (updatedDocId) return updatedDocId;
       throw new TRPCError({ code: "FORBIDDEN", message: "Not owner of event" });
     }),
-  addAttendesToEvent: protectedProcedure
+
+  addAttendeToEvent: protectedProcedure
     .input(
       z.object({
         eventId: z.string(),
@@ -89,8 +90,9 @@ export const eventRouter = createTRPCRouter({
         input.name,
         input.addAsAllowed
       );
-      return addAsAttendes({ ...input });
+      return addAsAttende({ ...input });
     }),
+
   signupForEvent: protectedProcedure
     .input(z.object({ eventId: z.string() }))
     .mutation(({ input, ctx }) => {
