@@ -8,7 +8,6 @@ import {
   type DocumentData,
   type QueryDocumentSnapshot,
 } from "firebase-admin/firestore";
-
 import {
   type NopEvent,
   type ConfirmedUser,
@@ -16,6 +15,7 @@ import {
   type EventMessage,
   type EventParticipant,
 } from "../components/types";
+
 import {
   type CollectionReference,
   type FirestoreDataConverter,
@@ -26,37 +26,6 @@ import { type EventFormType } from "../components/NoPEventForm";
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unnecessary-type-assertion
 const firestore: FirebaseFirestore.Firestore = firestoreAdmin;
 
-export const getAllEventsFromFirestore = async (): Promise<NopEvent[]> => {
-  const db = new FirbaseAdminClient(firestore);
-  return await db.getAllEventsFromFirestore();
-};
-
-export const getEvent = async (eventid: string): Promise<NopEvent | null> => {
-  const db = new FirbaseAdminClient(firestore);
-  return await db.getEvent(eventid);
-};
-
-export const getEventParticipants = async (
-  eventid: string
-): Promise<EventParticipant[] | null> => {
-  const db = new FirbaseAdminClient(firestore);
-  return await db.getEventParticipants(eventid);
-};
-
-export const getMyEventStatus = async (iam_userid: string, eventid: string) => {
-  const db = new FirbaseAdminClient(firestore);
-  return await db.getMyEventStatus(iam_userid, eventid);
-};
-
-export const getEventAttendes = async (iam_userid: string, eventid: string) => {
-  const db = new FirbaseAdminClient(firestore);
-  return await db.getEventAttendes(iam_userid, eventid);
-};
-
-export const getEventMessages = async (iam_userid: string, eventid: string) => {
-  const db = new FirbaseAdminClient(firestore);
-  return db.getEventMessages(iam_userid, eventid);
-};
 
 export const createEvent = async ({
   nopEvent,
@@ -119,7 +88,7 @@ const EVENT_ATTENDES = "attendes";
 const ATTENDES_ALLOWED = "allowed";
 const ATTENDES_CONFIRMED = "confirmed";
 
-class FirbaseAdminClient {
+export class FirbaseAdminClient {
   firestore: FirebaseFirestore.Firestore;
   constructor(firestoreApp: FirebaseFirestore.Firestore) {
     this.firestore = firestoreApp;

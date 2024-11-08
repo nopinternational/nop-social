@@ -5,13 +5,16 @@ import {
   getEvent,
   getEventAttendes,
   getEventMessages,
+
+  getMyEventStatus,
+  getEventParticipants,
+} from "~/module/events/database/database";
+import {
+  addAsAttende,
   signupToEvent,
   postEventMessage as postEventMessageFirebase,
   createEvent,
   updateEvent,
-  getMyEventStatus,
-  getEventParticipants,
-  addAsAttende,
 } from "~/module/events/database/eventsFirebase";
 import { type EventFormType } from "~/module/events/components/NoPEventForm";
 import { postEventMessage } from "./components/types";
