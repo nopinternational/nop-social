@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 import {
   type CollectionReference,
@@ -21,7 +17,6 @@ import {
 
 import { type EventFormType } from "../components/NoPEventForm";
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unnecessary-type-assertion
 
 const EVENTS_COLLECTION = "events";
 const EVENT_PARTICIPANTS = "participants";
@@ -324,6 +319,6 @@ const eventParticipantsConverter: FirestoreDataConverter<EventParticipant> = {
     //options: SnapshotOptions
   ): EventParticipant => {
     const data = snapshot.data();
-    return { id: snapshot.id, when: data.when };
+    return { id: snapshot.id, when: data.when as string};
   },
 };
