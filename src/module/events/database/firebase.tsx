@@ -4,26 +4,24 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 import {
+  type CollectionReference,
   type DocumentData,
+  type FirestoreDataConverter,
   type QueryDocumentSnapshot,
+  FieldValue,
 } from "firebase-admin/firestore";
+
 import {
-  type NopEvent,
   type ConfirmedUser,
   type EventFirestoreModel,
   type EventMessage,
   type EventParticipant,
+  type NopEvent,
 } from "../components/types";
 
-import {
-  type CollectionReference,
-  type FirestoreDataConverter,
-  FieldValue,
-} from "firebase-admin/firestore";
 import { type EventFormType } from "../components/NoPEventForm";
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unnecessary-type-assertion
-
 
 const EVENTS_COLLECTION = "events";
 const EVENT_PARTICIPANTS = "participants";

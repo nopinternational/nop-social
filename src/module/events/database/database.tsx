@@ -3,8 +3,10 @@ import {
   type NopEvent,
   type EventParticipant,
 } from "../components/types";
-import { FirbaseAdminClient } from "./eventsFirebase";
+import { FirbaseAdminClient } from "./firebase";
 import { type EventFormType } from "../components/NoPEventForm";
+
+
 const firestore: FirebaseFirestore.Firestore = firestoreAdmin;
 
 export const getAllEventsFromFirestore = async (): Promise<NopEvent[]> => {
