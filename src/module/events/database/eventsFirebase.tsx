@@ -3,7 +3,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-import { firestoreAdmin } from "~/server/api/firebaseAdmin";
 import {
   type DocumentData,
   type QueryDocumentSnapshot,
@@ -24,69 +23,14 @@ import {
 import { type EventFormType } from "../components/NoPEventForm";
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unnecessary-type-assertion
-const firestore: FirebaseFirestore.Firestore = firestoreAdmin;
 
-
-export const createEvent = async ({
-  nopEvent,
-  uid,
-}: {
-  nopEvent: EventFormType;
-  uid: string;
-}) => {
-  const db = new FirbaseAdminClient(firestore);
-  return db.createEvent(uid, nopEvent);
-};
-
-export const addAsAttende = async ({
-  eventId,
-  id,
-  name,
-  username,
-  addAsAllowed,
-}: {
-  eventId: string;
-  id: string;
-  name: string;
-  username: string;
-  addAsAllowed: boolean;
-}) => {
-  const db = new FirbaseAdminClient(firestore);
-  return db.addAsAttende(eventId, id, name, username, addAsAllowed);
-};
-export const updateEvent = async ({
-  nopEvent,
-  uid,
-  eventId,
-}: {
-  nopEvent: EventFormType;
-  uid: string;
-  eventId: string;
-}) => {
-  const db = new FirbaseAdminClient(firestore);
-  return db.updateEvent(uid, nopEvent, eventId);
-};
-
-export const postEventMessage = async (
-  eventId: string,
-  message: string,
-  from: string
-) => {
-  const db = new FirbaseAdminClient(firestore);
-  return db.postEventMessage(eventId, message, from);
-};
-
-export const signupToEvent = async (eventId: string, userid: string) => {
-  const db = new FirbaseAdminClient(firestore);
-  return db.signupToEvent(eventId, userid);
-};
 
 const EVENTS_COLLECTION = "events";
 const EVENT_PARTICIPANTS = "participants";
 const EVENT_SIGNUPS = "signups";
 const EVENT_ATTENDES = "attendes";
-const ATTENDES_ALLOWED = "allowed";
-const ATTENDES_CONFIRMED = "confirmed";
+// const ATTENDES_ALLOWED = "allowed";
+// const ATTENDES_CONFIRMED = "confirmed";
 
 export class FirbaseAdminClient {
   firestore: FirebaseFirestore.Firestore;
