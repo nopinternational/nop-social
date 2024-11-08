@@ -15,13 +15,13 @@ import {
   type EventFirestoreModel,
   type EventMessage,
   type EventParticipant,
-} from "./components/types";
+} from "../components/types";
 import {
   type CollectionReference,
   type FirestoreDataConverter,
   FieldValue,
 } from "firebase-admin/firestore";
-import { type EventFormType } from "./components/NoPEventForm";
+import { type EventFormType } from "../components/NoPEventForm";
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unnecessary-type-assertion
 const firestore: FirebaseFirestore.Firestore = firestoreAdmin;

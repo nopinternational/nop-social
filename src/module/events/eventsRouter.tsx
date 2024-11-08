@@ -12,7 +12,7 @@ import {
   getMyEventStatus,
   getEventParticipants,
   addAsAttende,
-} from "~/module/events/eventsFirebase";
+} from "~/module/events/database/eventsFirebase";
 import { type EventFormType } from "~/module/events/components/NoPEventForm";
 import { postEventMessage } from "./components/types";
 import { TRPCError } from "@trpc/server";
