@@ -1,125 +1,31 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-import { firestoreAdmin } from "~/server/api/firebaseAdmin";
 import {
+  type CollectionReference,
   type DocumentData,
+  type FirestoreDataConverter,
   type QueryDocumentSnapshot,
+  FieldValue,
 } from "firebase-admin/firestore";
 
 import {
-  type NopEvent,
   type ConfirmedUser,
   type EventFirestoreModel,
   type EventMessage,
   type EventParticipant,
-} from "./components/types";
-import {
-  type CollectionReference,
-  type FirestoreDataConverter,
-  FieldValue,
-} from "firebase-admin/firestore";
-import { type EventFormType } from "./components/NoPEventForm";
+  type NopEvent,
+} from "../components/types";
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unnecessary-type-assertion
-const firestore: FirebaseFirestore.Firestore = firestoreAdmin;
+import { type EventFormType } from "../components/NoPEventForm";
 
-export const getAllEventsFromFirestore = async (): Promise<NopEvent[]> => {
-  const db = new FirbaseAdminClient(firestore);
-  return await db.getAllEventsFromFirestore();
-};
-
-export const getEvent = async (eventid: string): Promise<NopEvent | null> => {
-  const db = new FirbaseAdminClient(firestore);
-  return await db.getEvent(eventid);
-};
-
-export const getEventParticipants = async (
-  eventid: string
-): Promise<EventParticipant[] | null> => {
-  const db = new FirbaseAdminClient(firestore);
-  return await db.getEventParticipants(eventid);
-};
-
-export const getMyEventStatus = async (iam_userid: string, eventid: string) => {
-  const db = new FirbaseAdminClient(firestore);
-  return await db.getMyEventStatus(iam_userid, eventid);
-};
-
-export const getEventAttendes = async (iam_userid: string, eventid: string) => {
-  const db = new FirbaseAdminClient(firestore);
-  return await db.getEventAttendes(iam_userid, eventid);
-};
-
-export const getEventMessages = async (iam_userid: string, eventid: string) => {
-  const db = new FirbaseAdminClient(firestore);
-  return db.getEventMessages(iam_userid, eventid);
-};
-
-export const createEvent = async ({
-  nopEvent,
-  uid,
-}: {
-  nopEvent: EventFormType;
-  uid: string;
-}) => {
-  const db = new FirbaseAdminClient(firestore);
-  return db.createEvent(uid, nopEvent);
-};
-
-export const addAsAttende = async ({
-  eventId,
-  id,
-  name,
-  username,
-  addAsAllowed,
-}: {
-  eventId: string;
-  id: string;
-  name: string;
-  username: string;
-  addAsAllowed: boolean;
-}) => {
-  const db = new FirbaseAdminClient(firestore);
-  return db.addAsAttende(eventId, id, name, username, addAsAllowed);
-};
-export const updateEvent = async ({
-  nopEvent,
-  uid,
-  eventId,
-}: {
-  nopEvent: EventFormType;
-  uid: string;
-  eventId: string;
-}) => {
-  const db = new FirbaseAdminClient(firestore);
-  return db.updateEvent(uid, nopEvent, eventId);
-};
-
-export const postEventMessage = async (
-  eventId: string,
-  message: string,
-  from: string
-) => {
-  const db = new FirbaseAdminClient(firestore);
-  return db.postEventMessage(eventId, message, from);
-};
-
-export const signupToEvent = async (eventId: string, userid: string) => {
-  const db = new FirbaseAdminClient(firestore);
-  return db.signupToEvent(eventId, userid);
-};
 
 const EVENTS_COLLECTION = "events";
 const EVENT_PARTICIPANTS = "participants";
 const EVENT_SIGNUPS = "signups";
 const EVENT_ATTENDES = "attendes";
-const ATTENDES_ALLOWED = "allowed";
-const ATTENDES_CONFIRMED = "confirmed";
+// const ATTENDES_ALLOWED = "allowed";
+// const ATTENDES_CONFIRMED = "confirmed";
 
-class FirbaseAdminClient {
+export class FirbaseAdminClient {
   firestore: FirebaseFirestore.Firestore;
   constructor(firestoreApp: FirebaseFirestore.Firestore) {
     this.firestore = firestoreApp;
@@ -413,6 +319,6 @@ const eventParticipantsConverter: FirestoreDataConverter<EventParticipant> = {
     //options: SnapshotOptions
   ): EventParticipant => {
     const data = snapshot.data();
-    return { id: snapshot.id, when: data.when };
+    return { id: snapshot.id, when: data.when as string};
   },
 };

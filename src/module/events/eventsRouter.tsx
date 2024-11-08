@@ -1,18 +1,18 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../../server/api/trpc";
 import {
+  addAsAttende,
+  createEvent,
   getAllEventsFromFirestore,
   getEvent,
   getEventAttendes,
   getEventMessages,
-  signupToEvent,
-  postEventMessage as postEventMessageFirebase,
-  createEvent,
-  updateEvent,
-  getMyEventStatus,
   getEventParticipants,
-  addAsAttende,
-} from "~/module/events/eventsFirebase";
+  getMyEventStatus,
+  postEventMessage as postEventMessageFirebase,
+  signupToEvent,
+  updateEvent,
+} from "~/module/events/database/database";
 import { type EventFormType } from "~/module/events/components/NoPEventForm";
 import { postEventMessage } from "./components/types";
 import { TRPCError } from "@trpc/server";
