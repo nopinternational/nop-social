@@ -11,68 +11,68 @@ import { Spinner } from "~/components/Spinner";
 import { ProfileHeader } from "~/module/profile/components/ProfileHeader";
 
 const Home: NextPage = () => {
-  //const hello = api.example.hello.useQuery({ text: "from tRPC" });
+    //const hello = api.example.hello.useQuery({ text: "from tRPC" });
 
-  const { data: sessionData } = useSession();
+    const { data: sessionData } = useSession();
 
-  const profiles = api.profile.getAllProfiles.useQuery(
-    undefined, // no input
-    { enabled: sessionData?.user !== undefined }
-  );
-
-  const renderProfile = (profile: Profile) => {
-    console.log("renderProfile.profile", profile);
-
-    const profileSlug = `profile/${profile.username}`;
-    return (
-      <Link
-        href={profileSlug}
-        className="col-span-2 md:col-span-1"
-        key={profile.username}
-      >
-        <div className="col-span-2 flex w-full flex-col items-center justify-center gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20 md:col-span-1">
-          <ProfileHeader profileName={profile.username} avatar={profile.avatar}/>
-        </div>
-      </Link>
+    const profiles = api.profile.getAllProfiles.useQuery(
+        undefined, // no input
+        { enabled: sessionData?.user !== undefined }
     );
-  };
 
-  const renderLoading = () => {
+    const renderProfile = (profile: Profile) => {
+        console.log("renderProfile.profile", profile);
+
+        const profileSlug = `profile/${profile.username}`;
+        return (
+            <Link
+                href={profileSlug}
+                className="col-span-2 md:col-span-1"
+                key={profile.username}
+            >
+                <div className="col-span-2 flex w-full flex-col items-center justify-center gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20 md:col-span-1">
+                    <ProfileHeader profileName={profile.username} avatar={profile.avatar}/>
+                </div>
+            </Link>
+        );
+    };
+
+    const renderLoading = () => {
+        return (
+            <div className="col-span-2 flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
+                <h3 className="text-2xl font-bold">
+                    <HighlightText>Laddar...</HighlightText>
+                </h3>
+                <div className="text-lg">
+                    <p>Den som väntar på något gott 😘 </p>
+                </div>
+                <Spinner />
+            </div>
+        );
+    };
     return (
-      <div className="col-span-2 flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
-        <h3 className="text-2xl font-bold">
-          <HighlightText>Laddar...</HighlightText>
-        </h3>
-        <div className="text-lg">
-          <p>Den som väntar på något gott 😘 </p>
-        </div>
-        <Spinner />
-      </div>
-    );
-  };
-  return (
-    <Layout
-      headingText={
-        <>
+        <Layout
+            headingText={
+                <>
           Våra <HighlightText>härliga</HighlightText> par
-        </>
-      }
-    >
-      <div className="grid grid-cols-2  gap-4   sm:grid-cols-2 md:gap-8">
-        <div className="col-span-2">
-          <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
-            <h3 className="text-2xl font-bold">Par, par, par ❤️❤️❤️</h3>
-            <div className="text-lg">
+                </>
+            }
+        >
+            <div className="grid grid-cols-2  gap-4   sm:grid-cols-2 md:gap-8">
+                <div className="col-span-2">
+                    <div className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
+                        <h3 className="text-2xl font-bold">Par, par, par ❤️❤️❤️</h3>
+                        <div className="text-lg">
               Night of Passion är fullt av trevliga par. Nedan hittar ni några
               av dom 😘
+                        </div>
+                    </div>
+                </div>
+                {profiles.isLoading ? renderLoading() : null}
+                {profiles.data?.map((profile) => renderProfile(profile))}
             </div>
-          </div>
-        </div>
-        {profiles.isLoading ? renderLoading() : null}
-        {profiles.data?.map((profile) => renderProfile(profile))}
-      </div>
-    </Layout>
-  );
+        </Layout>
+    );
 };
 
 export default Home;
