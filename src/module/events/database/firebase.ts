@@ -1,4 +1,3 @@
-
 import {
   type CollectionReference,
   type DocumentData,
@@ -111,7 +110,7 @@ export class FirbaseAdminClient {
     return null;
   };
 
-  getEventAttendes = async (iam_userid: string, eventid: string):  Promise<ConfirmedUser[] | null >=> {
+  getEventAttendes = async (iam_userid: string, eventid: string): Promise<ConfirmedUser[] | null> => {
     //events / REdvBu1tM2iI5GHEur8F / signups / attendes
     // console.log("FirbaseAdminClient.getEvent for id", eventid)
     const eventsRef = this.firestore.collection(EVENTS_COLLECTION);
@@ -130,7 +129,7 @@ export class FirbaseAdminClient {
 
       console.log("getEventAttendes.allowed:", allowed)
       console.log("getEventAttendes.allowed:", dta.confirmed)
-      
+
       if (allowed.includes(iam_userid)) {
         console.log("return getEventAttendes.confirmed:", dta.confirmed)
         return dta.confirmed as ConfirmedUser[];
@@ -226,11 +225,11 @@ export class FirbaseAdminClient {
     const docRef = eventsRef.doc();
     await docRef.set({ ...nopEvent, owner: uid });
 
-    const createdEventId = docRef.id; 
+    const createdEventId = docRef.id;
 
     const eventAttendes = docRef.collection(EVENT_SIGNUPS).doc(EVENT_ATTENDES);
-    await eventAttendes.set({allowed: []})
-    await eventAttendes.set({confirmed: []})
+    await eventAttendes.set({ allowed: [] })
+    await eventAttendes.set({ confirmed: [] })
     await this.signupToEvent(createdEventId, uid);
     await this.addUserAsAllowed(createdEventId, uid);
     return createdEventId;
@@ -251,13 +250,13 @@ export class FirbaseAdminClient {
 
     const attendesDoc = await attendesRef.get();
 
-    if (attendesDoc.exists){
+    if (attendesDoc.exists) {
       await attendesRef.update({
         confirmed: FieldValue.arrayUnion({ id: userId, name, username }),
       });
     } else {
 
-      await attendesRef.set({confirmed: [{ id: userId, name, username }]})
+      await attendesRef.set({ confirmed: [{ id: userId, name, username }] })
     }
 
     if (addAsAllowed) {
@@ -268,8 +267,8 @@ export class FirbaseAdminClient {
     return null;
   };
 
-  addUserAsAllowed = async (eventId: string, userId:string): Promise<string|null> => {
-        const eventsRef = this.firestore.collection(EVENTS_COLLECTION);
+  addUserAsAllowed = async (eventId: string, userId: string): Promise<string | null> => {
+    const eventsRef = this.firestore.collection(EVENTS_COLLECTION);
     const attendesRef = eventsRef
       .doc(eventId)
       .collection(EVENT_SIGNUPS)
@@ -323,6 +322,6 @@ const eventParticipantsConverter: FirestoreDataConverter<EventParticipant> = {
     //options: SnapshotOptions
   ): EventParticipant => {
     const data = snapshot.data();
-    return { id: snapshot.id, when: data.when as string};
+    return { id: snapshot.id, when: data.when as string };
   },
 };

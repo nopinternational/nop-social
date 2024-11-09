@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { type FC } from "react";
 import HighlightText from "~/components/HighlightText";
 import { ProfileLink } from "~/module/profile/components/ProfileLink";
@@ -6,21 +5,22 @@ import { api } from "~/utils/api";
 import { VIPBadge } from "./Badge";
 
 export const EventAttendes: FC<{ eventid: string }> = ({ eventid }) => {
-  const attendes = api.event.getEventAttendes.useQuery({ eventId: eventid });
 
-  if (attendes.isLoading || false) {
+    const attendes = api.event.getEventAttendes.useQuery({ eventId: eventid });
+       
+  if (attendes.isLoading || false ) {
     return <p>laddar deltagare...</p>;
   }
 
   if (!attendes.data) {
     return (
-    <div>
-      <p>Ni måste vara deltagare på träffen för att se vilka som kommer.</p>
-      <p>
-        Har ni betalat nyligen så kommer vi strax lägga till er som deltagare,
-        ha tålamod 😉
-      </p>
-    </div>)
+      <div>
+        <p>Ni måste vara deltagare på träffen för att se vilka som kommer.</p>
+        <p>
+      Har ni betalat nyligen så kommer vi strax lägga till er som deltagare,
+      ha tålamod 😉
+        </p>
+      </div>)
   }
 
   if (attendes.data.length == 0)
