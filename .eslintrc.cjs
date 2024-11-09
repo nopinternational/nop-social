@@ -26,7 +26,8 @@ const config = {
       },
     ],
     "no-console": "warn",
-    "indent": ["warn", 2]
+    "indent": ["warn", 2],
+    "object-curly-spacing": ["warn", "always"],
   },
 };
 
