@@ -25,6 +25,8 @@ const config = {
         fixStyle: "inline-type-imports",
       },
     ],
+    "no-console": "warn",
+    "indent": ["warn", 2]
   },
 };
 
