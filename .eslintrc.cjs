@@ -23,7 +23,7 @@ const config = {
             {
                 prefer: "type-imports",
                 fixStyle: "inline-type-imports",
-            
+            }
         ],
         "no-console": "warn",
         "indent": ["error", 4],
