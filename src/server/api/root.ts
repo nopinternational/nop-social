@@ -10,10 +10,10 @@ import { chatRouter } from "~/module/message/chatRouter";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  example: exampleRouter,
-  profile: profileRouter,
-  event: eventRouter,
-  chat: chatRouter,
+    example: exampleRouter,
+    profile: profileRouter,
+    event: eventRouter,
+    chat: chatRouter,
 });
 
 // export type definition of API

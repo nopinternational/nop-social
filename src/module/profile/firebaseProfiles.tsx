@@ -1,9 +1,9 @@
 import { firestoreAdmin } from "~/server/api/firebaseAdmin";
 import { type Person, type Profile } from "~/module/profile/profileRouter";
 import {
-  type QueryDocumentSnapshot,
-  type FirestoreDataConverter,
-  type DocumentData,
+    type QueryDocumentSnapshot,
+    type FirestoreDataConverter,
+    type DocumentData,
 } from "firebase-admin/firestore";
 
 interface ProfileDbModel extends DocumentData {
@@ -25,109 +25,109 @@ export type PartialProfile = {
 };
 
 export const getAllProfilesFromFirestore = async (): Promise<Profile[]> => {
-  const profilesRef = firestoreAdmin
-    .collection("profiles")
-    .withConverter(profileConverter);
+    const profilesRef = firestoreAdmin
+        .collection("profiles")
+        .withConverter(profileConverter);
 
-  const objects: Profile[] = [];
+    const objects: Profile[] = [];
 
-  const query = await profilesRef.get();
-  query.docs.forEach((snapshot) => objects.push(snapshot.data()));
+    const query = await profilesRef.get();
+    query.docs.forEach((snapshot) => objects.push(snapshot.data()));
 
-  return objects;
+    return objects;
 };
 
 export const getProfileByIdFromFirestore = async (
-  profileid: string
+    profileid: string
 ): Promise<Profile | null> => {
-  const profileRef = firestoreAdmin
-    .collection("profiles")
-    .doc(profileid)
-    .withConverter(profileConverter);
+    const profileRef = firestoreAdmin
+        .collection("profiles")
+        .doc(profileid)
+        .withConverter(profileConverter);
 
-  // const queryRef = profilesRef.where("username", "==", profileid);
+    // const queryRef = profilesRef.where("username", "==", profileid);
 
-  const doc = await profileRef.get();
-  if (!doc.exists) {
-    console.log("No such document!");
-  } else {
+    const doc = await profileRef.get();
+    if (!doc.exists) {
+        console.log("No such document!");
+    } else {
     // console.log("Document data:", doc.data());
-    return doc.data() as Profile;
-  }
+        return doc.data() as Profile;
+    }
 
-  return null;
+    return null;
 
-  // const querySnapshot = await queryRef.get();
+    // const querySnapshot = await queryRef.get();
 
-  // if (querySnapshot.docs.length > 0) {
-  //   const profile = querySnapshot.docs[0]?.data();
-  //   //console.log("getProfileFromFirestore", profile);
-  //   return Promise.resolve(profile as Profile);
-  // }
+    // if (querySnapshot.docs.length > 0) {
+    //   const profile = querySnapshot.docs[0]?.data();
+    //   //console.log("getProfileFromFirestore", profile);
+    //   return Promise.resolve(profile as Profile);
+    // }
 
-  // console.error(
-  //   "getProfileFromFirestore, found nothing for profileid",
-  //   profileid
-  // );
-  // return null;
+    // console.error(
+    //   "getProfileFromFirestore, found nothing for profileid",
+    //   profileid
+    // );
+    // return null;
 };
 
 export const getProfileByProfileNameFromFirestore = async (
-  profileid: string
+    profileid: string
 ): Promise<Profile | null> => {
-  const profilesRef = firestoreAdmin
-    .collection("profiles")
-    .withConverter(profileConverter);
+    const profilesRef = firestoreAdmin
+        .collection("profiles")
+        .withConverter(profileConverter);
 
-  const queryRef = profilesRef.where("username", "==", profileid);
+    const queryRef = profilesRef.where("username", "==", profileid);
 
-  const querySnapshot = await queryRef.get();
+    const querySnapshot = await queryRef.get();
 
-  if (querySnapshot.docs.length > 0) {
-    const profile = querySnapshot.docs[0]?.data();
-    //console.log("getProfileFromFirestore", profile);
-    return Promise.resolve(profile as Profile);
-  }
+    if (querySnapshot.docs.length > 0) {
+        const profile = querySnapshot.docs[0]?.data();
+        //console.log("getProfileFromFirestore", profile);
+        return Promise.resolve(profile as Profile);
+    }
 
-  console.error(
-    "getProfileFromFirestore, found nothing for profileid",
-    profileid
-  );
-  return null;
+    console.error(
+        "getProfileFromFirestore, found nothing for profileid",
+        profileid
+    );
+    return null;
 };
 
 export const getProfileByUserIdFromFirestore = async (
-  userId: string
+    userId: string
 ): Promise<Profile | null> => {
-  const profilesRef = firestoreAdmin
-    .collection("profiles")
-    .doc(userId)
-    .withConverter(profileConverter);
+    const profilesRef = firestoreAdmin
+        .collection("profiles")
+        .doc(userId)
+        .withConverter(profileConverter);
 
-  // const queryRef = profilesRef.where("username", "==", profileid);
+    // const queryRef = profilesRef.where("username", "==", profileid);
 
-  const profileSnapshot = await profilesRef.get();
+    const profileSnapshot = await profilesRef.get();
 
-  if (profileSnapshot.exists) {
-    const d = profileSnapshot.data() as Profile;
-    // console.log("get user for id", userId, d);
-    d.id = userId;
-    return d;
-  }
+    if (profileSnapshot.exists) {
+        const d = profileSnapshot.data() as Profile;
+        // console.log("get user for id", userId, d);
+        d.id = userId;
+        return d;
+    }
 
-  return null;
+    return null;
 };
 
 export const mergeToProfile = async (
-  id: string,
-  partialProfile: PartialProfile
+    id: string,
+    partialProfile: PartialProfile
 ) => {
-  //console.log("mergeToProfile.partialProfile", id, partialProfile)
-  const profileRef = firestoreAdmin.collection("profiles").doc(id);
+    //console.log("mergeToProfile.partialProfile", id, partialProfile)
+    const profileRef = firestoreAdmin.collection("profiles").doc(id);
 
-  await profileRef.set(partialProfile, { merge: true });
-  //---
-  //await setDoc(doc(firestoreFoo, "profiles", id), partialProfile, { merge: true })
+    await profileRef.set(partialProfile, { merge: true });
+    //---
+    //await setDoc(doc(firestoreFoo, "profiles", id), partialProfile, { merge: true })
 };
 
 // export const mergeToProfile = async (id: string, partialProfile: PartialProfile) => {
@@ -183,40 +183,40 @@ export const mergeToProfile = async (
 
 // Firestore data converter
 const profileConverter: FirestoreDataConverter<Profile> = {
-  toFirestore: (profile: Profile): ProfileDbModel => {
-    return {
-      username: profile.username,
-      person1: {
-        name: profile.person1.name,
-        born: profile.person1.born,
-      },
-      person2: {
-        name: profile.person2.name,
-        born: profile.person2.born,
-      },
-      description: profile.description,
-      avatar: profile.avatar,
-    };
-  },
-  fromFirestore: (
-    snapshot: QueryDocumentSnapshot<ProfileDbModel>
+    toFirestore: (profile: Profile): ProfileDbModel => {
+        return {
+            username: profile.username,
+            person1: {
+                name: profile.person1.name,
+                born: profile.person1.born,
+            },
+            person2: {
+                name: profile.person2.name,
+                born: profile.person2.born,
+            },
+            description: profile.description,
+            avatar: profile.avatar,
+        };
+    },
+    fromFirestore: (
+        snapshot: QueryDocumentSnapshot<ProfileDbModel>
     //options: SnapshotOptions
-  ): Profile => {
+    ): Profile => {
     // const data = snapshot.data(options) as ProfileDbModel;
-    const data = snapshot.data();
-    return {
-      id: snapshot.id,
-      username: data.username,
-      person1: {
-        name: data.person1.name,
-        born: data.person1.born,
-      },
-      person2: {
-        name: data.person2.name,
-        born: data.person2.born,
-      },
-      description: data.description,
-      avatar: data.avatar,
-    };
-  },
+        const data = snapshot.data();
+        return {
+            id: snapshot.id,
+            username: data.username,
+            person1: {
+                name: data.person1.name,
+                born: data.person1.born,
+            },
+            person2: {
+                name: data.person2.name,
+                born: data.person2.born,
+            },
+            description: data.description,
+            avatar: data.avatar,
+        };
+    },
 };

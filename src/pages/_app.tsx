@@ -9,17 +9,17 @@ import { api } from "~/utils/api";
 import "~/styles/globals.css";
 
 const MyApp: AppType<{ session: Session | null }> = ({
-  Component,
-  pageProps: { session, ...pageProps },
+    Component,
+    pageProps: { session, ...pageProps },
 }) => {
-  return (
-    <SessionProvider session={session}>
-      {/* <FlagProvider> */}
-      <Component {...pageProps} />
-      {/* </FlagProvider> */}
-      <Analytics />
-    </SessionProvider>
-  );
+    return (
+        <SessionProvider session={session}>
+            {/* <FlagProvider> */}
+            <Component {...pageProps} />
+            {/* </FlagProvider> */}
+            <Analytics />
+        </SessionProvider>
+    );
 };
 
 export default api.withTRPC(MyApp);

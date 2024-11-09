@@ -1,28 +1,28 @@
 import { type ChangeEvent } from "react";
 
 export const Toggle = ({
-  name,
-  optionText,
-  checked,
-  onClick,
+    name,
+    optionText,
+    checked,
+    onClick,
 }: {
   name: string;
   optionText: string;
   checked: boolean;
   onClick: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }) => {
-  return (
-    <label className="relative mr-5 inline-flex cursor-pointer items-center">
-      <input
-        type="checkbox"
-        className="peer sr-only"
-        checked={checked}
-        readOnly
-        name={name}
-        onChange={onClick}
-      />
-      <div
-        className="peer
+    return (
+        <label className="relative mr-5 inline-flex cursor-pointer items-center">
+            <input
+                type="checkbox"
+                className="peer sr-only"
+                checked={checked}
+                readOnly
+                name={name}
+                onChange={onClick}
+            />
+            <div
+                className="peer
                 h-6
                 w-11
                 rounded-full bg-gray-200
@@ -40,8 +40,8 @@ export const Toggle = ({
                 peer-checked:after:translate-x-full
                 peer-checked:after:border-white
                 peer-focus:ring-green-300"
-      ></div>
-      <span className=" ">{optionText}</span>
-    </label>
-  );
+            ></div>
+            <span className=" ">{optionText}</span>
+        </label>
+    );
 };
