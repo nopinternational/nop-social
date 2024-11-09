@@ -2,6 +2,7 @@ import { firestoreAdmin } from "~/server/api/firebaseAdmin";
 import {
   type NopEvent,
   type EventParticipant,
+  type ConfirmedUser,
 } from "../components/types";
 import { FirbaseAdminClient } from "./firebase";
 import { type EventFormType } from "../components/NoPEventForm";
@@ -31,7 +32,7 @@ export const getMyEventStatus = async (iam_userid: string, eventid: string) => {
   return await db.getMyEventStatus(iam_userid, eventid);
 };
 
-export const getEventAttendes = async (iam_userid: string, eventid: string) => {
+export const getEventAttendes = async (iam_userid: string, eventid: string): Promise<ConfirmedUser[] | null> => {
   const db = new FirbaseAdminClient(firestore);
   return await db.getEventAttendes(iam_userid, eventid);
 };
