@@ -111,7 +111,7 @@ export class FirbaseAdminClient {
     return null;
   };
 
-  getEventAttendes = async (iam_userid: string, eventid: string) => {
+  getEventAttendes = async (iam_userid: string, eventid: string):  Promise<ConfirmedUser[] | null >=> {
     //events / REdvBu1tM2iI5GHEur8F / signups / attendes
     // console.log("FirbaseAdminClient.getEvent for id", eventid)
     const eventsRef = this.firestore.collection(EVENTS_COLLECTION);
@@ -124,15 +124,19 @@ export class FirbaseAdminClient {
       allowed: string[];
     };
     if (snapshot.exists) {
-      //console.log("getEventAttendes", snapshot.data())
       const dta = snapshot.data() as FirebaseDocType;
+      console.log("getEventAttendes", dta)
       const allowed: string[] = dta.allowed;
 
-      // console.log("getEventAttendes.allowed:", allowed)
+      console.log("getEventAttendes.allowed:", allowed)
+      console.log("getEventAttendes.allowed:", dta.confirmed)
+      
       if (allowed.includes(iam_userid)) {
+        console.log("return getEventAttendes.confirmed:", dta.confirmed)
         return dta.confirmed as ConfirmedUser[];
       } else {
-        return [];
+        console.log("return null")
+        return null;
       }
     } else {
       // docSnap.data() will be undefined in this case

@@ -13,18 +13,19 @@ export const EventAttendes: FC<{ eventid: string }> = ({ eventid }) => {
   }
 
   if (!attendes.data) {
-    return <p>hittar ingen deltagare...</p>;
+    return (
+    <div>
+      <p>Ni måste vara deltagare på träffen för att se vilka som kommer.</p>
+      <p>
+        Har ni betalat nyligen så kommer vi strax lägga till er som deltagare,
+        ha tålamod 😉
+      </p>
+    </div>)
   }
 
   if (attendes.data.length == 0)
     return (
-      <div>
-        <p>Ni måste vara deltagare på träffen för att se vilka som kommer.</p>
-        <p>
-          Har ni betalat nyligen så kommer vi strax lägga till er som deltagare,
-          ha tålamod 😉
-        </p>
-      </div>
+      <p>Det finns inga deltagare på detta event ännu</p>
     );
 
   return (
