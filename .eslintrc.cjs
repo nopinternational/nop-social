@@ -25,7 +25,7 @@ const config = {
                 fixStyle: "inline-type-imports",
             }
         ],
-        "no-console": "warn",
+        "no-console": ["error", { allow: ["warn", "error"] }],
         "indent": ["error", 4],
         "object-curly-spacing": ["warn", "always"],
     },
