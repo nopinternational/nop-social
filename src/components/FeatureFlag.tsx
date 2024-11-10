@@ -1,19 +1,21 @@
-//import { useFlag, useUnleashContext } from "@unleash/nextjs/client";
-import { type ReactNode, useEffect } from "react";
+import { type ReactNode } from "react";
 import { useSession } from "next-auth/react";
+import { featureFlags } from "~/lib/featureflag/featureConfig";
+
+// FEATURE_MESSAGENOTIFICATION
 
 export const useFeature = (featureName: string): boolean => {
     const session = useSession()
+    const userId = session.data?.user.id ;
+    const useIt =  !!featureFlags[featureName]?.includes(userId|| "")
 
-    //const featureIsEnabled = useFlag(featureName)
-    //const updateContext = useUnleashContext();
+    console.log("useFeature - featurename", featureName)
+    console.log("useFeature - userid", userId)
+    console.log("useFeature - flags", featureFlags)
+    console.log("useFeature - <flag evaluation>", featureFlags[featureName]?.includes(userId|| ""))
+    console.log("useFeature - useIt", useIt)
 
-    useEffect(() => {
-        const userId = session.data?.user.id
-        //void updateContext({ userId });
-    });
-    //return featureIsEnabled
-    return false
+    return useIt
 }
 
 export const ToggledByFeatureFlag = ({ featureName, children }: { featureName: string, children: ReactNode }): React.JSX.Element | null => {
