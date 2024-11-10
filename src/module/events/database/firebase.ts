@@ -37,7 +37,6 @@ export class FirbaseAdminClient {
         const snapshot = await eventRef.get();
 
         if (snapshot.empty) {
-            console.log("No events found");
             return [];
         }
         const objects: NopEvent[] = [];
@@ -76,7 +75,7 @@ export class FirbaseAdminClient {
 
         const snapshot = await eventParticipantsRef.get();
         if (snapshot.empty) {
-            console.log("No matching documents participants.");
+            // console.log("No matching documents participants.", eventid);
             return null;
         }
         const particpants: EventParticipant[] = [];
@@ -124,22 +123,17 @@ export class FirbaseAdminClient {
     };
     if (snapshot.exists) {
         const dta = snapshot.data() as FirebaseDocType;
-        console.log("getEventAttendes", dta)
         const allowed: string[] = dta.allowed;
 
-        console.log("getEventAttendes.allowed:", allowed)
-        console.log("getEventAttendes.allowed:", dta.confirmed)
 
         if (allowed.includes(iam_userid)) {
-            console.log("return getEventAttendes.confirmed:", dta.confirmed)
             return dta.confirmed as ConfirmedUser[];
         } else {
-            console.log("return null")
             return null;
         }
     } else {
         // docSnap.data() will be undefined in this case
-        console.log("No event attendes for id ", eventid);
+        // console.log("No event attendes for id ", eventid);
     }
     return [];
     };
@@ -168,7 +162,7 @@ export class FirbaseAdminClient {
             }
         } else {
             // docSnap.data() will be undefined in this case
-            console.log("No event messages for", eventid);
+            // console.log("No event messages for", eventid);
         }
         return [];
     };

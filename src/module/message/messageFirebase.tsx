@@ -306,7 +306,6 @@ class FirbaseChatMessageClient {
         if (lastReadDoc.exists) {
             const data = lastReadDoc.data() as Readstatus;
             //  ?["lastread"] as Date
-            console.log("data -- ", data);
             return data["lastread"] as Date;
         }
         return null;

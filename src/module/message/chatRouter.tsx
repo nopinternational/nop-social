@@ -90,8 +90,6 @@ export const chatRouter = createTRPCRouter({
             })
         )
         .mutation(({ input, ctx }) => {
-            console.log("updateConvoMarkAsRead convo", input.chatConvoId);
-            console.log("updateConvoMarkAsRead userid", ctx.session.user.id);
             updateConvoMarkAsRead(input.chatConvoId, ctx.session.user.id)
         }),
 
