@@ -1,4 +1,11 @@
 
+/*
+
+    reading env variables using dynamic keys i.e. process.env["variable"] 
+    cannot be done due to webpack issues. Therefor a non-straight loading 
+    of featureflags :/
+*/
+const featureValusRaw: { [key: string]: string } = { messageNotification: process.env.NEXT_PUBLIC_FEATURE_MESSAGENOTIFICATION || "" }
 
 
 export const featureFlags: { [key: string]: string[] } = {
@@ -6,14 +13,13 @@ export const featureFlags: { [key: string]: string[] } = {
 
 } 
 
-const loadFromEnv = () => {
-    const flag1 = process.env.NEXT_PUBLIC_FEATURE_MESSAGENOTIFICATION
-
-    console.log("FeatureFlag: FEATURE_MESSAGENOTIFICATION-2", flag1)
-    // console.log("FeatureFlag: FEATURE_MESSAGENOTIFICATION", process.env)
-
-    featureFlags.messageNotification =  flag1?.split(',') || []
+const load = () => {
+    for (const key in featureValusRaw) {
+        featureFlags[key] = parseEnvValue(featureValusRaw[key] as string)
+    }
+}
+const parseEnvValue = (value: string): string[] => {
+    return value?.split(',') || []
 }
 
-loadFromEnv()  
-
+load()

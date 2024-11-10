@@ -18,7 +18,6 @@ import { api } from "~/utils/api";
 const Home: NextPage = () => {
     
     const useMessageNotification = useFeature("messageNotification")
-    console.log("messageNotification", useMessageNotification)
     return (
         <Layout
             headingText={
