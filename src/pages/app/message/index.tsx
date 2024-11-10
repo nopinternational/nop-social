@@ -13,11 +13,12 @@ import { useFeature } from "~/components/FeatureFlag";
 import { MessageHeaderCard } from "~/module/message/components/MessageHeaderCard";
 import { ProfilePic } from "~/module/profile/components/ProfilePic";
 import { api } from "~/utils/api";
+import { VIPBadge } from "~/module/events/components/Badge";
 
 
 const Home: NextPage = () => {
     
-    const useMessageNotification = useFeature("messageNotification")
+    
     return (
         <Layout
             headingText={
@@ -86,7 +87,7 @@ const ConnectedConversationsCard = () => {
             {myConversations.map((convo) => (
                 <Link
                     key={convo.conversationId}
-                    className="grid grid-cols-4 hover:bg-white/20"
+                    className=" hover:bg-white/20"
                     href={`/app/message/${convo.conversationId}`}
                 >
                     <Conversation convo={convo} />
@@ -97,7 +98,7 @@ const ConnectedConversationsCard = () => {
 };
 
 const Conversation = ({ convo }: { convo: ConversationGroup }) => {
-    const featureIsRead = false;
+    const useMessageNotification = useFeature("messageNotification")
     // : string | null
     function getFirstChatmember(chatmembers: ChatMember[]): string | null {
     // (convo.chatMembers && convo.chatMembers.length > 0) ||
@@ -119,7 +120,7 @@ const Conversation = ({ convo }: { convo: ConversationGroup }) => {
 
     const when = new Date(convo.when);
     const isRead = convoLastread === null ? true : convoLastread < when;
-    const css = isRead && featureIsRead ? "bg-lime-500" : "";
+    const css = isRead && useMessageNotification ? "bg-[hsl(280,100%,70%)]/20 border-2 border-solid border-[hsl(280,100%,70%)] rounded-xl p-2" : "";
 
     const dateReadString = convoLastread
         ? convoLastread.toLocaleDateString() +
@@ -127,11 +128,14 @@ const Conversation = ({ convo }: { convo: ConversationGroup }) => {
       convoLastread.toLocaleDateString()
         : "aldrig 😢";
     return (
-        <>
-            <div className="col-span-1 flex items-center justify-center pt-2">
+        
+        <div className={"flex " + css}>
+            
+            <div className="mr-3">
+                
                 <ProfilePic variant="small" />
             </div>
-            <div className={"col-span-3 " + css}>
+            <div className="">
                 <h3 className="text-2xl font-bold">
                     <HighlightText>{chatMemberProfileName}</HighlightText>
                 </h3>
@@ -141,12 +145,12 @@ const Conversation = ({ convo }: { convo: ConversationGroup }) => {
                 <div className="relative">
                     <p className="left-0 text-xs">när: {whenFormatted}</p>
                 </div>
-                {featureIsRead ? (
+                {false && useMessageNotification ? (
                     <div>
                         <p className="left-0 text-xs">convoread? {dateReadString}</p>
                     </div>
                 ) : null}
             </div>
-        </>
+        </div>
     );
 };
