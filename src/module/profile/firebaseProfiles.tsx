@@ -45,31 +45,17 @@ export const getProfileByIdFromFirestore = async (
         .doc(profileid)
         .withConverter(profileConverter);
 
-    // const queryRef = profilesRef.where("username", "==", profileid);
 
     const doc = await profileRef.get();
     if (!doc.exists) {
-        console.log("No such document!");
+        //console.log("Profile does not exist ", profileid);
     } else {
-    // console.log("Document data:", doc.data());
+        // console.log("Document data:", doc.data());
         return doc.data() as Profile;
     }
 
     return null;
 
-    // const querySnapshot = await queryRef.get();
-
-    // if (querySnapshot.docs.length > 0) {
-    //   const profile = querySnapshot.docs[0]?.data();
-    //   //console.log("getProfileFromFirestore", profile);
-    //   return Promise.resolve(profile as Profile);
-    // }
-
-    // console.error(
-    //   "getProfileFromFirestore, found nothing for profileid",
-    //   profileid
-    // );
-    // return null;
 };
 
 export const getProfileByProfileNameFromFirestore = async (

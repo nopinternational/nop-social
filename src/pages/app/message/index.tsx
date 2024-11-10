@@ -12,53 +12,6 @@ import { MessageHeaderCard } from "~/module/message/components/MessageHeaderCard
 import { ProfilePic } from "~/module/profile/components/ProfilePic";
 import { api } from "~/utils/api";
 
-const CONVERSATION_GROUP_EMPTY: ConversationGroup[] = [];
-/* const CONVERSATION_GROUP_DUMMY: ConversationGroup[] = [
-  {
-    conversationId: "test-e36db886ceadadf6e26678b57222a6d0",
-    username: "sthlmpar08",
-    lastMessage: "Så roligt att höra! Vi ses på lördag för en middag",
-    members: ["123", "456"],
-    when: "2024-03-01T10:40:28.706Z",
-    chatMembers: [{ profileid: "sthlmpar08", profilename: "sthlmpar08" }],
-    conversationGroupName: "sthlmpar08",
-  },
-  {
-    conversationId: "test-6f0216ac2fa4cee37679b55795f5517d",
-    username: "Sexy-couple",
-    lastMessage:
-      "Det var många härliga par på förra träffen och ni är ett par som vi särskilt gillar 😉",
-    members: ["123", "456"],
-    when: "2024-03-01T10:41:28.706Z",
-    chatMembers: [{ profileid: "Sexy-couple", profilename: "Sexy-couple" }],
-    conversationGroupName: "Sexy-couple",
-  },
-  {
-    conversationId: "test-7061c9f8e194f2076a40e0b988a00859",
-    username: "Latin-Language-Lovers",
-    lastMessage:
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-    members: ["123", "456"],
-    when: "2024-03-01T10:42:28.706Z",
-    chatMembers: [
-      {
-        profileid: "Latin-Language-Lovers",
-        profilename: "Latin-Language-Lovers",
-      },
-    ],
-    conversationGroupName: "Latin-Language-Lovers",
-  },
-  {
-    conversationId: "test-TliD2abuGuAbNELbtDXf",
-    username: "happy couple",
-    lastMessage: "Tjoho på er!",
-    members: ["123", "456"],
-    when: "2024-03-01T10:43:28.706Z",
-    chatMembers: [{ profileid: "happy couple", profilename: "happy couple" }],
-    conversationGroupName: "happy couple",
-  },
-];*/
-const CONVERSATION_GROUP = CONVERSATION_GROUP_EMPTY;
 
 const Home: NextPage = () => {
     return (
@@ -111,10 +64,8 @@ const LoadingMessagesCard = () => {
 const ConnectedConversationsCard = () => {
     const myConvoGroups = api.chat.getMyConvoGroups.useQuery();
     const myConversations = myConvoGroups.data || [];
-    //const myConversations: ConversationGroup[] = [];
 
     if (!myConvoGroups.data) {
-    // console.log("myConvoGroups.data", myConvoGroups.data);
         return <LoadingMessagesCard />;
     }
     if (myConversations && myConversations.length == 0) {
@@ -141,29 +92,6 @@ const ConnectedConversationsCard = () => {
     );
 };
 
-/*
-const DummyConversationsCard = () => {
-  return (
-    <Card
-      header={
-        <>
-          Pågående <HighlightText>konversationer</HighlightText>
-        </>
-      }
-    >
-      {CONVERSATION_GROUP.map((convo) => (
-        <Link
-          key={convo.conversationId}
-          className="grid grid-cols-4 hover:bg-white/20"
-          href={`/app/message/${convo.conversationId}`}
-        >
-          <Conversation convo={convo} />
-        </Link>
-      ))}
-    </Card>
-  );
-};*/
-
 const Conversation = ({ convo }: { convo: ConversationGroup }) => {
     const featureIsRead = false;
     // : string | null
@@ -189,11 +117,6 @@ const Conversation = ({ convo }: { convo: ConversationGroup }) => {
     const isRead = convoLastread === null ? true : convoLastread < when;
     const css = isRead && featureIsRead ? "bg-lime-500" : "";
 
-    console.log("-----------------------");
-    console.log("when", when);
-    console.log("last read", convoLastread);
-    console.log("isRead", isRead);
-    console.log("-----------------------");
     const dateReadString = convoLastread
         ? convoLastread.toLocaleDateString() +
       " - " +

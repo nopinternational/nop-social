@@ -20,8 +20,8 @@ import { MessageHeaderCard } from "~/module/message/components/MessageHeaderCard
 import { useEffect } from "react";
 
 const Home: NextPage = () => {
-    const session = useSession();
 
+    const session = useSession();
     const router = useRouter();
     const { messageid } = router.query;
     const apiUtil = api.useContext();
@@ -40,8 +40,6 @@ const Home: NextPage = () => {
     api.chat.updateConvoMarkAsRead.useMutation();
 
     useEffect(() => {
-        console.log("useEffect - convoid", convoId);
-
         if (convoId) {
             void updateConvo({ chatConvoId: convoId });
         }
@@ -154,7 +152,6 @@ const Home: NextPage = () => {
 
 export default Home;
 
-const MESSAGES_EMPTY: ConversationMessage[] = [];
 
 const MESSAGES_DUMMY: ConversationMessage[] = [
     {

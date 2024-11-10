@@ -8,26 +8,19 @@ import HighlightText from "~/components/HighlightText";
 import Layout from "~/components/Layout";
 import { auth } from "~/lib/firebase/firebase";
 import { Spinner } from "~/components/Spinner";
-import { useRouter } from "next/router";
 import Link from "next/link";
 import { PasswordCard } from "~/module/profile/components/PasswordCard";
 
 const Home: NextPage = () => {
     const searchParams = useSearchParams();
-    const router = useRouter();
     const [isCodeOK, setCodeOk] = useState<boolean | null>(null);
     const [isSuccessful, setSuccessful] = useState(false);
     const [isVeryingCodeTimeout, setVerifyingCodeTimeout] = useState(false);
     const [timeoutRef, setTimeoutRef] = useState<NodeJS.Timeout | null>(null);
 
     const code = searchParams.get("oobCode");
-    console.log("reset password code: ", code, searchParams);
-    console.log("reset password code: ", code, searchParams.entries());
 
-    console.log("router.query: ", router.query);
     const deferredCode = useDeferredValue(code);
-    console.log("deferredCode", deferredCode);
-    console.log("------------------------------------ ");
 
     useEffect(
         () => {
@@ -61,7 +54,6 @@ const Home: NextPage = () => {
         }, 3000);
         setTimeoutRef(ref);
         return () => {
-            console.log("--clear timeout--");
             clearTimeout(ref);
         };
     }, []);

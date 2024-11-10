@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { type NextPage } from "next";
 import { useSession } from "next-auth/react";
 import HighlightText from "~/components/HighlightText";
@@ -11,8 +10,6 @@ import { Spinner } from "~/components/Spinner";
 import { ProfileHeader } from "~/module/profile/components/ProfileHeader";
 
 const Home: NextPage = () => {
-    //const hello = api.example.hello.useQuery({ text: "from tRPC" });
-
     const { data: sessionData } = useSession();
 
     const profiles = api.profile.getAllProfiles.useQuery(
@@ -21,7 +18,6 @@ const Home: NextPage = () => {
     );
 
     const renderProfile = (profile: Profile) => {
-        console.log("renderProfile.profile", profile);
 
         const profileSlug = `profile/${profile.username}`;
         return (

@@ -43,7 +43,7 @@ export const chatRouter = createTRPCRouter({
                 chatConvoId: z.string(),
             })
         )
-        .query(async ({ input, ctx }): Promise<ConversationMessage[]> => {
+        .query(async ({ input }): Promise<ConversationMessage[]> => {
             // console.log("getChatMessage.input", input);
             // console.log("getChatMessage.ctx", ctx);
             const messages = await getChatMessages(input.chatConvoId);
@@ -90,8 +90,6 @@ export const chatRouter = createTRPCRouter({
             })
         )
         .mutation(({ input, ctx }) => {
-            console.log("updateConvoMarkAsRead convo", input.chatConvoId);
-            console.log("updateConvoMarkAsRead userid", ctx.session.user.id);
             updateConvoMarkAsRead(input.chatConvoId, ctx.session.user.id)
         }),
 

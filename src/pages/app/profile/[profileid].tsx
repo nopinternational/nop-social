@@ -29,9 +29,10 @@ const Home: NextPage = () => {
         { profilename: pid },
         { enabled: sessionData?.user !== undefined }
     );
-    const { mutate: postChatMessage, mutateAsync: postChatMessageAsync } =
-    api.chat.postChatMessageToUser.useMutation();
 
+    const { mutateAsync: postChatMessageAsync } =
+            api.chat.postChatMessageToUser.useMutation();
+    
     const YEAR = new Date().getFullYear();
 
     const renderLoading = (profileid: string) => {
