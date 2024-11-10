@@ -152,7 +152,6 @@ const Home: NextPage = () => {
 
 export default Home;
 
-const MESSAGES_EMPTY: ConversationMessage[] = [];
 
 const MESSAGES_DUMMY: ConversationMessage[] = [
     {

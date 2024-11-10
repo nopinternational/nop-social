@@ -305,8 +305,7 @@ class FirbaseChatMessageClient {
         const lastReadDoc = await lastReaRef.get();
         if (lastReadDoc.exists) {
             const data = lastReadDoc.data() as Readstatus;
-            //  ?["lastread"] as Date
-            return data["lastread"] as Date;
+            return data[LASTREAD_FIELD] as Date;
         }
         return null;
     };
@@ -466,7 +465,7 @@ const messageConverter: FirestoreDataConverter<ConversationMessage> = {
     },
 };
 
-const messageConverterForUser = (
+const _messageConverterForUser = (
     userid: string
 ): FirestoreDataConverter<ConversationMessage> => {
     return {
