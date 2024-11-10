@@ -153,8 +153,8 @@ export const authOptions: NextAuthOptions = {
         signOut: () => {
             // console.log("EVENT: signout ", obj)
             signOut(authApp)
-                .then(() => { console.log("firebase signout OK") })
-                .catch((err) => { console.log("firebase signout ERROR ", err) })
+                .then(() => { /* console.log("firebase signout OK") */ })
+                .catch((_err) => {/*  console.log("firebase signout ERROR ", err) */ })
 
         }
     }
