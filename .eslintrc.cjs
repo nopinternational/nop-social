@@ -25,6 +25,13 @@ const config = {
                 fixStyle: "inline-type-imports",
             }
         ],
+        "@typescript-eslint/no-unused-vars": [
+            "warn",
+            {
+                "args": "all",
+                "argsIgnorePattern": "^_",
+            }
+        ],
         "no-console": ["error", { allow: ["warn", "error"] }],
         "indent": ["error", 4],
         "object-curly-spacing": ["warn", "always"],
