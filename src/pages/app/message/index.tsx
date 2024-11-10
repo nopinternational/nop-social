@@ -1,6 +1,7 @@
 import { type NextPage } from "next";
 import Link from "next/link";
 import { Card } from "~/components/Card";
+// import { useFeature } from "~/components/FeatureFlag";
 import HighlightText from "~/components/HighlightText";
 import Layout from "~/components/Layout";
 import {
@@ -8,12 +9,15 @@ import {
     type ConversationGroup,
 } from "~/components/Message/ChatMessage";
 import { Spinner } from "~/components/Spinner";
+import { useFeature } from "~/components/FeatureFlag";
 import { MessageHeaderCard } from "~/module/message/components/MessageHeaderCard";
 import { ProfilePic } from "~/module/profile/components/ProfilePic";
 import { api } from "~/utils/api";
 
 
 const Home: NextPage = () => {
+    
+    const useMessageNotification = useFeature("messageNotification")
     return (
         <Layout
             headingText={
