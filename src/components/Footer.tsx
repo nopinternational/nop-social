@@ -1,11 +1,13 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import HighlightText from "./HighlightText";
 import Link from "next/link";
+import { api } from "~/utils/api";
+import { type ConversationGroup } from "./Message/ChatMessage";
 
 type CTA_Button = {
     text: string;
     url: string;
-    badge?: string;
+    badge?: string | null;
 };
 
 const BUTTONS: CTA_Button[] = [
@@ -32,6 +34,10 @@ const Footer: React.FC<FooterProps> = ({
 }: FooterProps) => {
     const { data: sessionData } = useSession();
 
+    const myConvoGroups = api.chat.getMyConvoGroups.useQuery();
+    const myConversations = myConvoGroups.data || [];
+ 
+
     const renderNotLoggedIn = () => {
         return (
             <div className="flex flex-col items-center justify-center gap-4">
@@ -54,13 +60,25 @@ const Footer: React.FC<FooterProps> = ({
     if (!sessionData) {
         return renderNotLoggedIn();
     }
-    //     const myConvoGroups = api.chat.getMyConvoGroups.useQuery();
-    // const myConversations = myConvoGroups.data || [];
+       
+    const convosToUnreadCount = (convos: ConversationGroup[]): number => {
+        const count = convos
+            .map(convo => {
+                const convoLastread = convo.lastread;    
+                const when = new Date(convo.when);
+                const isRead = convoLastread === null ? true : convoLastread < when;
+                return isRead
+            })
+            .filter(item => item)
+            .length
+
+        return count
+    }
     
     const buttonsToRender =  BUTTONS.concat([], {
         text: "Meddelanden",
         url: "/app/message",
-        badge: "45"
+        badge: convosToUnreadCount(myConversations)
     })
 
     return (
@@ -99,7 +117,7 @@ const CTAButton = ({ button }: { button: CTA_Button }) => {
             <Link href={button.url}>
                 <button className="relative rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
                     {button.text}
-                    {button.badge && <ButtonBadge badgeText="14"></ButtonBadge>}
+                    {button.badge && <ButtonBadge badgeText={button.badge}></ButtonBadge>}
                 </button>
             </Link>
         </div>
