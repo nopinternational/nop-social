@@ -3,6 +3,7 @@ import HighlightText from "./HighlightText";
 import Link from "next/link";
 import { api } from "~/utils/api";
 import { type ConversationGroup } from "./Message/ChatMessage";
+import { useFeature } from "./FeatureFlag";
 
 type CTA_Button = {
     text: string;
@@ -33,6 +34,7 @@ const Footer: React.FC<FooterProps> = ({
     includeSigninSignoutButton = true,
 }: FooterProps) => {
     const { data: sessionData } = useSession();
+    const useMessageNotification = useFeature("messageNotification")
 
     const myConvoGroups = api.chat.getMyConvoGroups.useQuery();
     const myConversations = myConvoGroups.data || [];
@@ -67,18 +69,18 @@ const Footer: React.FC<FooterProps> = ({
                 const convoLastread = convo.lastread;    
                 const when = new Date(convo.when);
                 const isRead = convoLastread === null ? true : convoLastread < when;
-                return isRead
+                return useMessageNotification && isRead 
             })
             .filter(item => item)
             .length
 
         return count
     }
-    
+    const unreadCount = convosToUnreadCount(myConversations)
     const buttonsToRender =  BUTTONS.concat([], {
         text: "Meddelanden",
         url: "/app/message",
-        badge: convosToUnreadCount(myConversations)
+        badge: unreadCount ? unreadCount : null
     })
 
     return (
