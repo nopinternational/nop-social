@@ -13,7 +13,7 @@ import { useFeature } from "~/components/FeatureFlag";
 import { MessageHeaderCard } from "~/module/message/components/MessageHeaderCard";
 import { ProfilePic } from "~/module/profile/components/ProfilePic";
 import { api } from "~/utils/api";
-import { VIPBadge } from "~/module/events/components/Badge";
+import { ProfileLink } from "~/module/profile/components/ProfileLink";
 
 
 const Home: NextPage = () => {
@@ -130,14 +130,14 @@ const Conversation = ({ convo }: { convo: ConversationGroup }) => {
     return (
         
         <div className={"flex " + css}>
-            
             <div className="min-w-max">
-                
                 <ProfilePic variant="small" />
             </div>
             <div className="ml-3">
                 <h3 className="text-2xl font-bold">
-                    <HighlightText>{chatMemberProfileName}</HighlightText>
+                    <HighlightText>
+                        <ProfileLink username={chatMemberProfileName}></ProfileLink>
+                    </HighlightText>
                 </h3>
                 <p className="line-clamp-3 truncate  whitespace-pre-wrap rounded-xl bg-white/10 p-2 pb-1 italic">
                     {convo.lastMessage || "inget har sagts ännu"}

@@ -1,3 +1,4 @@
+import { ProfileLink } from "~/module/profile/components/ProfileLink";
 import HighlightText from "../HighlightText";
 import { TextEditForm, type TextEditFormOptions } from "../TextEditForm";
 
@@ -60,7 +61,9 @@ export const ChatMessage = ({
             ) : (
                 <div className="pr-10">
                     <p>
-                        <HighlightText>{message.from}</HighlightText> säger:
+                        <HighlightText>
+                            <ProfileLink username={message.from}></ProfileLink>
+                        </HighlightText> säger:
                     </p>
                     <p className="whitespace-pre-wrap rounded-xl bg-white/10 p-2">
                         {message.message}
@@ -94,7 +97,9 @@ export const SendChatMessageForm = ({
         buttontext: "Skicka",
         headingText: (
             <>
-        Skriv ett meddelande till <HighlightText>{toUsername}</HighlightText>
+                Skriv ett meddelande till <HighlightText>
+                    <ProfileLink username={toUsername}></ProfileLink>
+                </HighlightText>
             </>
         ),
         emptyOnSubmit: true,
