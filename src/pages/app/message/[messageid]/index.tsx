@@ -44,7 +44,7 @@ const Home: NextPage = () => {
         if (convoId) {
             void updateConvo({ chatConvoId: convoId });
         }
-    }, [convoId]);
+    }, [convoId, updateConvo]);
 
     const { mutate: postChatMessage } =
     api.chat.postChatMessageToConvo.useMutation({
@@ -101,8 +101,6 @@ const Home: NextPage = () => {
     data.conversation.conversationGroupName = getGroupNameFromChatMembers(
         data.conversation.chatMembers
     );
-    console.log(data)
-    console.log(data.conversation)
     return (
         <Layout
             headingText={
