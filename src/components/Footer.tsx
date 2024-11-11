@@ -3,9 +3,9 @@ import HighlightText from "./HighlightText";
 import Link from "next/link";
 
 type CTA_Button = {
-  text: string;
-  url: string;
-  isnew?: boolean;
+    text: string;
+    url: string;
+    badge?: string;
 };
 
 const BUTTONS: CTA_Button[] = [
@@ -20,11 +20,6 @@ const BUTTONS: CTA_Button[] = [
     {
         text: "Visa alla träffar",
         url: "/app/event",
-    },
-    {
-        text: "Meddelanden",
-        url: "/app/message",
-        isnew: false,
     },
 ];
 
@@ -59,6 +54,14 @@ const Footer: React.FC<FooterProps> = ({
     if (!sessionData) {
         return renderNotLoggedIn();
     }
+    //     const myConvoGroups = api.chat.getMyConvoGroups.useQuery();
+    // const myConversations = myConvoGroups.data || [];
+    
+    const buttonsToRender =  BUTTONS.concat([], {
+        text: "Meddelanden",
+        url: "/app/message",
+        badge: "45"
+    })
 
     return (
         <div className="flex flex-col items-center justify-center gap-4">
@@ -69,7 +72,7 @@ const Footer: React.FC<FooterProps> = ({
                 </span>
             </p>
             <div className="flex flex-wrap justify-center justify-self-center">
-                {BUTTONS.map((button) => (
+                {buttonsToRender.map((button) => (
                     <CTAButton key={button.url} button={button} />
                 ))}
             </div>
@@ -96,14 +99,16 @@ const CTAButton = ({ button }: { button: CTA_Button }) => {
             <Link href={button.url}>
                 <button className="relative rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
                     {button.text}
-
-                    {button.isnew ? (
-                        <div className="absolute -end-2 -top-2 inline-flex h-6 items-center justify-center rounded-full border-2 border-white bg-red-500 p-2 text-xs font-bold text-white dark:border-gray-900">
-              Nytt
-                        </div>
-                    ) : null}
+                    {button.badge && <ButtonBadge badgeText="14"></ButtonBadge>}
                 </button>
             </Link>
         </div>
     );
 };
+
+const ButtonBadge = ({ badgeText }: {badgeText: string}) => {
+    return (
+        <div className="absolute -end-2 -top-2 inline-flex h-6 items-center justify-center rounded-full border-2 border-white bg-red-500 p-2 text-xs font-bold text-white dark:border-gray-900">
+            {badgeText}
+        </div>)
+}
