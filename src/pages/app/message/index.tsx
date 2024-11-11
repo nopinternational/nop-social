@@ -131,11 +131,11 @@ const Conversation = ({ convo }: { convo: ConversationGroup }) => {
         
         <div className={"flex " + css}>
             
-            <div className="mr-3">
+            <div className="min-w-max">
                 
                 <ProfilePic variant="small" />
             </div>
-            <div className="">
+            <div className="ml-3">
                 <h3 className="text-2xl font-bold">
                     <HighlightText>{chatMemberProfileName}</HighlightText>
                 </h3>
