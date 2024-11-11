@@ -77,11 +77,13 @@ const Footer: React.FC<FooterProps> = ({
         return count
     }
     const unreadCount = convosToUnreadCount(myConversations)
-    const buttonsToRender =  BUTTONS.concat([], {
+
+    const messageCTAButton: CTA_Button = {
         text: "Meddelanden",
         url: "/app/message",
-        badge: unreadCount ? unreadCount : null
-    })
+        badge: unreadCount ? unreadCount.toString() : null
+    }
+    const buttonsToRender =  BUTTONS.concat( messageCTAButton)
 
     return (
         <div className="flex flex-col items-center justify-center gap-4">
