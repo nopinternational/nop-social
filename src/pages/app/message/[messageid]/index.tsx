@@ -18,6 +18,7 @@ import {
 import { api } from "~/utils/api";
 import { MessageHeaderCard } from "~/module/message/components/MessageHeaderCard";
 import { useEffect } from "react";
+import { ProfileLink } from "~/module/profile/components/ProfileLink";
 
 const Home: NextPage = () => {
 
@@ -100,7 +101,8 @@ const Home: NextPage = () => {
     data.conversation.conversationGroupName = getGroupNameFromChatMembers(
         data.conversation.chatMembers
     );
-
+    console.log(data)
+    console.log(data.conversation)
     return (
         <Layout
             headingText={
@@ -118,7 +120,7 @@ const Home: NextPage = () => {
                             <>
                 Konversation med{" "}
                                 <HighlightText>
-                                    {data.conversation.conversationGroupName}
+                                    <ProfileLink username={data.conversation.conversationGroupName}></ProfileLink>
                                 </HighlightText>
                 :
                             </>
