@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
 import { useSearchParams } from "next/navigation";
-import { useDeferredValue, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { checkActionCode, confirmPasswordReset } from "firebase/auth";
 
 import { Card } from "~/components/Card";
@@ -20,14 +20,10 @@ const Home: NextPage = () => {
 
     const code = searchParams.get("oobCode");
 
-    const deferredCode = useDeferredValue(code);
 
     useEffect(
         () => {
             if (code) {
-                const checkCode = async (code: string) => {
-                    const actionCodeInfo = await checkActionCode(auth, code);
-                };
 
                 if (timeoutRef) {
                     clearTimeout(timeoutRef);
@@ -35,7 +31,7 @@ const Home: NextPage = () => {
                 }
                 //checkCode(code).catch(console.error);
                 checkActionCode(auth, code)
-                    .then((result) => {
+                    .then((_result) => {
                         setCodeOk(true);
                     })
                     .catch((error) => {
