@@ -35,6 +35,7 @@ const config = {
         "no-console": ["error", { allow: ["warn", "error"] }],
         "indent": ["error", 4],
         "object-curly-spacing": ["warn", "always"],
+        "semi": ["error", "always"],
     },
 };
 
