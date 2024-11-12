@@ -465,34 +465,34 @@ const messageConverter: FirestoreDataConverter<ConversationMessage> = {
     },
 };
 
-const _messageConverterForUser = (
-    userid: string
-): FirestoreDataConverter<ConversationMessage> => {
-    return {
-        toFirestore: (message: ConversationMessage): MessageFirestoreModel => {
-            return {
-                fromUserId: message.fromId,
-                fromUser: message.from,
-                chatConvoId: message.conversationId,
-                chatMessage: message.message,
-                when: message.when,
-            };
-        },
-        fromFirestore: (
-            snapshot: QueryDocumentSnapshot<MessageFirestoreModel>
-            //options: SnapshotOptions
-        ): ConversationMessage => {
-            const data = snapshot.data();
+// const _messageConverterForUser = (
+//     userid: string
+// ): FirestoreDataConverter<ConversationMessage> => {
+//     return {
+//         toFirestore: (message: ConversationMessage): MessageFirestoreModel => {
+//             return {
+//                 fromUserId: message.fromId,
+//                 fromUser: message.from,
+//                 chatConvoId: message.conversationId,
+//                 chatMessage: message.message,
+//                 when: message.when,
+//             };
+//         },
+//         fromFirestore: (
+//             snapshot: QueryDocumentSnapshot<MessageFirestoreModel>
+//             //options: SnapshotOptions
+//         ): ConversationMessage => {
+//             const data = snapshot.data();
 
-            // return { id: snapshot.id, ...data };
-            return {
-                from: data.fromUser || data.fromUserId,
-                fromId: data.fromUserId,
-                conversationId: snapshot.id,
-                messageId: snapshot.id,
-                message: data.chatMessage + "userid: - " + userid,
-                when: data.when,
-            };
-        },
-    };
-};
+//             // return { id: snapshot.id, ...data };
+//             return {
+//                 from: data.fromUser || data.fromUserId,
+//                 fromId: data.fromUserId,
+//                 conversationId: snapshot.id,
+//                 messageId: snapshot.id,
+//                 message: data.chatMessage + "userid: - " + userid,
+//                 when: data.when,
+//             };
+//         },
+//     };
+// };
