@@ -1,7 +1,7 @@
-import { type ConvoWithMessages, type ConversationMessage, ConversationGroup } from "~/components/Message/ChatMessage";
-import { FirbaseChatMessageClient } from "./messageFirebase";
+import { type ConvoWithMessages, type ConversationMessage, type ConversationGroup } from "~/components/Message/ChatMessage";
+import { FirbaseChatMessageClient } from "./firebase";
 import { firestoreAdmin } from "~/server/api/firebaseAdmin";
-import { APIMessageToUser } from "../types";
+import { type APIMessageToUser } from "../types";
 
 const firestore: FirebaseFirestore.Firestore = firestoreAdmin;
 export const getChatMessages = async (
