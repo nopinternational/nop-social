@@ -1,7 +1,6 @@
 import { type NextPage } from "next";
 import Link from "next/link";
 import { Card } from "~/components/Card";
-// import { useFeature } from "~/components/FeatureFlag";
 import HighlightText from "~/components/HighlightText";
 import Layout from "~/components/Layout";
 import {
@@ -9,8 +8,6 @@ import {
     type ConversationGroup,
 } from "~/components/Message/ChatMessage";
 import { Spinner } from "~/components/Spinner";
-import { useFeature } from "~/components/FeatureFlag";
-import { MessageHeaderCard } from "~/module/message/components/MessageHeaderCard";
 import { ProfilePic } from "~/module/profile/components/ProfilePic";
 import { api } from "~/utils/api";
 import { ProfileLink } from "~/module/profile/components/ProfileLink";
@@ -29,7 +26,6 @@ const Home: NextPage = () => {
         >
             <div className="grid grid-cols-2  gap-4   sm:grid-cols-2 md:gap-8">
                 <div className="col-span-2">
-                    <MessageHeaderCard />
                     <ConnectedConversationsCard></ConnectedConversationsCard>
                 </div>
             </div>
@@ -98,11 +94,7 @@ const ConnectedConversationsCard = () => {
 };
 
 const Conversation = ({ convo }: { convo: ConversationGroup }) => {
-    const useMessageNotification = useFeature("messageNotification")
-    // : string | null
     function getFirstChatmember(chatmembers: ChatMember[]): string | null {
-    // (convo.chatMembers && convo.chatMembers.length > 0) ||
-    // convo.chatMembers[0]?.profileName ||
         if (chatmembers.length >= 0) {
             const chtmember = chatmembers[0] as ChatMember;
             return chtmember.profilename;
@@ -120,7 +112,7 @@ const Conversation = ({ convo }: { convo: ConversationGroup }) => {
 
     const when = new Date(convo.when);
     const isRead = convoLastread === null ? true : convoLastread < when;
-    const css = isRead && useMessageNotification ? "bg-[hsl(280,100%,70%)]/20 border-2 border-solid border-[hsl(280,100%,70%)] rounded-xl p-2" : "";
+    const css = isRead ? "bg-[hsl(280,100%,70%)]/20 border-2 border-solid border-[hsl(280,100%,70%)] rounded-xl p-2" : "";
 
     const dateReadString = convoLastread
         ? convoLastread.toLocaleDateString() +
@@ -145,7 +137,7 @@ const Conversation = ({ convo }: { convo: ConversationGroup }) => {
                 <div className="relative">
                     <p className="left-0 text-xs">när: {whenFormatted}</p>
                 </div>
-                {false && useMessageNotification ? (
+                {false ? (
                     <div>
                         <p className="left-0 text-xs">convoread? {dateReadString}</p>
                     </div>

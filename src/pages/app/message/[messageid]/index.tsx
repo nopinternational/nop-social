@@ -16,7 +16,6 @@ import {
     type ConversationMessage,
 } from "~/components/Message/ChatMessage";
 import { api } from "~/utils/api";
-import { MessageHeaderCard } from "~/module/message/components/MessageHeaderCard";
 import { useEffect } from "react";
 import { ProfileLink } from "~/module/profile/components/ProfileLink";
 
@@ -111,8 +110,6 @@ const Home: NextPage = () => {
         >
             <div className="grid grid-cols-2  gap-4   sm:grid-cols-2 md:gap-8">
                 <div className="col-span-2">
-                    <MessageHeaderCard />
-
                     <Card
                         header={
                             <>

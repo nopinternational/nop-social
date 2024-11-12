@@ -3,7 +3,6 @@ import HighlightText from "./HighlightText";
 import Link from "next/link";
 import { api } from "~/utils/api";
 import { type ConversationGroup } from "./Message/ChatMessage";
-import { useFeature } from "./FeatureFlag";
 
 type CTA_Button = {
     text: string;
@@ -34,7 +33,6 @@ const Footer: React.FC<FooterProps> = ({
     includeSigninSignoutButton = true,
 }: FooterProps) => {
     const { data: sessionData } = useSession();
-    const useMessageNotification = useFeature("messageNotification")
 
     const myConvoGroups = api.chat.getMyConvoGroups.useQuery();
     const myConversations = myConvoGroups.data || [];
@@ -69,7 +67,7 @@ const Footer: React.FC<FooterProps> = ({
                 const convoLastread = convo.lastread;    
                 const when = new Date(convo.when);
                 const isRead = convoLastread === null ? true : convoLastread < when;
-                return useMessageNotification && isRead 
+                return isRead 
             })
             .filter(item => item)
             .length
@@ -83,7 +81,7 @@ const Footer: React.FC<FooterProps> = ({
         url: "/app/message",
         badge: unreadCount ? unreadCount.toString() : null
     }
-    const buttonsToRender =  BUTTONS.concat( messageCTAButton)
+    const buttonsToRender =  BUTTONS.concat(messageCTAButton)
 
     return (
         <div className="flex flex-col items-center justify-center gap-4">
