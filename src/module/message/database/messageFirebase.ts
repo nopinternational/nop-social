@@ -12,9 +12,9 @@ import {
     type ConversationMessage,
     type ConvoWithMessages,
 } from "~/components/Message/ChatMessage";
-import { getProfileByUserIdFromFirestore } from "../profile/firebaseProfiles";
-import { type Profile } from "../profile/profileRouter";
-import { type APIMessageToUser } from "./types";
+import { getProfileByUserIdFromFirestore } from "../../profile/firebaseProfiles";
+import { type Profile } from "../../profile/profileRouter";
+import { type APIMessageToUser } from "../types";
 
 export type MessageFirestoreModel = {
   chatConvoId: string;

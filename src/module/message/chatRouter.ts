@@ -7,7 +7,7 @@ import {
     persistChatMessage,
     persistChatMessageToUser,
     updateConvoMarkAsRead,
-} from "./messageFirebase";
+} from "./database/messageFirebase";
 
 // import { type MessageFirestoreModel } from "~/module/message/messageFirebase";
 import {
