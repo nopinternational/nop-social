@@ -1,6 +1,3 @@
-import { firestoreAdmin } from "~/server/api/firebaseAdmin";
-
-const firestore: FirebaseFirestore.Firestore = firestoreAdmin;
 
 import {
     type FirestoreDataConverter,
@@ -12,9 +9,10 @@ import {
     type ConversationMessage,
     type ConvoWithMessages,
 } from "~/components/Message/ChatMessage";
-import { getProfileByUserIdFromFirestore } from "../profile/firebaseProfiles";
-import { type Profile } from "../profile/profileRouter";
-import { type APIMessageToUser } from "./types";
+
+import { getProfileByUserIdFromFirestore } from "../../profile/firebaseProfiles";
+import { type Profile } from "../../profile/profileRouter";
+import { type APIMessageToUser } from "../types";
 
 export type MessageFirestoreModel = {
   chatConvoId: string;
@@ -58,42 +56,6 @@ function permute(permutation: string[]) {
     return result;
 }
 
-export const getChatMessages = async (
-    messageCollection: string
-): Promise<ConversationMessage[]> => {
-    const db = new FirbaseChatMessageClient(firestore);
-    return db.getChatMessages(messageCollection);
-};
-
-export const getConvoAndMessages = async (
-    messageCollectionId: string,
-    userId: string
-): Promise<ConvoWithMessages> => {
-    const db = new FirbaseChatMessageClient(firestore);
-    return db.getConvoAndMessages(messageCollectionId, userId);
-};
-
-export const getGroups = async (
-    userId: string
-): Promise<ConversationGroup[]> => {
-    const db = new FirbaseChatMessageClient(firestore);
-    return db.getConvoGroupsWithProfiles(userId);
-};
-
-export const persistChatMessage = async (message: ConversationMessage) => {
-    const db = new FirbaseChatMessageClient(firestore);
-    return db.storeChatMessage(message);
-};
-
-export const updateConvoMarkAsRead = (convoId: string, userId: string) => {
-    const db = new FirbaseChatMessageClient(firestore);
-    db.updateConvoMarkAsRead(convoId, userId);
-};
-
-export const persistChatMessageToUser = async (message: APIMessageToUser) => {
-    const db = new FirbaseChatMessageClient(firestore);
-    return db.persistChatMessageToUser(message);
-};
 
 const CHATMESSAGE_COLLECTION = "message";
 const GROUP_COLLECTION = "group";
@@ -108,7 +70,7 @@ type CreateConversationGroup = {
   when: string;
 };
 
-class FirbaseChatMessageClient {
+export class FirbaseChatMessageClient {
     firestore: FirebaseFirestore.Firestore;
 
     constructor(firestoreApp: FirebaseFirestore.Firestore) {
@@ -465,34 +427,34 @@ const messageConverter: FirestoreDataConverter<ConversationMessage> = {
     },
 };
 
-const _messageConverterForUser = (
-    userid: string
-): FirestoreDataConverter<ConversationMessage> => {
-    return {
-        toFirestore: (message: ConversationMessage): MessageFirestoreModel => {
-            return {
-                fromUserId: message.fromId,
-                fromUser: message.from,
-                chatConvoId: message.conversationId,
-                chatMessage: message.message,
-                when: message.when,
-            };
-        },
-        fromFirestore: (
-            snapshot: QueryDocumentSnapshot<MessageFirestoreModel>
-            //options: SnapshotOptions
-        ): ConversationMessage => {
-            const data = snapshot.data();
+// const _messageConverterForUser = (
+//     userid: string
+// ): FirestoreDataConverter<ConversationMessage> => {
+//     return {
+//         toFirestore: (message: ConversationMessage): MessageFirestoreModel => {
+//             return {
+//                 fromUserId: message.fromId,
+//                 fromUser: message.from,
+//                 chatConvoId: message.conversationId,
+//                 chatMessage: message.message,
+//                 when: message.when,
+//             };
+//         },
+//         fromFirestore: (
+//             snapshot: QueryDocumentSnapshot<MessageFirestoreModel>
+//             //options: SnapshotOptions
+//         ): ConversationMessage => {
+//             const data = snapshot.data();
 
-            // return { id: snapshot.id, ...data };
-            return {
-                from: data.fromUser || data.fromUserId,
-                fromId: data.fromUserId,
-                conversationId: snapshot.id,
-                messageId: snapshot.id,
-                message: data.chatMessage + "userid: - " + userid,
-                when: data.when,
-            };
-        },
-    };
-};
+//             // return { id: snapshot.id, ...data };
+//             return {
+//                 from: data.fromUser || data.fromUserId,
+//                 fromId: data.fromUserId,
+//                 conversationId: snapshot.id,
+//                 messageId: snapshot.id,
+//                 message: data.chatMessage + "userid: - " + userid,
+//                 when: data.when,
+//             };
+//         },
+//     };
+// };
