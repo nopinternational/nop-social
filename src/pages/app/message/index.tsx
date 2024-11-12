@@ -8,7 +8,6 @@ import {
     type ConversationGroup,
 } from "~/components/Message/ChatMessage";
 import { Spinner } from "~/components/Spinner";
-import { MessageHeaderCard } from "~/module/message/components/MessageHeaderCard";
 import { ProfilePic } from "~/module/profile/components/ProfilePic";
 import { api } from "~/utils/api";
 import { ProfileLink } from "~/module/profile/components/ProfileLink";
@@ -27,7 +26,6 @@ const Home: NextPage = () => {
         >
             <div className="grid grid-cols-2  gap-4   sm:grid-cols-2 md:gap-8">
                 <div className="col-span-2">
-                    <MessageHeaderCard />
                     <ConnectedConversationsCard></ConnectedConversationsCard>
                 </div>
             </div>
