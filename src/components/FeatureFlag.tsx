@@ -6,16 +6,16 @@ import { featureFlags } from "~/lib/featureflag/featureConfig";
 
 export const useFeature = (featureName: string): boolean => {
     
-    const session = useSession()
+    const session = useSession();
     const userId = session.data?.user.id ;
-    const useIt =  !!featureFlags[featureName]?.includes(userId|| "")
+    const useIt =  !!featureFlags[featureName]?.includes(userId|| "");
 
-    return useIt
-}
+    return useIt;
+};
 
 export const ToggledByFeatureFlag = ({ featureName, children }: { featureName: string, children: ReactNode }): React.JSX.Element | null => {
     
-    const featureFlagToggle = useFeature(featureName)
+    const featureFlagToggle = useFeature(featureName);
 
-    return featureFlagToggle ? <>{children}</> : null
-}
+    return featureFlagToggle ? <>{children}</> : null;
+};

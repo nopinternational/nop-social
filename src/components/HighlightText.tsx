@@ -11,4 +11,4 @@ const HighlightText = ({ children }: Props) => {
     return null;
 };
 
-export default HighlightText
+export default HighlightText;

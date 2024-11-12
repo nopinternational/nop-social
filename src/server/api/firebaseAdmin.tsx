@@ -1,4 +1,4 @@
-import admin, { type ServiceAccount } from 'firebase-admin'
+import admin, { type ServiceAccount } from 'firebase-admin';
 import { cert } from "firebase-admin/app";
 import { type Firestore } from "firebase-admin/firestore";
 
@@ -23,4 +23,4 @@ if (admin.apps?.length == 0) {
     adminApp = admin.app(ADMIN_APP_NAME);
 }
 
-export const firestoreAdmin: Firestore = adminApp.firestore()
+export const firestoreAdmin: Firestore = adminApp.firestore();

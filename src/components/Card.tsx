@@ -1,4 +1,4 @@
-import { type ReactNode } from "react"
+import { type ReactNode } from "react";
 
 export type CardProps = {
     header: ReactNode
@@ -12,5 +12,5 @@ export const Card = ({ header, children }: CardProps) => {
             {children}
         </div>
 
-    )
-}
+    );
+};

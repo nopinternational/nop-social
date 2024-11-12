@@ -59,14 +59,14 @@ export const authOptions: NextAuthOptions = {
         signIn({ user }) {
             const signinUser = user as SigninUser;
 
-            if (signinUser.subscription === true) { return true }
+            if (signinUser.subscription === true) { return true; }
             if (signinUser.subscription !== "true")
-                throw new Error("403")
+                throw new Error("403");
 
-            return false
+            return false;
         },
         redirect: async ({ url }) => {
-            return Promise.resolve(url)
+            return Promise.resolve(url);
         }
     },
     //adapter: PrismaAdapter(prisma),
@@ -77,7 +77,7 @@ export const authOptions: NextAuthOptions = {
             id: "nop-auth",
             name: "NoP Auth",
             async authorize(credentials) {
-                await setPersistence(authApp, browserSessionPersistence)
+                await setPersistence(authApp, browserSessionPersistence);
                 onAuthStateChanged(authApp, (user) => {
                     // console.log("-------------------------------")
                     // console.log("-------------------------------")
@@ -98,7 +98,7 @@ export const authOptions: NextAuthOptions = {
                 const fbuser = await signInWithEmailAndPassword(authApp, credentials?.username || "", credentials?.password || "")
                     .then(async (firebaseUser) => {
 
-                        const idTokenResult = await firebaseUser.user.getIdTokenResult()
+                        const idTokenResult = await firebaseUser.user.getIdTokenResult();
 
                         // .then((idTokenResult) => {
 
@@ -109,17 +109,17 @@ export const authOptions: NextAuthOptions = {
                             "name": firebaseUser.user.displayName,
                             "email": firebaseUser.user.email,
                             "subscription": idTokenResult.claims.subscription == "true"
-                        }
+                        };
                     }, (error) => {
-                        const firebaseError = error as FirebaseError
+                        const firebaseError = error as FirebaseError;
 
                         console.error("error in signInWithEmailAndPassword:", firebaseError.message);
-                        return null
-                    })
+                        return null;
+                    });
 
 
                 // console.log("authorize,  returnObject:", fbuser)
-                return fbuser
+                return fbuser;
 
             },
             credentials: {
@@ -154,7 +154,7 @@ export const authOptions: NextAuthOptions = {
             // console.log("EVENT: signout ", obj)
             signOut(authApp)
                 .then(() => { /* console.log("firebase signout OK") */ })
-                .catch((_err) => {/*  console.log("firebase signout ERROR ", err) */ })
+                .catch((_err) => {/*  console.log("firebase signout ERROR ", err) */ });
 
         }
     }
@@ -170,4 +170,4 @@ export const getServerAuthSession = (ctx: {
   res: GetServerSidePropsContext["res"];
 }) => {
     return getServerSession(ctx.req, ctx.res, authOptions);
-}
+};

@@ -222,8 +222,8 @@ export class FirbaseAdminClient {
         const createdEventId = docRef.id;
 
         const eventAttendes = docRef.collection(EVENT_SIGNUPS).doc(EVENT_ATTENDES);
-        await eventAttendes.set({ allowed: [] })
-        await eventAttendes.set({ confirmed: [] })
+        await eventAttendes.set({ allowed: [] });
+        await eventAttendes.set({ confirmed: [] });
         await this.signupToEvent(createdEventId, uid);
         await this.addUserAsAllowed(createdEventId, uid);
         return createdEventId;
@@ -250,11 +250,11 @@ export class FirbaseAdminClient {
             });
         } else {
 
-            await attendesRef.set({ confirmed: [{ id: userId, name, username }] })
+            await attendesRef.set({ confirmed: [{ id: userId, name, username }] });
         }
 
         if (addAsAllowed) {
-            void this.addUserAsAllowed(eventId, userId)
+            void this.addUserAsAllowed(eventId, userId);
         }
 
 
@@ -273,7 +273,7 @@ export class FirbaseAdminClient {
         });
 
         return null;
-    }
+    };
 
     updateEvent = async (
         uid: string,

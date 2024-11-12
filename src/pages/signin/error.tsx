@@ -34,6 +34,6 @@ const ErrorPage = () => {
             </main>
         </Layout>
     );
-}
+};
 
 export default ErrorPage;

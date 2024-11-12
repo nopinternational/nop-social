@@ -67,21 +67,21 @@ const Footer: React.FC<FooterProps> = ({
                 const convoLastread = convo.lastread;    
                 const when = new Date(convo.when);
                 const isRead = convoLastread === null ? true : convoLastread < when;
-                return isRead 
+                return isRead; 
             })
             .filter(item => item)
-            .length
+            .length;
 
-        return count
-    }
-    const unreadCount = convosToUnreadCount(myConversations)
+        return count;
+    };
+    const unreadCount = convosToUnreadCount(myConversations);
 
     const messageCTAButton: CTA_Button = {
         text: "Meddelanden",
         url: "/app/message",
         badge: unreadCount ? unreadCount.toString() : null
-    }
-    const buttonsToRender =  BUTTONS.concat(messageCTAButton)
+    };
+    const buttonsToRender =  BUTTONS.concat(messageCTAButton);
 
     return (
         <div className="flex flex-col items-center justify-center gap-4">
@@ -130,5 +130,5 @@ const ButtonBadge = ({ badgeText }: {badgeText: string}) => {
     return (
         <div className="absolute -end-2 -top-2 inline-flex h-6 items-center justify-center rounded-full border-2 border-white bg-red-500 p-2 text-xs font-bold text-white dark:border-gray-900">
             {badgeText}
-        </div>)
-}
+        </div>);
+};

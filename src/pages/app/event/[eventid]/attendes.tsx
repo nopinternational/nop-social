@@ -2,10 +2,10 @@ import { type NextPage } from "next";
 import { useSession } from "next-auth/react";
 import HighlightText from "~/components/HighlightText";
 
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 import { api } from "~/utils/api";
 import Link from "next/link";
-import { EventAttendes } from "~/module/events/components/EventAttendes"
+import { EventAttendes } from "~/module/events/components/EventAttendes";
 import { EventMessages } from "~/module/events/components/EventMessages";
 import Layout from "~/components/Layout";
 import { Spinner } from "~/components/Spinner";
@@ -21,23 +21,23 @@ const Home: NextPage = () => {
     //console.log("session: ", sessionData)
     //sessionData?.user?.append("name1") = "jw"
 
-    const queryInput = { eventId: eventid }
+    const queryInput = { eventId: eventid };
     const event = api.event.getEvent.useQuery(queryInput,
-        { enabled: sessionData?.user !== undefined })
+        { enabled: sessionData?.user !== undefined });
 
     if (event.isLoading || false) {
         return (
             <Layout headingText={<>Laddar <HighlightText>träff...</HighlightText></>}>
                 <Spinner />
             </Layout>
-        )
+        );
     }
 
     if (!event.data) {
-        return <p>hittar ingen träff...</p>
+        return <p>hittar ingen träff...</p>;
     }
 
-    const e = event.data
+    const e = event.data;
 
 
     return (

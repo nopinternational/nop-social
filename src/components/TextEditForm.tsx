@@ -13,14 +13,14 @@ export interface TextEditFormOptions {
 export const TextEditForm: FC<{ placeholder?: string, value?: string, onsubmitHandler?: ({ text }: { text: string }) => void, options?: TextEditFormOptions }> = ({ placeholder, value, onsubmitHandler, options }) => {
     const [text, setText] = useState<string>(value || "");
 
-    const btText = options?.buttontext || "Ändra"
+    const btText = options?.buttontext || "Ändra";
 
 
     const onChange = (e: React.MouseEvent<HTMLButtonElement>): void => {
-        e.preventDefault()
-        onsubmitHandler && text !== "" && onsubmitHandler({ text: text })
+        e.preventDefault();
+        onsubmitHandler && text !== "" && onsubmitHandler({ text: text });
         if (options?.emptyOnSubmit)
-            setText(() => "")
+            setText(() => "");
     };
 
 
@@ -28,7 +28,7 @@ export const TextEditForm: FC<{ placeholder?: string, value?: string, onsubmitHa
         if (!headingText)
             return null;
 
-        return <div className="m-2">{headingText}</div>
+        return <div className="m-2">{headingText}</div>;
 
     }
 
@@ -49,6 +49,6 @@ export const TextEditForm: FC<{ placeholder?: string, value?: string, onsubmitHa
                 className="mt-4 mb-3 rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => onChange(event)}>{btText}</button>
         </form>
-    )
-}
+    );
+};
 

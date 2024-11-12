@@ -16,15 +16,15 @@ export const EventMessages = ({ eventid }: { eventid: string }) => {
 
     const trpc_message_object = api.event.getEventMessages.useQuery(
         { eventId: eventid }
-    )
+    );
 
     const { mutate: postEventMessage } = api.event.postEventMessage.useMutation(
         {
             async onSuccess() {
-                await utils.event.getEventMessages.invalidate()
+                await utils.event.getEventMessages.invalidate();
             },
         }
-    )
+    );
 
 
 
@@ -32,10 +32,10 @@ export const EventMessages = ({ eventid }: { eventid: string }) => {
     const postMessageHandler = ({ text }: { text: string }) => {
         //console.log("EventMessages.postMessageHandler->e", e)
         if (text && text.length > 0) {
-            const eventMessage: PostEventMessage = { eventId: eventid, wallmessage: text, from: "this is from Heavy" }
-            postEventMessage(eventMessage)
+            const eventMessage: PostEventMessage = { eventId: eventid, wallmessage: text, from: "this is from Heavy" };
+            postEventMessage(eventMessage);
         }
-    }
+    };
 
     // const messages = [a_message, a_message, a_message]
 
@@ -58,7 +58,7 @@ export const EventMessages = ({ eventid }: { eventid: string }) => {
                         <Spinner />
                     </div>
                 </div>
-            )
+            );
         }
 
         if (trpc_message_object.data) {
@@ -67,16 +67,16 @@ export const EventMessages = ({ eventid }: { eventid: string }) => {
                     <div className="text-lg italic whitespace-pre-wrap p-2 bg-white/10 rounded-md">
                         inga meddelande har skrivits ännu, ni kan bli dom första
                     </div>
-                )
+                );
             }
-            return trpc_message_object.data.map((eventMessage) => <Message key={eventMessage.message} messageObject={eventMessage}></Message>)
+            return trpc_message_object.data.map((eventMessage) => <Message key={eventMessage.message} messageObject={eventMessage}></Message>);
         }
-    }
+    };
     const textEditFormOptions: TextEditFormOptions = {
         buttontext: "skicka",
         headingText: <>Skicka ett <HighlightText>meddelande:</HighlightText></>,
         emptyOnSubmit: true
-    }
+    };
 
     return trpc_message_object.data ? (
         <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
@@ -104,15 +104,15 @@ export const EventMessages = ({ eventid }: { eventid: string }) => {
             </div>
         </div >
 
-    ) : null
-}
+    ) : null;
+};
 
 
 
 
 const Message = ({ messageObject }: { messageObject: EventMessage }) => {
     // console.log("Message.messageObject", messageObject)
-    const username = messageObject.from.username
+    const username = messageObject.from.username;
     return (
         <div>
             <div>
@@ -123,5 +123,5 @@ const Message = ({ messageObject }: { messageObject: EventMessage }) => {
                 {messageObject.message}
             </div>
         </div>
-    )
-}
+    );
+};

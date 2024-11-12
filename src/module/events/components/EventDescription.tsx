@@ -1,6 +1,6 @@
-import { type FC } from "react"
-import { type NopEvent } from "./types"
-import HighlightText from "~/components/HighlightText"
+import { type FC } from "react";
+import { type NopEvent } from "./types";
+import HighlightText from "~/components/HighlightText";
 
 const EventAttendes: FC<{ event: NopEvent }> = ({ event }) => {
     return (
@@ -19,7 +19,7 @@ const EventAttendes: FC<{ event: NopEvent }> = ({ event }) => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default EventAttendes
+export default EventAttendes;

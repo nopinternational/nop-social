@@ -14,7 +14,7 @@ export function UserList({ usernames }: { usernames: string[] }) {
                             onClick={() => null}
                         > {username}</button>
                     </div>
-                )
+                );
             })}
 
             {usernames.map((username) => {
@@ -25,9 +25,9 @@ export function UserList({ usernames }: { usernames: string[] }) {
                             onClick={() => null}
                         > {username}</button>
                     </div>
-                )
+                );
             })}
 
         </div>
-    </div>
+    </div>;
 }
