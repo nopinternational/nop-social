@@ -267,8 +267,8 @@ const AddAsAttendeForm = ({
     });
 
     const toggleAllowedClick = () => {
-        setToggleAllowedChecked((oldState) => {return !oldState})
-    }
+        setToggleAllowedChecked((oldState) => {return !oldState;});
+    };
     const addAsAttendes = () => {
         addAttendesToEvent({
             eventId: eventId,

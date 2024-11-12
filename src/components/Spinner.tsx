@@ -9,5 +9,5 @@ export const Spinner = () => {
                             border-8 border-solid border-[hsl(280,100%,70%)] border-t-transparent shadow-md"></div>
             </div>
         </div>
-    )
-}
+    );
+};

@@ -1,5 +1,5 @@
-import Image from 'next/image'
-import swishPic from './swish.png'
+import Image from 'next/image';
+import swishPic from './swish.png';
 
 export const SwishQR = () => {
     return (
@@ -11,5 +11,5 @@ export const SwishQR = () => {
             height={150}
         // blurDataURL="data:..." automatically provided
         // placeholder="blur" // Optional blur-up while loading
-        />)
-}
+        />);
+};

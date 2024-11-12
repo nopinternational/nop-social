@@ -19,7 +19,7 @@ const Home: NextPage = () => {
                 </div>
             </div>
         </Layout>
-    )
+    );
 };
 
 export default Home;

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image, { type StaticImageData } from 'next/image';
-import swishLogoSVG from "./swishLogoSVG.svg"
+import swishLogoSVG from "./swishLogoSVG.svg";
 
 type SwishButtonProp = {
     swishto?: string
@@ -14,13 +14,13 @@ type SwishButtonProp = {
 }
 
 export const CocktailSwishButton = ({ message }: { message: string }) => {
-    return <SwishButton message={message} amount={100} />
-}
+    return <SwishButton message={message} amount={100} />;
+};
 
 export const SwishButton = ({ swishto = "+46700066099", amount, message }: SwishButtonProp) => {
     // How to generate url
     // https://developer.swish.nu/documentation/guides/generate-qr-codes
-    const link = `https://app.swish.nu/1/p/sw/?sw=${swishto}&amt=${amount}&cur=SEK&src=qr&msg=${message}&edit=msg,amt`
+    const link = `https://app.swish.nu/1/p/sw/?sw=${swishto}&amt=${amount}&cur=SEK&src=qr&msg=${message}&edit=msg,amt`;
     return (<>
         <Link href={link}>
             <button
@@ -34,5 +34,5 @@ export const SwishButton = ({ swishto = "+46700066099", amount, message }: Swish
                 <span>Swisha</span>
             </button>
         </Link>
-    </>)
-}
+    </>);
+};

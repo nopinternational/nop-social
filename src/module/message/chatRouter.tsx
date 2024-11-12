@@ -90,7 +90,7 @@ export const chatRouter = createTRPCRouter({
             })
         )
         .mutation(({ input, ctx }) => {
-            updateConvoMarkAsRead(input.chatConvoId, ctx.session.user.id)
+            updateConvoMarkAsRead(input.chatConvoId, ctx.session.user.id);
         }),
 
     postChatMessageToUser: protectedProcedure

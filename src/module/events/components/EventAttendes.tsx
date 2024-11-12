@@ -20,7 +20,7 @@ export const EventAttendes: FC<{ eventid: string }> = ({ eventid }) => {
       Har ni betalat nyligen så kommer vi strax lägga till er som deltagare,
       ha tålamod 😉
                 </p>
-            </div>)
+            </div>);
     }
 
     if (attendes.data.length == 0)

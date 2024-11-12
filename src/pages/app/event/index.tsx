@@ -3,14 +3,14 @@ import Link from "next/link";
 import { api } from "~/utils/api";
 import HighlightText from "~/components/HighlightText";
 
-import { type NopEvent } from "~/module/events/components/types"
+import { type NopEvent } from "~/module/events/components/types";
 import Layout from "~/components/Layout";
 import { Spinner } from "~/components/Spinner";
 
 const Home: NextPage = () => {
     //const hello = api.example.hello.useQuery({ text: "from tRPC" });
 
-    const events = api.event.getAllEvents.useQuery()
+    const events = api.event.getAllEvents.useQuery();
 
     const eventRender = (event: NopEvent) => {
 
@@ -38,8 +38,8 @@ const Home: NextPage = () => {
                     </div>
                 </Link>
             </div>
-        )
-    }
+        );
+    };
 
     const renderNoEvents = () => {
         return (
@@ -49,8 +49,8 @@ const Home: NextPage = () => {
                     <p>Just nu har vi inga träffar planerade, men återkom snart så har vi säkerligen något kul på gång 😘 </p>
                 </div>
             </div>
-        )
-    }
+        );
+    };
     const renderLoading = () => {
         return (
             <div className="flex flex-col col-span-2 gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
@@ -60,8 +60,8 @@ const Home: NextPage = () => {
                 </div>
                 <Spinner />
             </div>
-        )
-    }
+        );
+    };
 
     //console.log("events: -> events.data:", events.data)
 
@@ -70,13 +70,13 @@ const Home: NextPage = () => {
 
             <div className="grid grid-cols-2  sm:grid-cols-2   gap-4 md:gap-8">
                 {events.isLoading ? renderLoading() : null}
-                {events.data?.map((event) => { return eventRender(event) })}
+                {events.data?.map((event) => { return eventRender(event); })}
                 {events.data && events.data.length == 0 ? renderNoEvents() : null}
             </div>
 
 
         </Layout>
-    )
+    );
 };
 
 export default Home;

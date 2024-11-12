@@ -29,7 +29,7 @@ export default function useFirebaseAuth() {
 
         if (!authState) {
             setLoading(false);
-            setAuthUser(null)
+            setAuthUser(null);
             return;
         }
 
@@ -43,13 +43,13 @@ export default function useFirebaseAuth() {
     };
 
     const signIn = async (email: string, password: string) => {
-        return signInWithEmailAndPassword(auth, email, password)
+        return signInWithEmailAndPassword(auth, email, password);
     };
 
 
     const signOut = async () => {
     //console.log("signout authuser: ", authUser);
-        await firbaseSignOut(auth)
+        await firbaseSignOut(auth);
     };
 
     useEffect(() => {
