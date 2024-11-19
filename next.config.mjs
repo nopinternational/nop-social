@@ -27,6 +27,10 @@ const config = {
                 hostname: '**.vercel.app',
             },
             {
+                protocol: 'https',
+                hostname: 'app.nightofpassion.se',
+            },
+            {
                 protocol: 'http',
                 hostname: 'localhost',
                 port: '3000',
