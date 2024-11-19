@@ -1,6 +1,7 @@
 import admin, { type ServiceAccount } from 'firebase-admin';
 import { cert } from "firebase-admin/app";
 import { type Firestore } from "firebase-admin/firestore";
+import { type Storage } from "firebase-admin/storage";
 
 export const adminServiceAccount: ServiceAccount = {
     projectId: process.env.FIREBASE_A_PROJECT_ID,
