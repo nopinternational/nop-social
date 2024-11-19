@@ -190,6 +190,10 @@ const profileConverter: FirestoreDataConverter<Profile> = {
     ): Profile => {
     // const data = snapshot.data(options) as ProfileDbModel;
         const data = snapshot.data();
+        let avatar = data.avatar;
+        if (avatar) {
+            avatar = "/api" + avatar;
+        }
         return {
             id: snapshot.id,
             username: data.username,
@@ -202,7 +206,7 @@ const profileConverter: FirestoreDataConverter<Profile> = {
                 born: data.person2.born,
             },
             description: data.description,
-            avatar: data.avatar,
+            avatar: avatar,
         };
     },
 };
