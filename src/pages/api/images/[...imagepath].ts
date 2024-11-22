@@ -11,6 +11,8 @@ export default async function handler(
     res: NextApiResponse
 ) {
    
+    // eslint-disable-next-line no-console
+    console.log("----req.url", req);
     const r = req.url?.replace(/^\/api/, '') as string; // TODO handle no match
 
     const session = await getSession({ req });
@@ -34,6 +36,7 @@ export default async function handler(
 
     const resBufferArray = await fileBlob.arrayBuffer();
     const resBuffer = Buffer.from(resBufferArray);
+    res.setHeader("X-image-service-url", req.headers.host || "");
     if (image.contentType){
         res.setHeader("Content-Type", image.contentType);
     }
