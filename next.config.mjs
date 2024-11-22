@@ -26,10 +26,13 @@ const config = {
             {
                 protocol: 'https',
                 hostname: '**.vercel.app',
+                pathname: '/**'
             },
+            
             {
                 protocol: 'https',
                 hostname: 'app.nightofpassion.se',
+                pathname: '/**'
             },
         ],
     }
