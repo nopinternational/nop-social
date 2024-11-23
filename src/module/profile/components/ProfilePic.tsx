@@ -3,7 +3,16 @@ import Image, { type StaticImageData } from "next/image";
 
 type ProfilePicProps = { variant?: string; url?: string };
 export const ProfilePic = ({ variant, url }: ProfilePicProps) => {
-    const couplePic: string | StaticImageData = url || defaultCouplePic;
+    
+    // const baseurl = getBaseUrl();
+    let remoteUrl = url;
+    if (url) {
+        remoteUrl = url;
+    }
+    // eslint-disable-next-line no-console
+    console.log("ProfilePic.remoteurl:", remoteUrl);
+    
+    const couplePic: string | StaticImageData = remoteUrl || defaultCouplePic;
 
     if (variant === "small")
         return (
@@ -30,3 +39,4 @@ export const ProfilePic = ({ variant, url }: ProfilePicProps) => {
         />
     );
 };
+

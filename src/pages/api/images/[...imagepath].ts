@@ -11,13 +11,15 @@ export default async function handler(
     res: NextApiResponse
 ) {
    
-    // eslint-disable-next-line no-console
-    console.log("----req.url", req);
     const r = req.url?.replace(/^\/api/, '') as string; // TODO handle no match
-
+    console.error("--- req.url", req.url);
+    console.error("--- req.cookies", req.cookies);
+    console.error("--- req.headers", req.headers);
     const session = await getSession({ req });
 
+
     if (!session) {
+        console.error("xxx -- No session");
         return res.send({ error: 'You must sign in to view the protected content on this page...', status: 401 });
     }
     
@@ -25,6 +27,8 @@ export default async function handler(
     
     if (!image) {
         const errMsg = "Path does not exist: " + r;
+        console.error("Image null", errMsg);
+        console.error("Image null", image);
         return res.send({ error: errMsg, status: 404 });
     }
 
@@ -34,6 +38,11 @@ export default async function handler(
         },
     }).then((res) => res.blob());
 
+    console.error("----");
+    console.error("----fileblob ", fileBlob);
+    console.error("----");
+    console.error("");
+    console.error("");
     const resBufferArray = await fileBlob.arrayBuffer();
     const resBuffer = Buffer.from(resBufferArray);
     res.setHeader("X-image-service-url", req.headers.host || "");
@@ -68,7 +77,11 @@ const getFromFirebaseStorage = async (path: string): Promise<ImageUrlResponse | 
         const meta = await getMetadata(pathRef);
         // console.log("meta", meta);
         const url = await getDownloadURL(pathRef);
-        return { url, contentType: meta.contentType, size: meta.size };
+        const response = { url, contentType: meta.contentType, size: meta.size };
+        // eslint-disable-next-line no-console
+        console.info("getFromFirebaseStorage.response", response);
+        return response;
+
     } catch (error) {
         console.error("getFromFirebaseStorage.error", error);
         return null;
