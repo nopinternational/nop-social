@@ -27,10 +27,10 @@ export default async function handler(
     console.error("---------------------------------------");
 
 
-    if (!session) {
-        console.error("xxx -- No session");
-        return res.send({ error: 'You must sign in to view the protected content on this page...', status: 401 });
-    }
+    // if (!session) {
+    //     console.error("xxx -- No session");
+    //     return res.send({ error: 'You must sign in to view the protected content on this page...', status: 401 });
+    // }
     
     const image = await getImage(r);
     
