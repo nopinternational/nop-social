@@ -12,10 +12,19 @@ export default async function handler(
 ) {
    
     const r = req.url?.replace(/^\/api/, '') as string; // TODO handle no match
+    console.error("---------------------------------------");
     console.error("--- req.url", req.url);
+    console.error("---------------------------------------");
     console.error("--- req.cookies", req.cookies);
+    console.error("---------------------------------------");
     console.error("--- req.headers", req.headers);
     const session = await getSession({ req });
+
+    console.error("---------------------------------------");
+    console.error("--- session", session);
+    console.error("---------------------------------------");
+    console.error("--- req.cookies.session", req.cookies.session);
+    console.error("---------------------------------------");
 
 
     if (!session) {
