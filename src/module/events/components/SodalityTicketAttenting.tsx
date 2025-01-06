@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useState } from "react";
 import { Card } from "~/components/Card";
@@ -11,6 +12,19 @@ export const AttendingAndPayWithSodality = ({ ticketUrl }: { ticketUrl: string }
     const startPollForPayment = () => {
         setShowSpinner(true);
     };
+
+    const fetchPayments = async () => {
+        const res = await fetch("http://localhost:3000/api/payments");
+        const foo = await res.json();
+        console.log("fetchPayments", foo);
+        return foo;
+    };
+    const { data, status } = useQuery(["paymets"], fetchPayments, {
+        enabled: showSpinner,
+        refetchInterval: 2000,
+    });
+
+    console.log("status:", status);
 
     return (
         <div className="grid grid-cols-2  gap-4   sm:grid-cols-2 md:gap-8">
