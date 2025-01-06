@@ -239,7 +239,7 @@ export const NoPEventForm = ({
                 value={eventOptions.ticketUrl}
                 onChange={updateOptionTicketUrl}
             />
-            <p className="italic">Om ticket url anges så spelar "custom anmälningssida" ingen roll.</p>
+            <p className="italic">Om ticket url anges så spelar Custom anmälningssida ingen roll.</p>
             <br />
 
             {isSaving ? (
