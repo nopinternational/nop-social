@@ -94,7 +94,7 @@ const Home: NextPage = () => {
     }
 
     const e: NopEvent = event.data;
-    console.log("NopEvent", e);
+
 
     return (
         <Layout
