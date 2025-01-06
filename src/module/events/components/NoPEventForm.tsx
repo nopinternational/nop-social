@@ -2,28 +2,36 @@ import React, { type ChangeEvent, useState } from "react";
 import { Toggle } from "~/components/Toogle";
 
 export type EventFormType = {
-  title: string;
-  when: string;
-  description: string;
-  longDesc: string;
-  options: EventOptions;
-  order: number;
+    title: string;
+    when: string;
+    description: string;
+    longDesc: string;
+    options: EventOptions;
+    order: number;
 };
 
 export type EventInformation = {
-  title: string;
-  when: string;
-  description: string;
-  longDesc: string;
-  order: number;
-  options: EventOptions;
+    title: string;
+    when: string;
+    description: string;
+    longDesc: string;
+    order: number;
+    options: EventOptions;
+};
+
+export type EventToggleOptions = {
+    active: boolean;
+    showParticipants: boolean;
+    signupOpen: boolean;
+    customSignupPage: boolean;
 };
 
 export type EventOptions = {
-  active: boolean;
-  showParticipants: boolean;
-  signupOpen: boolean;
-  customSignupPage: boolean;
+    active: boolean;
+    showParticipants: boolean;
+    signupOpen: boolean;
+    customSignupPage: boolean;
+    ticketUrl: string;
 };
 
 const DEFAULT_EVENT: EventFormType = {
@@ -36,6 +44,7 @@ const DEFAULT_EVENT: EventFormType = {
         showParticipants: false,
         signupOpen: false,
         customSignupPage: false,
+        ticketUrl: "",
     },
     order: 10000,
 };
@@ -66,8 +75,8 @@ export const NoPEventForm = ({
     event,
     onCreateHandler,
 }: {
-  event?: EventFormType;
-  onCreateHandler?: (e: EventFormType) => void;
+    event?: EventFormType;
+    onCreateHandler?: (e: EventFormType) => void;
 }) => {
     const [eventInformation, setEventInformation] = useState<EventInformation>(
         getInitialEventInformation(event)
@@ -79,7 +88,7 @@ export const NoPEventForm = ({
     };
 
     const [eventOptions, setEventOptions] =
-    useState<EventOptions>(initialOptions);
+        useState<EventOptions>(initialOptions);
     const [isSaving, setIsSaving] = useState(false);
 
     const createEvent = (e: React.MouseEvent<HTMLButtonElement>): void => {
@@ -129,8 +138,18 @@ export const NoPEventForm = ({
         const name: string = e.target.name;
         setEventOptions((options) => {
             const newOptions = { ...options };
-            const newVal = !options[name as keyof EventOptions];
-            newOptions[name as keyof EventOptions] = newVal;
+            const newVal = !options[name as keyof EventToggleOptions];
+            newOptions[name as keyof EventToggleOptions] = newVal;
+            return newOptions;
+        });
+    };
+
+    const updateOptionTicketUrl = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ): void => {
+        setEventOptions((options) => {
+            const newOptions = { ...options };
+            const eventVal = event.target.value;
+            newOptions["ticketUrl"] = eventVal;
             return newOptions;
         });
     };
@@ -212,6 +231,15 @@ export const NoPEventForm = ({
                 checked={eventOptions.customSignupPage}
                 onClick={toggleOption}
             />
+            <div className="m-2">Ticket url</div>
+            <input
+                className="w-full rounded-lg px-3 py-3 text-black"
+                name="order"
+                type="text"
+                value={eventOptions.ticketUrl}
+                onChange={updateOptionTicketUrl}
+            />
+            <br />
 
             <br />
 
@@ -237,14 +265,14 @@ export const NoPEventForm = ({
                             fill="#1C64F2"
                         ></path>
                     </svg>
-          Spara
+                    Spara
                 </button>
             ) : (
                 <button
                     className="mb-3 mt-4 rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
                     onClick={(event) => createEvent(event)}
                 >
-          Spara
+                    Spara
                 </button>
             )}
         </form>
