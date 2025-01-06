@@ -221,7 +221,7 @@ const AttendingAndPayWithSodality = ({ ticketUrl }: { ticketUrl :string}) => {
                     <div className="whitespace-pre-wrap text-lg">
                         Vi samarbetar med Sodality för att betala för cocktailträffen. Klickan nedan för att starta betalningen.
                     </div>
-                    <div>
+                    <div className="flex items-center justify-center">
                         <Link href={ticketUrl}>
                             <button
                                 className="flex items-center gap-3 relative rounded-full bg-green-600 px-8 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
