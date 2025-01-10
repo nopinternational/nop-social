@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 import { Card } from "~/components/Card";
@@ -8,16 +9,31 @@ import { Spinner } from "~/components/Spinner";
 export const AttendingAndPayWithSodality = ({ ticketUrl }: { ticketUrl: string }) => {
 
     const [showSpinner, setShowSpinner] = useState(false);
+    const [hasPayed, setHasPayed] = useState(false);
+    const session = useSession();
+    const currentEmail = session.data?.user.email;
     
     const startPollForPayment = () => {
         setShowSpinner(true);
     };
 
+    const lemonPayments = (payments: [{}], currentUserEmail: string) => {
+        console.log("lemonPayments", payments, currentEmail);
+        const thisUserHasPayed: boolean = payments.filter(p => p.email === currentEmail).length > 0;
+        console.log("thisUserHasPayed", thisUserHasPayed);
+        if (thisUserHasPayed) {
+            setShowSpinner(false);
+            setHasPayed(true);
+
+        }
+
+    };
     const fetchPayments = async () => {
         const res = await fetch("http://localhost:3000/api/payments");
-        const foo = await res.json();
-        console.log("fetchPayments", foo);
-        return foo;
+        const payments = await res.json();
+        console.log("fetchPayments", payments, session);
+        lemonPayments(payments, currentEmail);
+        return payments;
     };
     const { data, status } = useQuery(["paymets"], fetchPayments, {
         enabled: showSpinner,
@@ -57,8 +73,9 @@ export const AttendingAndPayWithSodality = ({ ticketUrl }: { ticketUrl: string }
                         Vi samarbetar med Sodality för att betala för cocktailträffen. Klickan nedan för att starta betalningen.
                     </div>
                     <div className="flex items-center justify-center">
-                        <Link href={ticketUrl} target="ticketpayment">
+                        <Link href={"https://www.google.com" || ticketUrl} target="ticketpayment">
                             <button
+                                disabled={showSpinner || hasPayed}
                                 className="flex items-center gap-3 relative rounded-full bg-green-600 px-8 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
                                 onClick={startPollForPayment}>
                                 <span>Betala</span>
@@ -66,7 +83,9 @@ export const AttendingAndPayWithSodality = ({ ticketUrl }: { ticketUrl: string }
                         </Link>
                     </div>
                     {showSpinner ? <div><Spinner></Spinner>
-                    </div>: null}
+                    </div> : null}
+                    {hasPayed ?
+                        <div className="text-lg text-green-600">Ni har nu betalat för träffen  </div> : null}
                 </Card>
             </div>
         </div>);
