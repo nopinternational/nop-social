@@ -15,6 +15,7 @@ import {
 } from "../components/types";
 
 import { type EventFormType } from "../components/NoPEventForm";
+import { type MyEventStatus } from "./database";
 
 
 const EVENTS_COLLECTION = "events";
@@ -89,7 +90,15 @@ export class FirbaseAdminClient {
     getMyEventStatus = async (
         iam_userid: string,
         eventid: string
-    ): Promise<{ when: string } | null> => {
+    ): Promise<MyEventStatus | null> => {
+    //console.log("FirbaseAdminClient.getEvent for id", eventid)
+        return await this.getSignupStatus(iam_userid, eventid);
+    };
+
+    getSignupStatus = async (
+        iam_userid: string,
+        eventid: string
+    ): Promise< MyEventStatus | null> => {
     //console.log("FirbaseAdminClient.getEvent for id", eventid)
         const eventStatusRef = this.firestore
             .collection(EVENTS_COLLECTION)
@@ -100,8 +109,8 @@ export class FirbaseAdminClient {
         const snapshot = await eventStatusRef.get();
         //console.log("FirbaseAdminClient.getEvent -> snapshot", snapshot)
         if (snapshot.exists) {
-            //console.log("FirbaseAdminClient.getEvent -> snapshot.data()", snapshot.data())
-            return snapshot.data() as { when: string };
+            console.log("FirbaseAdminClient.getEvent -> snapshot.data()", snapshot.data());
+            return snapshot.data() as MyEventStatus;
         } else {
             // docSnap.data() will be undefined in this case
             // console.log("No such event!", eventid);
@@ -319,3 +328,4 @@ const eventParticipantsConverter: FirestoreDataConverter<EventParticipant> = {
         return { id: snapshot.id, when: data.when as string };
     },
 };
+

@@ -27,7 +27,12 @@ export const getEventParticipants = async (
     return await db.getEventParticipants(eventid);
 };
 
-export const getMyEventStatus = async (iam_userid: string, eventid: string) => {
+export type MyEventStatus = {
+    when: string
+}
+
+
+export const getMyEventStatus = async (iam_userid: string, eventid: string): Promise<MyEventStatus | null> => {
     const db = new FirbaseAdminClient(firestore);
     return await db.getMyEventStatus(iam_userid, eventid);
 };

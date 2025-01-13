@@ -26,7 +26,7 @@ const Home: NextPage = () => {
     //sessionData?.user?.append("name1") = "jw"
 
     const [attendingToEvent, setAttendToEvent] = useState(false);
-    const [isConfirmed, setConfirmed] = useState(true);
+    const [isConfirmed, setConfirmed] = useState(false);
 
     const queryInput = { eventId: eventid as string };
     const event = api.event.getEvent.useQuery(queryInput, {
@@ -150,7 +150,7 @@ const Home: NextPage = () => {
                     </div>
                 </div>
             ) : null}
-            
+
             <ShowParticipantsLinkButton showParticipants={e.options.showParticipants} />
 
 
