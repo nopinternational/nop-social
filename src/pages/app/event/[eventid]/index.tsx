@@ -26,7 +26,7 @@ const Home: NextPage = () => {
     //sessionData?.user?.append("name1") = "jw"
 
     const [attendingToEvent, setAttendToEvent] = useState(false);
-    const [isConfirmed, setConfirmed] = useState(false);
+    const [isConfirmed, setConfirmed] = useState(true);
 
     const queryInput = { eventId: eventid as string };
     const event = api.event.getEvent.useQuery(queryInput, {
@@ -36,13 +36,15 @@ const Home: NextPage = () => {
         enabled: sessionData?.user !== undefined,
     });
 
+    console.log("myEventStatus", myEventStatus.data);
+    
     useEffect(() => {
         if (myEventStatus.data) setAttendToEvent(true);
     }, [myEventStatus.data]);
 
     const { mutate: eventSignUp } = api.event.signupForEvent.useMutation();
     const attendToEventHandler = () => {
-    //console.log("attendToEventHandler")
+        //console.log("attendToEventHandler")
         setAttendToEvent(true);
         eventSignUp({ eventId: eventid as string });
     };
@@ -97,6 +99,32 @@ const Home: NextPage = () => {
 
     const e: NopEvent = event.data;
 
+    const ShowParticipantsLinkButton = ({ showParticipants }: {showParticipants: boolean}) => {
+        return showParticipants ? (
+            <div className="p-2">
+                <Link href={router.asPath + "/attendes"}>
+                    <button className="rounded-full bg-[hsl(280,100%,70%)] bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
+                            Vilka kommer på träffen?
+                    </button>
+                </Link>
+            </div>
+        ) : null;
+    };
+
+    if (isConfirmed) {
+        return (<Layout
+            headingText={
+                <>
+                    Träff med <HighlightText>Night of Passion</HighlightText>
+                </>
+            }
+        >
+            <EventDescription event={e} />
+            <IsConfirmed />
+            <ShowParticipantsLinkButton showParticipants={ e.options.showParticipants} />
+
+        </Layout>);
+    }
 
     return (
         <Layout
@@ -122,17 +150,10 @@ const Home: NextPage = () => {
                     </div>
                 </div>
             ) : null}
-            {e.options.showParticipants ? (
-                <div className="p-2">
-                    <Link href={router.asPath + "/attendes"}>
-                        <button className="rounded-full bg-[hsl(280,100%,70%)] bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
-                            Vilka kommer på träffen?
-                        </button>
-                    </Link>
-                </div>
-            ) : null}
+            
+            <ShowParticipantsLinkButton showParticipants={e.options.showParticipants} />
 
-            {isConfirmed ? <IsConfirmed /> : null}
+
             {attendingToEvent && e.options.signupOpen ? (
                 <Attending event={e} session={session.data} />
             ) : null}
