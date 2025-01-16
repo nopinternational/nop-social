@@ -125,7 +125,7 @@ export class FirbaseAdminClient {
         const snapshot = await eventStatusRef.get();
         //console.log("FirbaseAdminClient.getEvent -> snapshot", snapshot)
         if (snapshot.exists) {
-            return snapshot.data() as MyEventStatus;
+            return snapshot.data() as {when: string};
         } else {
             // docSnap.data() will be undefined in this case
             // console.log("No such event!", eventid);
@@ -340,7 +340,7 @@ const eventParticipantsConverter: FirestoreDataConverter<EventParticipant> = {
     //options: SnapshotOptions
     ): EventParticipant => {
         const data = snapshot.data();
-        return { id: snapshot.id, when: data.when as string };
+        return { id: snapshot.id, when: data.when as string }; 
     },
 };
 
