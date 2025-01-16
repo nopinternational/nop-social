@@ -11,16 +11,18 @@ export const AttendingAndPayWithSodality = ({ ticketUrl }: { ticketUrl: string }
     const [showSpinner, setShowSpinner] = useState(false);
     const [hasPayed, setHasPayed] = useState(false);
     const session = useSession();
-    const currentEmail = session.data?.user.email;
+    const currentEmail = session.data?.user.email || null;
     
     const startPollForPayment = () => {
         setShowSpinner(true);
     };
 
-    const lemonPayments = (payments: [{}], currentUserEmail: string) => {
-        console.log("lemonPayments", payments, currentEmail);
-        const thisUserHasPayed: boolean = payments.filter(p => p.email === currentEmail).length > 0;
-        console.log("thisUserHasPayed", thisUserHasPayed);
+    type LemonPayment = {
+        email: string
+    }
+
+    const lemonPayments = (payments: LemonPayment[], currentUserEmail: string | null) => {
+        const thisUserHasPayed: boolean = payments.filter(p => p.email === currentUserEmail).length > 0;
         if (thisUserHasPayed) {
             setShowSpinner(false);
             setHasPayed(true);
@@ -28,19 +30,19 @@ export const AttendingAndPayWithSodality = ({ ticketUrl }: { ticketUrl: string }
         }
 
     };
+
     const fetchPayments = async () => {
         const res = await fetch("http://localhost:3000/api/payments");
-        const payments = await res.json();
-        console.log("fetchPayments", payments, session);
+        const payments: LemonPayment[] = await res.json() as LemonPayment[];
         lemonPayments(payments, currentEmail);
         return payments;
     };
-    const { data, status } = useQuery(["paymets"], fetchPayments, {
+
+    useQuery(["paymets"], fetchPayments, {
         enabled: showSpinner,
         refetchInterval: 2000,
     });
 
-    console.log("status:", status);
 
     return (
         <div className="grid grid-cols-2  gap-4   sm:grid-cols-2 md:gap-8">

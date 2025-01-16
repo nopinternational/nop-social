@@ -36,10 +36,12 @@ const Home: NextPage = () => {
         enabled: sessionData?.user !== undefined,
     });
 
-    console.log("myEventStatus", myEventStatus.data);
     
     useEffect(() => {
-        if (myEventStatus.data) setAttendToEvent(true);
+        if (myEventStatus.data) {
+            setAttendToEvent(myEventStatus.data.when !== undefined);
+            setConfirmed(myEventStatus.data.confirmed);
+        }
     }, [myEventStatus.data]);
 
     const { mutate: eventSignUp } = api.event.signupForEvent.useMutation();
@@ -120,7 +122,7 @@ const Home: NextPage = () => {
             }
         >
             <EventDescription event={e} />
-            <IsConfirmed />
+            <IsConfirmed eventName={e.title} />
             <ShowParticipantsLinkButton showParticipants={ e.options.showParticipants} />
 
         </Layout>);
@@ -167,20 +169,22 @@ const Home: NextPage = () => {
     );
 };
 
-
-const IsConfirmed = () => {
+interface IsConfirmedProps {
+    eventName: string;
+}
+const IsConfirmed: React.FC<IsConfirmedProps> = ({ eventName }) => {
     return (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:gap-8">
             <div className="col-span-2">
                 <Card
                     header={
                         <>
-                            Välkommen på <HighlightText>Cocktailträff 🎉🍸🍾</HighlightText>
+                            Välkommen på <HighlightText>{eventName} 🎉🍸🍾</HighlightText>
                         </>
                     }
                 >
                     <div>
-                        Ni har betalat ooch er plats är bekräftad. Vi ses på träffen!
+                        Er plats på träffen är bekräftad. Vi ses 😘
                     </div>
                     <div>
                         Vi skickar ut mer information några dagar innan träffen.

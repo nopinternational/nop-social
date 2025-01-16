@@ -28,7 +28,9 @@ export const getEventParticipants = async (
 };
 
 export type MyEventStatus = {
-    when: string
+    when?: string
+    confirmed: boolean
+    confirmedAs?: ConfirmedUser
 }
 
 
