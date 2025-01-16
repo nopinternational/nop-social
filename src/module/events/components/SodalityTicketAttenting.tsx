@@ -75,7 +75,7 @@ export const AttendingAndPayWithSodality = ({ ticketUrl }: { ticketUrl: string }
                         Vi samarbetar med Sodality för att betala för cocktailträffen. Klickan nedan för att starta betalningen.
                     </div>
                     <div className="flex items-center justify-center">
-                        <Link href={"https://www.google.com" || ticketUrl} target="ticketpayment">
+                        <Link href={ ticketUrl} target="ticketpayment">
                             <button
                                 disabled={showSpinner || hasPayed}
                                 className="flex items-center gap-3 relative rounded-full bg-green-600 px-8 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
