@@ -15,6 +15,7 @@ import {
 } from "../components/types";
 
 import { type EventFormType } from "../components/NoPEventForm";
+import { type MyEventStatus } from "./database";
 
 
 const EVENTS_COLLECTION = "events";
@@ -89,7 +90,31 @@ export class FirbaseAdminClient {
     getMyEventStatus = async (
         iam_userid: string,
         eventid: string
-    ): Promise<{ when: string } | null> => {
+    ): Promise<MyEventStatus | null> => {
+        //console.log("FirbaseAdminClient.getEvent for id", eventid)
+        
+        const attendences = await this.getEventAttendes(iam_userid, eventid); 
+        let confirmedAs: ConfirmedUser | null = null;
+        if (attendences) {
+            confirmedAs = attendences.find((attendee) => attendee.id === iam_userid) || null;
+        }
+        
+        const when = await this.getSignupStatus(iam_userid, eventid);
+        const myEventStatus: MyEventStatus = { confirmed: confirmedAs !== null };
+        if (confirmedAs) {
+            myEventStatus.confirmedAs = confirmedAs;
+        }
+        if (when) {
+            myEventStatus.when = when.when;
+        }
+        return myEventStatus;
+
+    };
+
+    getSignupStatus = async (
+        iam_userid: string,
+        eventid: string
+    ): Promise<{when: string} | null> => {
     //console.log("FirbaseAdminClient.getEvent for id", eventid)
         const eventStatusRef = this.firestore
             .collection(EVENTS_COLLECTION)
@@ -100,8 +125,7 @@ export class FirbaseAdminClient {
         const snapshot = await eventStatusRef.get();
         //console.log("FirbaseAdminClient.getEvent -> snapshot", snapshot)
         if (snapshot.exists) {
-            //console.log("FirbaseAdminClient.getEvent -> snapshot.data()", snapshot.data())
-            return snapshot.data() as { when: string };
+            return snapshot.data() as {when: string};
         } else {
             // docSnap.data() will be undefined in this case
             // console.log("No such event!", eventid);
@@ -316,6 +340,7 @@ const eventParticipantsConverter: FirestoreDataConverter<EventParticipant> = {
     //options: SnapshotOptions
     ): EventParticipant => {
         const data = snapshot.data();
-        return { id: snapshot.id, when: data.when as string };
+        return { id: snapshot.id, when: data.when as string }; 
     },
 };
+

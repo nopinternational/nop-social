@@ -1,6 +1,6 @@
 
 type Props = {
-    children: JSX.Element | string | null | undefined
+    children: JSX.Element | string | string[] | null | undefined
 }
 
 const HighlightText = ({ children }: Props) => {
