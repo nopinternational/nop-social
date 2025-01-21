@@ -92,13 +92,13 @@ export class FirbaseAdminClient {
         eventid: string
     ): Promise<MyEventStatus | null> => {
         //console.log("FirbaseAdminClient.getEvent for id", eventid)
-        
-        const attendences = await this.getEventAttendes(iam_userid, eventid); 
+
+        const attendences = await this.getEventAttendes(iam_userid, eventid);
         let confirmedAs: ConfirmedUser | null = null;
         if (attendences) {
             confirmedAs = attendences.find((attendee) => attendee.id === iam_userid) || null;
         }
-        
+
         const when = await this.getSignupStatus(iam_userid, eventid);
         const myEventStatus: MyEventStatus = { confirmed: confirmedAs !== null };
         if (confirmedAs) {
@@ -114,8 +114,8 @@ export class FirbaseAdminClient {
     getSignupStatus = async (
         iam_userid: string,
         eventid: string
-    ): Promise<{when: string} | null> => {
-    //console.log("FirbaseAdminClient.getEvent for id", eventid)
+    ): Promise<{ when: string } | null> => {
+        //console.log("FirbaseAdminClient.getEvent for id", eventid)
         const eventStatusRef = this.firestore
             .collection(EVENTS_COLLECTION)
             .doc(eventid)
@@ -125,7 +125,7 @@ export class FirbaseAdminClient {
         const snapshot = await eventStatusRef.get();
         //console.log("FirbaseAdminClient.getEvent -> snapshot", snapshot)
         if (snapshot.exists) {
-            return snapshot.data() as {when: string};
+            return snapshot.data() as { when: string };
         } else {
             // docSnap.data() will be undefined in this case
             // console.log("No such event!", eventid);
@@ -134,38 +134,38 @@ export class FirbaseAdminClient {
     };
 
     getEventAttendes = async (iam_userid: string, eventid: string): Promise<ConfirmedUser[] | null> => {
-    //events / REdvBu1tM2iI5GHEur8F / signups / attendes
-    // console.log("FirbaseAdminClient.getEvent for id", eventid)
+        //events / REdvBu1tM2iI5GHEur8F / signups / attendes
+        // console.log("FirbaseAdminClient.getEvent for id", eventid)
         const eventsRef = this.firestore.collection(EVENTS_COLLECTION);
         const eventRef = eventsRef.doc(eventid);
         const signupsCollectionRef = eventRef.collection("signups");
         const attendesRef = signupsCollectionRef.doc("attendes");
         const snapshot = await attendesRef.get();
-    type FirebaseDocType = {
-      confirmed: object[];
-      allowed: string[];
-    };
-        
-    if (snapshot.exists) {
-        const dta = snapshot.data() as FirebaseDocType;
-        const allowed: string[] = dta.allowed;
+        type FirebaseDocType = {
+            confirmed: object[];
+            allowed: string[];
+        };
+
+        if (snapshot.exists) {
+            const dta = snapshot.data() as FirebaseDocType;
+            const allowed: string[] = dta.allowed;
 
 
-        if (allowed.includes(iam_userid)) {
-            return dta.confirmed as ConfirmedUser[];
+            if (allowed.includes(iam_userid)) {
+                return dta.confirmed as ConfirmedUser[];
+            } else {
+                return null;
+            }
         } else {
-            return null;
+            // docSnap.data() will be undefined in this case
+            // console.log("No event attendes for id ", eventid);
         }
-    } else {
-        // docSnap.data() will be undefined in this case
-        // console.log("No event attendes for id ", eventid);
-    }
-    return [];
+        return [];
     };
 
     getEventMessages = async (iam_userid: string, eventid: string) => {
-    //events / REdvBu1tM2iI5GHEur8F / signups / attendes
-    // console.log("FirbaseAdminClient.getEventMessages for id", eventid)
+        //events / REdvBu1tM2iI5GHEur8F / signups / attendes
+        // console.log("FirbaseAdminClient.getEventMessages for id", eventid)
         const eventsRef = this.firestore.collection(EVENTS_COLLECTION);
         const eventRef = eventsRef.doc(eventid);
         const signupsCollectionRef = eventRef.collection("signups");
@@ -175,9 +175,9 @@ export class FirbaseAdminClient {
         if (snapshot.exists) {
             // console.log("getEventMessages", snapshot.data())
             const dta = snapshot.data() as {
-        wallmessages: object[];
-        allowed: string[];
-      };
+                wallmessages: object[];
+                allowed: string[];
+            };
             if (dta.allowed.includes(iam_userid)) {
                 if (dta.wallmessages)
                     return (dta.wallmessages as EventMessage[]).reverse();
@@ -193,8 +193,8 @@ export class FirbaseAdminClient {
     };
 
     signupToEvent = async (eventId: string, userId: string) => {
-    //console.log("signupToEvent", userid, eventId)
-    // console.log("FirbaseAdminClient.signupToEvent for id", eventId, userId)
+        //console.log("signupToEvent", userid, eventId)
+        // console.log("FirbaseAdminClient.signupToEvent for id", eventId, userId)
         const eventsRef = this.firestore.collection(EVENTS_COLLECTION);
         const eventRef = eventsRef.doc(eventId);
         const participantsCollectionRef = eventRef.collection(EVENT_PARTICIPANTS);
@@ -204,8 +204,8 @@ export class FirbaseAdminClient {
     };
 
     postEventMessage = async (eventId: string, message: string, from: string) => {
-    //console.log("firebase.postEventMessage", eventId, message, from)
-    // console.log("FirbaseAdminClient.postEventMessage for id", eventId, from)
+        //console.log("firebase.postEventMessage", eventId, message, from)
+        // console.log("FirbaseAdminClient.postEventMessage for id", eventId, from)
         const eventsRef = this.firestore.collection(EVENTS_COLLECTION);
         const eventRef = eventsRef.doc(eventId);
         const signupsCollectionRef = eventRef.collection("signups");
@@ -238,7 +238,7 @@ export class FirbaseAdminClient {
         uid: string,
         nopEvent: EventFormType
     ): Promise<string> => {
-    // console.log("persist event", uid, nopEvent);
+        // console.log("persist event", uid, nopEvent);
         const eventsRef = this.firestore.collection(EVENTS_COLLECTION);
 
         const docRef = eventsRef.doc();
@@ -289,7 +289,7 @@ export class FirbaseAdminClient {
         return null;
     };
 
-    addAsAllowedUser = async (eventId: string, userId: string, when: Date): Promise<void>=> {
+    addAsAllowedUser = async (eventId: string, userId: string, when: Date): Promise<void> => {
         const eventsRef = this.firestore.collection(EVENTS_COLLECTION);
         const eventRef = eventsRef.doc(eventId);
         const allowedCollectionRef = eventRef.collection("allowed");
@@ -350,10 +350,10 @@ const eventParticipantsConverter: FirestoreDataConverter<EventParticipant> = {
     },
     fromFirestore: (
         snapshot: QueryDocumentSnapshot
-    //options: SnapshotOptions
+        //options: SnapshotOptions
     ): EventParticipant => {
         const data = snapshot.data();
-        return { id: snapshot.id, when: data.when as string }; 
+        return { id: snapshot.id, when: data.when as string };
     },
 };
 
