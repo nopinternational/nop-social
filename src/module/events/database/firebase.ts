@@ -169,10 +169,8 @@ export class FirbaseAdminClient {
             const allowed: string[] = dta.allowed;
 
             const allowedUsers = await this.getAllowedUsers( eventid);
-            console.log("eventPermission", allowedUsers);
 
             if (isAllowedUser(iam_userid, allowedUsers) || allowed.includes(iam_userid)) {
-                console.log("is allowed uiser?", iam_userid, true);
                 return dta.confirmed as ConfirmedUser[];
             } else {
                 return null;
