@@ -145,6 +145,7 @@ export class FirbaseAdminClient {
       confirmed: object[];
       allowed: string[];
     };
+        
     if (snapshot.exists) {
         const dta = snapshot.data() as FirebaseDocType;
         const allowed: string[] = dta.allowed;
@@ -288,7 +289,7 @@ export class FirbaseAdminClient {
         return null;
     };
 
-    addAsAllowedUser = async (eventId: string, userId: string, when: Date) => {
+    addAsAllowedUser = async (eventId: string, userId: string, when: Date): Promise<void>=> {
         const eventsRef = this.firestore.collection(EVENTS_COLLECTION);
         const eventRef = eventsRef.doc(eventId);
         const allowedCollectionRef = eventRef.collection("allowed");

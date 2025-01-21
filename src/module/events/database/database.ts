@@ -77,17 +77,17 @@ export const addAsAttende = async ({
     return db.addAsAttende(eventId, id, name, username, addAsAllowed);
 };
 
-export const addAsAllowed = async ({
+export const addAsAllowed = async({
     eventId,
     uid,
     when
 }: {
-  eventId: string;
-  uid: string;
-  when?: Date
-}) => {
+    eventId: string;
+    uid: string;
+    when?: Date
+}): Promise<void> => {
     const db = new FirbaseAdminClient(firestore);
-    return db.addAsAllowed(eventId, uid, when  || new Date());
+    return db.addAsAllowedUser(eventId, uid, when  || new Date());
 };
 
 
