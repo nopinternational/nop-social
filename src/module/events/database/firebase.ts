@@ -16,6 +16,7 @@ import {
 
 import { type EventFormType } from "../components/NoPEventForm";
 import { type MyEventStatus } from "./database";
+import { type AllowedUser, isAllowedUser } from "../lib/allowed";
 
 
 const EVENTS_COLLECTION = "events";
@@ -24,6 +25,7 @@ const EVENT_SIGNUPS = "signups";
 const EVENT_ATTENDES = "attendes";
 // const ATTENDES_ALLOWED = "allowed";
 // const ATTENDES_CONFIRMED = "confirmed";
+
 
 export class FirbaseAdminClient {
     firestore: FirebaseFirestore.Firestore;
@@ -133,9 +135,25 @@ export class FirbaseAdminClient {
         return null;
     };
 
+    getAllowedUsers = async (eventid: string): Promise<AllowedUser[]> => {
+        const eventRef = this.firestore.collection(EVENTS_COLLECTION).doc(eventid);
+        const allowedCollectionRef = eventRef.collection("allowed");
+
+        const allowedUsers: AllowedUser[] = [];
+        await allowedCollectionRef.get().then((querySnapShot) => {
+            querySnapShot.forEach((doc) => {
+                const data = doc.data();
+                allowedUsers.push({ id: doc.id, when: data.when as Date });
+            });
+        });
+
+        return allowedUsers;
+    };
+
     getEventAttendes = async (iam_userid: string, eventid: string): Promise<ConfirmedUser[] | null> => {
         //events / REdvBu1tM2iI5GHEur8F / signups / attendes
         // console.log("FirbaseAdminClient.getEvent for id", eventid)
+
         const eventsRef = this.firestore.collection(EVENTS_COLLECTION);
         const eventRef = eventsRef.doc(eventid);
         const signupsCollectionRef = eventRef.collection("signups");
@@ -150,8 +168,11 @@ export class FirbaseAdminClient {
             const dta = snapshot.data() as FirebaseDocType;
             const allowed: string[] = dta.allowed;
 
+            const allowedUsers = await this.getAllowedUsers( eventid);
+            console.log("eventPermission", allowedUsers);
 
-            if (allowed.includes(iam_userid)) {
+            if (isAllowedUser(iam_userid, allowedUsers) || allowed.includes(iam_userid)) {
+                console.log("is allowed uiser?", iam_userid, true);
                 return dta.confirmed as ConfirmedUser[];
             } else {
                 return null;
@@ -161,6 +182,10 @@ export class FirbaseAdminClient {
             // console.log("No event attendes for id ", eventid);
         }
         return [];
+    };
+
+    isUserAllowedForEvent = async (iam_userid: string, eventid: string): Promise<boolean> => {
+        return isAllowedUser(iam_userid, await this.getAllowedUsers(eventid));
     };
 
     getEventMessages = async (iam_userid: string, eventid: string) => {
@@ -178,7 +203,7 @@ export class FirbaseAdminClient {
                 wallmessages: object[];
                 allowed: string[];
             };
-            if (dta.allowed.includes(iam_userid)) {
+            if (await this.isUserAllowedForEvent(iam_userid, eventid) || dta.allowed.includes(iam_userid)) {
                 if (dta.wallmessages)
                     return (dta.wallmessages as EventMessage[]).reverse();
                 return [];
