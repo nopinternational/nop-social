@@ -249,6 +249,8 @@ export class FirbaseAdminClient {
         await eventAttendes.set({ allowed: [] });
         await eventAttendes.set({ confirmed: [] });
         await this.signupToEvent(createdEventId, uid);
+
+        await this.addAsAllowedUser(createdEventId, uid, new Date());
         await this.addUserAsAllowed(createdEventId, uid);
         return createdEventId;
     };
@@ -278,11 +280,21 @@ export class FirbaseAdminClient {
         }
 
         if (addAsAllowed) {
+            void this.addAsAllowedUser(eventId, userId, new Date());
             void this.addUserAsAllowed(eventId, userId);
         }
 
 
         return null;
+    };
+
+    addAsAllowedUser = async (eventId: string, userId: string, when: Date) => {
+        const eventsRef = this.firestore.collection(EVENTS_COLLECTION);
+        const eventRef = eventsRef.doc(eventId);
+        const allowedCollectionRef = eventRef.collection("allowed");
+        await allowedCollectionRef
+            .doc(userId)
+            .set({ when: when });
     };
 
     addUserAsAllowed = async (eventId: string, userId: string): Promise<string | null> => {

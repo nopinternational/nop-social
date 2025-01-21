@@ -76,6 +76,21 @@ export const addAsAttende = async ({
     const db = new FirbaseAdminClient(firestore);
     return db.addAsAttende(eventId, id, name, username, addAsAllowed);
 };
+
+export const addAsAllowed = async ({
+    eventId,
+    uid,
+    when
+}: {
+  eventId: string;
+  uid: string;
+  when?: Date
+}) => {
+    const db = new FirbaseAdminClient(firestore);
+    return db.addAsAllowed(eventId, uid, when  || new Date());
+};
+
+
 export const updateEvent = async ({
     nopEvent,
     uid,
