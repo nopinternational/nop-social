@@ -4,6 +4,7 @@ import { z } from "zod";
 const nopEvent = z.object({
     id: z.string(),
     name: z.string(),
+    owner: z.string(),
     title: z.string(),
     description: z.string(),
     longDesc: z.string(),
@@ -35,6 +36,7 @@ export type ConfirmedUser = {
 
 export interface EventFirestoreModel extends DocumentData {
   name: string;
+  owner: string;
   title: string;
   description: string;
   longDesc: string;

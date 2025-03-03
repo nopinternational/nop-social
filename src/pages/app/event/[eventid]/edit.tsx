@@ -28,9 +28,10 @@ const Home: NextPage = () => {
 
     const { mutateAsync: updateEvent } = api.event.updateEvent.useMutation();
 
-    const event = api.event.getEvent.useQuery(queryInput, {
+    const event = api.event.getMyEvent.useQuery(queryInput, {
         enabled: sessionData?.user !== undefined &&  !!eventid,
     });
+
 
     const attendes = api.event.getEventAttendes.useQuery({
         eventId: eventid as string,
@@ -59,6 +60,26 @@ const Home: NextPage = () => {
                 }
             >
                 <Spinner />
+            </Layout>
+        );
+    }
+
+    if (event.isError && event.error.data?.code === "FORBIDDEN") {
+        return (
+            <Layout
+                headingText={
+                    <>
+            Fel vid laddning av <HighlightText>träff</HighlightText>
+                    </>
+                }
+            >
+                <div className="grid grid-cols-2  gap-4   sm:grid-cols-2 md:gap-8">
+                    <div className="col-span-2 p-2">
+                        <Card header="Kan inte ändra träff">
+                            Du har inte rättighet att ändra denna träff.
+                        </Card>
+                    </div>
+                </div>
             </Layout>
         );
     }
