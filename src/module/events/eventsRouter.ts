@@ -26,6 +26,17 @@ export const eventRouter = createTRPCRouter({
         .query(async ({ input }) => {
             return await getEvent(input.eventId);
         }),
+    
+    getMyEvent: protectedProcedure
+        .input(z.object({ eventId: z.string() }))
+        .query(async ({ input, ctx }) => {
+            const nopEvent = await getEvent(input.eventId);
+            if (nopEvent?.owner === ctx.session.user.id) {
+                return nopEvent;
+            }
+            throw new TRPCError({ code: "FORBIDDEN", message: "Not owner of event" });
+        }),
+    
     getEventParticipants: protectedProcedure
         .input(z.object({ eventId: z.string() }))
         .query(async ({ input }) => {
