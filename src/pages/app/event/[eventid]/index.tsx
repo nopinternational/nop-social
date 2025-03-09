@@ -259,8 +259,7 @@ const AttendingToSkargardsParty = () => {
                         Vi har nu registrerat er anmälan att ni vill vara med. Vi
                         eftersträvar att få en bra blandning på paren, så att alla ska känna
                         sig trygga och bekväma. Det gör att det kan dröja innan vi bekräftar
-                        er plats. From söndagen 29/9 kommer vi att börja bjuda in par som
-                        anmält sitt intresse.
+                        er plats.
                     </div>
                     <div className="whitespace-pre-wrap text-lg">
                         Vi kommer att använda den email som ni använder för att logga in på
