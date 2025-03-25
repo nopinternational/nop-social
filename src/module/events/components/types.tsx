@@ -15,7 +15,7 @@ const nopEvent = z.object({
         active: z.boolean(),
         showParticipants: z.boolean(),
         customSignupPage: z.boolean(),
-        ticketUrl: z.string(),
+        memberlyEventId: z.string(),
     }),
     order: z.number(),
 });
@@ -47,7 +47,7 @@ export interface EventFirestoreModel extends DocumentData {
     active: boolean;
     showParticipants: boolean;
     customSignupPage: boolean;
-    ticketUrl: string
+    memberlyEventId: string
   };
   order: number;
 }
