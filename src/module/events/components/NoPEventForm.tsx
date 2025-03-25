@@ -31,7 +31,7 @@ export type EventOptions = {
     showParticipants: boolean;
     signupOpen: boolean;
     customSignupPage: boolean;
-    ticketUrl: string;
+    memberlyEventId: string;
 };
 
 const DEFAULT_EVENT: EventFormType = {
@@ -44,7 +44,7 @@ const DEFAULT_EVENT: EventFormType = {
         showParticipants: false,
         signupOpen: false,
         customSignupPage: false,
-        ticketUrl: "",
+        memberlyEventId: "",
     },
     order: 10000,
 };
@@ -144,12 +144,12 @@ export const NoPEventForm = ({
         });
     };
 
-    const updateOptionTicketUrl = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    const updateOptionMemberlyEventId = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ): void => {
         setEventOptions((options) => {
             const newOptions = { ...options };
             const eventVal = event.target.value;
-            newOptions["ticketUrl"] = eventVal;
+            newOptions["memberlyEventId"] = eventVal;
             return newOptions;
         });
     };
@@ -231,15 +231,15 @@ export const NoPEventForm = ({
                 checked={eventOptions.customSignupPage}
                 onClick={toggleOption}
             />
-            <div className="m-2">Ticket url</div>
+            <div className="m-2">Event ID</div>
             <input
                 className="w-full rounded-lg px-3 py-3 text-black"
                 name="order"
                 type="text"
-                value={eventOptions.ticketUrl}
-                onChange={updateOptionTicketUrl}
+                value={eventOptions.memberlyEventId}
+                onChange={updateOptionMemberlyEventId}
             />
-            <p className="italic">Om ticket url anges så spelar Custom anmälningssida ingen roll.</p>
+            <p className="italic">Memberly event ID </p>
             <br />
 
             {isSaving ? (

@@ -228,8 +228,8 @@ const Attending = ({
     event: NopEvent;
     session: Session | null;
 }) => {
-    if (event.options.ticketUrl) {
-        return <AttendingAndPayWithSodality ticketUrl={event.options.ticketUrl} />;
+    if (event.options.memberlyEventId) {
+        return <AttendingAndPayWithSodality ticketUrl={event.options.memberlyEventId} />;
     }
     if (event.options.customSignupPage) {
         return <AttendingToSkargardsParty />;
