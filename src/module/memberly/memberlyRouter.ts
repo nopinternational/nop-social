@@ -9,7 +9,11 @@ export const memberlyRouter = createTRPCRouter({
     initiateTicketPayment: protectedProcedure
         .input(z.object({ eventId: z.string() }))
         .query(({ input, ctx }) => {
-            return startTicketPaymentClient(input.eventId, ctx.session.user.email, ctx.session.user.id);
+            const email = ctx.session.user.email;
+            if (!email) {
+                throw new Error("No email in session");
+            }
+            return startTicketPaymentClient(input.eventId, email, ctx.session.user.id);
         })
 });
 
