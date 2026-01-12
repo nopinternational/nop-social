@@ -173,7 +173,7 @@ interface IsConfirmedProps {
     eventName: string;
 }
 
-const IsConfirmedCustom: React.FC<IsConfirmedProps> = ({ eventName }) => {
+const IsConfirmedCustom: React.FC<IsConfirmedProps> = () => {
     return (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:gap-8">
             <div className="col-span-2">
@@ -297,7 +297,7 @@ const CustomAttendingToEvent = ({
     return <AttendingToNopGoesCae
         eventTitle={eventTitle}
         username={username} />;
-}
+};
 
 const AttendingToNopGoesCae = ({
     eventTitle,
@@ -360,9 +360,8 @@ const AttendingToNopGoesCae = ({
         </div>
     );
 };
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const AttendingToCustomEvent = () => {
-
 
     return (
         <div className="grid grid-cols-2  gap-4   sm:grid-cols-2 md:gap-8">
