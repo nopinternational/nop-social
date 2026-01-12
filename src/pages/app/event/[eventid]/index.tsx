@@ -36,7 +36,7 @@ const Home: NextPage = () => {
         enabled: sessionData?.user !== undefined,
     });
 
-    
+
     useEffect(() => {
         if (myEventStatus.data) {
             setAttendToEvent(myEventStatus.data.when !== undefined);
@@ -101,12 +101,12 @@ const Home: NextPage = () => {
 
     const e: NopEvent = event.data;
 
-    const ShowParticipantsLinkButton = ({ showParticipants }: {showParticipants: boolean}) => {
+    const ShowParticipantsLinkButton = ({ showParticipants }: { showParticipants: boolean }) => {
         return showParticipants ? (
             <div className="p-2">
                 <Link href={router.asPath + "/attendes"}>
                     <button className="rounded-full bg-[hsl(280,100%,70%)] bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
-                            Vilka kommer på träffen?
+                        Vilka kommer på träffen?
                     </button>
                 </Link>
             </div>
@@ -123,7 +123,7 @@ const Home: NextPage = () => {
         >
             <EventDescription event={e} />
             <IsConfirmed eventName={e.title} />
-            <ShowParticipantsLinkButton showParticipants={ e.options.showParticipants} />
+            <ShowParticipantsLinkButton showParticipants={e.options.showParticipants} />
 
         </Layout>);
     }
@@ -232,7 +232,8 @@ const Attending = ({
         return <AttendingAndPayWithSodality ticketUrl={event.options.memberlyEventId} />;
     }
     if (event.options.customSignupPage) {
-        return <AttendingToSkargardsParty />;
+        return <CustomAttendingToEvent eventTitle={event.title}
+            username={session?.user.name} />;
     }
 
     return (
@@ -244,7 +245,80 @@ const Attending = ({
 };
 
 
-const AttendingToSkargardsParty = () => {
+const CustomAttendingToEvent = ({
+    eventTitle,
+    username,
+}: AttendingToCocktailMeetProps) => {
+    return <AttendingToNopGoesCae
+        eventTitle={eventTitle}
+        username={username} />;
+}
+
+const AttendingToNopGoesCae = ({
+    eventTitle,
+    username,
+}: AttendingToCocktailMeetProps) => {
+    const getSwishMessage = (username: string | undefined | null): string => {
+        if (username) {
+            return eventTitle + ": " + username;
+        }
+        return "Ert användarnamn och era namn här";
+    };
+    const swishMessage = getSwishMessage(username);
+
+    return (
+        <div className="grid grid-cols-2  gap-4   sm:grid-cols-2 md:gap-8">
+            <div className="col-span-2">
+                
+                <Card
+                    header={
+                        <>
+                            <HighlightText>Betala</HighlightText> för festen
+                        </>
+                    }
+                >
+                    <div className="whitespace-pre-wrap text-lg">
+                        Kostnaden för festen är 100:- som ni swishar till 0700066099. Märk
+                        er betalning med ert användarnamn ex &quot;passion-couple&quot;.
+                    </div>
+                    <div>
+                        Är ni på samma enhet som ni har Swish-appen installerad kan ni
+                        klicka på knappen nedan för att betala.
+                    </div>
+                    <div className="flex items-center justify-center">
+                        <CocktailSwishButton message={swishMessage} />
+                    </div>
+                    <div>
+                        Eller så öppnar ni upp er swish app och skannar QR koden nedan.
+                    </div>
+                    <div className="p-2">
+                        <SwishQR />
+                    </div>
+                    <div className="whitespace-pre-wrap text-lg">
+                        Övriga kostnader såsom resa, hotell och entre ombesörjer ni för själva. 
+                    </div>
+                    <div className="whitespace-pre-wrap text-lg">
+                        Har ni frågor eller funderingar så kan ni skicka ett mail till{" "}
+                        <a
+                            className="text-[hsl(280,100%,70%)]"
+                            href="mailto:fest@nightofpassion.se"
+                        >
+                            fest@nightofpassion.se
+                        </a>
+                    </div>
+
+                    <div className="whitespace-pre-wrap text-lg">
+                        Kram på er så länge 😘
+                    </div>
+                </Card>
+            </div>
+        </div>
+    );
+};
+
+const AttendingToCustomEvent = () => {
+
+
     return (
         <div className="grid grid-cols-2  gap-4   sm:grid-cols-2 md:gap-8">
             <div className="col-span-2">
@@ -279,11 +353,13 @@ const AttendingToSkargardsParty = () => {
                     <div className="whitespace-pre-wrap text-lg">
                         Kram på er så länge 😘
                     </div>
+                    
                 </div>
             </div>
         </div>
     );
 };
+
 const AttendingToCocktailMeet = ({
     eventTitle,
     username,
@@ -303,7 +379,7 @@ const AttendingToCocktailMeet = ({
                 <Card
                     header={
                         <>
-                            Välkommen på <HighlightText>Cocktailträff 🎉🍸🍾</HighlightText>
+                            Välkommen på <HighlightText>{eventTitle || "Cocktailträff"} 🎉🍸🍾</HighlightText>
                         </>
                     }
                 >
