@@ -122,7 +122,7 @@ const Home: NextPage = () => {
             }
         >
             <EventDescription event={e} />
-            <IsConfirmed eventName={e.title} />
+            {e.options.customSignupPage ? <IsConfirmedCustom eventName={e.title} /> : <IsConfirmed eventName={e.title} />}
             <ShowParticipantsLinkButton showParticipants={e.options.showParticipants} />
 
         </Layout>);
@@ -172,6 +172,51 @@ const Home: NextPage = () => {
 interface IsConfirmedProps {
     eventName: string;
 }
+
+const IsConfirmedCustom: React.FC<IsConfirmedProps> = ({ eventName }) => {
+    return (
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:gap-8">
+            <div className="col-span-2">
+                <Card
+                    header={
+                        <>
+                            <HighlightText>Ni har betalat och vi ses i Norrköping 😘 🎉🍾</HighlightText>
+                        </>
+                    }
+                >
+                    <h3 className="text-2xl font-bold">
+                        <HighlightText>Boende och tidplan</HighlightText>
+                    </h3>
+                    <div className="whitespace-pre-wrap text-lg">
+                        Vi har bokat rum på Elite Grand Hotel i Norrköping och vi hoppas att fler vill bo på samma ställe.
+                        Rum finns från ca 1000kr/natt och ni bokar detta själva <a className="text-[hsl(280,100%,70%)]" href="https://www.elite.se/hotell/norrkoping/elite-grand-hotel-norrkoping/" target="_blank" rel="noopener noreferrer">här</a>.
+                    </div>
+                    <div>
+                        Kvällen inleder vi på hotellet, där vi ses i baren kl 18.00 för ett mingel med skål. Efter det går vi ut på stan för att äta en middag,
+                        vi ordnar med bordsbokning så det är ingenting ni behöver bekymra er om.
+                    </div>
+                    <div>
+                        Höjdpunkten för resan blir <HighlightText>Club Adam & Eva</HighlightText> där vi ska njuta hela natten tillsammans med er 😍
+                    </div>
+                    <div className="whitespace-pre-wrap text-lg">
+                        Har ni frågor eller funderingar så kan ni skicka ett mail till{" "}
+                        <a
+                            className="text-[hsl(280,100%,70%)]"
+                            href="mailto:fest@nightofpassion.se"
+                        >
+                            fest@nightofpassion.se
+                        </a>
+                    </div>
+                    <div>
+                        Vi ser så fram emot detta, kramar från <HighlightText>Evelina & Johan</HighlightText>
+                    </div>
+
+                </Card>
+            </div>
+        </div>
+    );
+};
+
 const IsConfirmed: React.FC<IsConfirmedProps> = ({ eventName }) => {
     return (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:gap-8">
@@ -269,7 +314,7 @@ const AttendingToNopGoesCae = ({
     return (
         <div className="grid grid-cols-2  gap-4   sm:grid-cols-2 md:gap-8">
             <div className="col-span-2">
-                
+
                 <Card
                     header={
                         <>
@@ -295,7 +340,7 @@ const AttendingToNopGoesCae = ({
                         <SwishQR />
                     </div>
                     <div className="whitespace-pre-wrap text-lg">
-                        Övriga kostnader såsom resa, hotell och entre ombesörjer ni för själva. 
+                        Övriga kostnader såsom resa, hotell och entre ombesörjer ni för själva.
                     </div>
                     <div className="whitespace-pre-wrap text-lg">
                         Har ni frågor eller funderingar så kan ni skicka ett mail till{" "}
@@ -353,7 +398,7 @@ const AttendingToCustomEvent = () => {
                     <div className="whitespace-pre-wrap text-lg">
                         Kram på er så länge 😘
                     </div>
-                    
+
                 </div>
             </div>
         </div>
