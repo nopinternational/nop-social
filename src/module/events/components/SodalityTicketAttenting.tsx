@@ -5,23 +5,27 @@ import { useState } from "react";
 import { Card } from "~/components/Card";
 import HighlightText from "~/components/HighlightText";
 import { Spinner } from "~/components/Spinner";
+import { api } from "~/utils/api";
 
 export const AttendingAndPayWithSodality = ({ ticketUrl }: { ticketUrl: string }) => {
 
     const [showSpinner, setShowSpinner] = useState(false);
     const [hasPayed, setHasPayed] = useState(false);
+    
     const session = useSession();
     const currentEmail = session.data?.user.email || null;
     
-    const startPollForPayment = () => {
+    const startPayment = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        //startTicketPayment();
         setShowSpinner(true);
     };
 
-    type LemonPayment = {
+    type UserPaid = {
         email: string
     }
 
-    const lemonPayments = (payments: LemonPayment[], currentUserEmail: string | null) => {
+    const checkForPayment = (payments: UserPaid[], currentUserEmail: string | null) => {
         const thisUserHasPayed: boolean = payments.filter(p => p.email === currentUserEmail).length > 0;
         if (thisUserHasPayed) {
             setShowSpinner(false);
@@ -33,16 +37,21 @@ export const AttendingAndPayWithSodality = ({ ticketUrl }: { ticketUrl: string }
 
     const fetchPayments = async () => {
         const res = await fetch("http://localhost:3000/api/payments");
-        const payments: LemonPayment[] = await res.json() as LemonPayment[];
-        lemonPayments(payments, currentEmail);
+        const payments: UserPaid[] = await res.json() as UserPaid[];
+        checkForPayment(payments, currentEmail);
         return payments;
     };
 
     useQuery(["paymets"], fetchPayments, {
-        enabled: showSpinner,
+        // enabled: showSpinner,
+        enabled: false,
         refetchInterval: 2000,
     });
 
+
+    
+
+    
 
     return (
         <div className="grid grid-cols-2  gap-4   sm:grid-cols-2 md:gap-8">
@@ -75,16 +84,18 @@ export const AttendingAndPayWithSodality = ({ ticketUrl }: { ticketUrl: string }
                         Vi samarbetar med Sodality för att betala för cocktailträffen. Klickan nedan för att starta betalningen.
                     </div>
                     <div className="flex items-center justify-center">
-                        <Link href={ ticketUrl} target="ticketpayment">
+                        {/* <Link href={ ticketUrl} target="ticketpayment"> */}
+                        <Link href="#" target="ticketpayment">
                             <button
                                 disabled={showSpinner || hasPayed}
                                 className="flex items-center gap-3 relative rounded-full bg-green-600 px-8 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-                                onClick={startPollForPayment}>
+                                onClick={startPayment}>
                                 <span>Betala</span>
                             </button>
                         </Link>
                     </div>
                     {showSpinner ? <div><Spinner></Spinner>
+                        <MemberlyPayment eventId={ticketUrl} ></MemberlyPayment>
                     </div> : null}
                     {hasPayed ?
                         <div className="text-lg text-green-600">Ni har nu betalat för träffen  </div> : null}
@@ -92,4 +103,55 @@ export const AttendingAndPayWithSodality = ({ ticketUrl }: { ticketUrl: string }
             </div>
         </div>);
 
+};
+
+const MemberlyPayment = ({ eventId }: {eventId: string}) => {
+    //const [memberlyData, setMemberlyData] = useState<MemberlyInitTicketPayResponse | null>(null);
+
+    const initiatePayment = api.memberly.initiateTicketPayment.useQuery(
+        { eventId: eventId },
+        {
+            enabled: true
+        }
+    );
+
+    // async function startTicketPayment(): Promise<void> {
+    //     console.log("startTicketPayment");
+    //     // event.preventDefault();
+    //     //const foo = await initiatePayment.refetch();
+    //     console.log("foo:", foo);
+    //     console.log("foo.data:", foo.data);
+    //     setMemberlyData(foo.data);
+    // }
+    if (initiatePayment.isSuccess) {
+        const data = initiatePayment.data;
+        // setMemberlyData(data);
+    
+        const memberlyData = data;
+
+        return (
+            <div>
+                <div>
+                    <p>MemberlyPayment</p>
+                </div>
+                <div>{memberlyData?.acquireTicketUrl}</div>
+                <Link href={memberlyData?.acquireTicketUrl || ""} target="acquireticket">
+                    <button
+                        className="flex items-center gap-3 relative rounded-full bg-green-600 px-8 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
+                    ticket
+                    </button>
+                </Link>
+
+                <div>{memberlyData?.acquireMembershipUrl}</div>
+                <Link href={
+                    memberlyData?.acquireMembershipUrl || ""} target="acquiremembership">
+                    <button
+                        className="flex items-center gap-3 relative rounded-full bg-green-600 px-8 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
+                    membership
+                    </button>
+                </Link>
+            </div>
+        );
+    }
+    return null;
 };

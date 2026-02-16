@@ -36,7 +36,7 @@ const Home: NextPage = () => {
         enabled: sessionData?.user !== undefined,
     });
 
-    
+
     useEffect(() => {
         if (myEventStatus.data) {
             setAttendToEvent(myEventStatus.data.when !== undefined);
@@ -101,12 +101,12 @@ const Home: NextPage = () => {
 
     const e: NopEvent = event.data;
 
-    const ShowParticipantsLinkButton = ({ showParticipants }: {showParticipants: boolean}) => {
+    const ShowParticipantsLinkButton = ({ showParticipants }: { showParticipants: boolean }) => {
         return showParticipants ? (
             <div className="p-2">
                 <Link href={router.asPath + "/attendes"}>
                     <button className="rounded-full bg-[hsl(280,100%,70%)] bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
-                            Vilka kommer på träffen?
+                        Vilka kommer på träffen?
                     </button>
                 </Link>
             </div>
@@ -122,8 +122,8 @@ const Home: NextPage = () => {
             }
         >
             <EventDescription event={e} />
-            <IsConfirmed eventName={e.title} />
-            <ShowParticipantsLinkButton showParticipants={ e.options.showParticipants} />
+            {e.options.customSignupPage ? <IsConfirmedCustom eventName={e.title} /> : <IsConfirmed eventName={e.title} />}
+            <ShowParticipantsLinkButton showParticipants={e.options.showParticipants} />
 
         </Layout>);
     }
@@ -172,6 +172,51 @@ const Home: NextPage = () => {
 interface IsConfirmedProps {
     eventName: string;
 }
+
+const IsConfirmedCustom: React.FC<IsConfirmedProps> = () => {
+    return (
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:gap-8">
+            <div className="col-span-2">
+                <Card
+                    header={
+                        <>
+                            <HighlightText>Ni har betalat och vi ses i Norrköping 😘 🎉🍾</HighlightText>
+                        </>
+                    }
+                >
+                    <h3 className="text-2xl font-bold">
+                        <HighlightText>Boende och tidplan</HighlightText>
+                    </h3>
+                    <div className="whitespace-pre-wrap text-lg">
+                        Vi har bokat rum på Elite Grand Hotel i Norrköping och vi hoppas att fler vill bo på samma ställe.
+                        Rum finns från ca 1000kr/natt och ni bokar detta själva <a className="text-[hsl(280,100%,70%)]" href="https://www.elite.se/hotell/norrkoping/elite-grand-hotel-norrkoping/" target="_blank" rel="noopener noreferrer">här</a>.
+                    </div>
+                    <div>
+                        Kvällen inleder vi på hotellet, där vi ses i baren kl 18.00 för ett mingel med skål. Efter det går vi ut på stan för att äta en middag,
+                        vi ordnar med bordsbokning så det är ingenting ni behöver bekymra er om.
+                    </div>
+                    <div>
+                        Höjdpunkten för resan blir <HighlightText>Club Adam & Eva</HighlightText> där vi ska njuta hela natten tillsammans med er 😍
+                    </div>
+                    <div className="whitespace-pre-wrap text-lg">
+                        Har ni frågor eller funderingar så kan ni skicka ett mail till{" "}
+                        <a
+                            className="text-[hsl(280,100%,70%)]"
+                            href="mailto:fest@nightofpassion.se"
+                        >
+                            fest@nightofpassion.se
+                        </a>
+                    </div>
+                    <div>
+                        Vi ser så fram emot detta, kramar från <HighlightText>Evelina & Johan</HighlightText>
+                    </div>
+
+                </Card>
+            </div>
+        </div>
+    );
+};
+
 const IsConfirmed: React.FC<IsConfirmedProps> = ({ eventName }) => {
     return (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:gap-8">
@@ -228,11 +273,12 @@ const Attending = ({
     event: NopEvent;
     session: Session | null;
 }) => {
-    if (event.options.ticketUrl) {
-        return <AttendingAndPayWithSodality ticketUrl={event.options.ticketUrl} />;
+    if (event.options.memberlyEventId) {
+        return <AttendingAndPayWithSodality ticketUrl={event.options.memberlyEventId} />;
     }
     if (event.options.customSignupPage) {
-        return <AttendingToSkargardsParty />;
+        return <CustomAttendingToEvent eventTitle={event.title}
+            username={session?.user.name} />;
     }
 
     return (
@@ -244,7 +290,79 @@ const Attending = ({
 };
 
 
-const AttendingToSkargardsParty = () => {
+const CustomAttendingToEvent = ({
+    eventTitle,
+    username,
+}: AttendingToCocktailMeetProps) => {
+    return <AttendingToNopGoesCae
+        eventTitle={eventTitle}
+        username={username} />;
+};
+
+const AttendingToNopGoesCae = ({
+    eventTitle,
+    username,
+}: AttendingToCocktailMeetProps) => {
+    const getSwishMessage = (username: string | undefined | null): string => {
+        if (username) {
+            return eventTitle + ": " + username;
+        }
+        return "Ert användarnamn och era namn här";
+    };
+    const swishMessage = getSwishMessage(username);
+
+    return (
+        <div className="grid grid-cols-2  gap-4   sm:grid-cols-2 md:gap-8">
+            <div className="col-span-2">
+
+                <Card
+                    header={
+                        <>
+                            <HighlightText>Betala</HighlightText> för festen
+                        </>
+                    }
+                >
+                    <div className="whitespace-pre-wrap text-lg">
+                        Kostnaden för festen är 100:- som ni swishar till 0700066099. Märk
+                        er betalning med ert användarnamn ex &quot;passion-couple&quot;.
+                    </div>
+                    <div>
+                        Är ni på samma enhet som ni har Swish-appen installerad kan ni
+                        klicka på knappen nedan för att betala.
+                    </div>
+                    <div className="flex items-center justify-center">
+                        <CocktailSwishButton message={swishMessage} />
+                    </div>
+                    <div>
+                        Eller så öppnar ni upp er swish app och skannar QR koden nedan.
+                    </div>
+                    <div className="p-2">
+                        <SwishQR />
+                    </div>
+                    <div className="whitespace-pre-wrap text-lg">
+                        Övriga kostnader såsom resa, hotell och entre ombesörjer ni för själva.
+                    </div>
+                    <div className="whitespace-pre-wrap text-lg">
+                        Har ni frågor eller funderingar så kan ni skicka ett mail till{" "}
+                        <a
+                            className="text-[hsl(280,100%,70%)]"
+                            href="mailto:fest@nightofpassion.se"
+                        >
+                            fest@nightofpassion.se
+                        </a>
+                    </div>
+
+                    <div className="whitespace-pre-wrap text-lg">
+                        Kram på er så länge 😘
+                    </div>
+                </Card>
+            </div>
+        </div>
+    );
+};
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const AttendingToCustomEvent = () => {
+
     return (
         <div className="grid grid-cols-2  gap-4   sm:grid-cols-2 md:gap-8">
             <div className="col-span-2">
@@ -279,11 +397,13 @@ const AttendingToSkargardsParty = () => {
                     <div className="whitespace-pre-wrap text-lg">
                         Kram på er så länge 😘
                     </div>
+
                 </div>
             </div>
         </div>
     );
 };
+
 const AttendingToCocktailMeet = ({
     eventTitle,
     username,
@@ -303,7 +423,7 @@ const AttendingToCocktailMeet = ({
                 <Card
                     header={
                         <>
-                            Välkommen på <HighlightText>Cocktailträff 🎉🍸🍾</HighlightText>
+                            Välkommen på <HighlightText>{eventTitle || "Cocktailträff"} 🎉🍸🍾</HighlightText>
                         </>
                     }
                 >
