@@ -75,7 +75,7 @@
     "@smithy/util-utf8" "^2.0.0"
     tslib "^2.6.2"
 
-"@aws-sdk/client-s3@^3.306.0":
+"@aws-sdk/client-s3@^3.990.0":
   version "3.990.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/client-s3/-/client-s3-3.990.0.tgz#5cafb93eba5e8fd26e16a6f7fc27776a85d08878"
   integrity sha512-XnsM8RgB35Atn2+aYSocitCybDG82x9yYf/s2D23ytpyHCupmuZN3LzK2a0WxmKO6Zf7EtEIYy0mHGY4tLp9YA==
@@ -504,7 +504,7 @@
     "@smithy/types" "^4.12.0"
     tslib "^2.6.2"
 
-"@aws-sdk/s3-request-presigner@^3.306.0":
+"@aws-sdk/s3-request-presigner@^3.990.0":
   version "3.990.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/s3-request-presigner/-/s3-request-presigner-3.990.0.tgz#8de3280fc3862ac266b6dade51a224e0e44d23f5"
   integrity sha512-cex+QPepH6a2gPBERvOnbPxxLeAtp1P1smnCVzxZ236YBy5XeIBMGySknrG7WZoCu9CqiXv1sfI/+sJPcM7QdQ==
