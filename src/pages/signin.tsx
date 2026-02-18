@@ -116,7 +116,7 @@ export default Signin;
 const PasswordInput = ({
     passwordRef,
 }: {
-  passwordRef: RefObject<HTMLInputElement>;
+    passwordRef: RefObject<HTMLInputElement | null>;
 }) => {
     const [type, setType] = useState("password");
     const [icon, setIcon] = useState<object>(eyeOff);

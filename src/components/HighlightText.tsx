@@ -1,6 +1,7 @@
+import type { ReactNode } from "react";
 
 type Props = {
-    children: JSX.Element | string | string[] | null | undefined
+    children?: ReactNode
 }
 
 const HighlightText = ({ children }: Props) => {
