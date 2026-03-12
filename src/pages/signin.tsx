@@ -124,16 +124,16 @@ const PasswordInput = ({
     };
 
     return (
-        <div className="relative mb-4 flex">
+        <div className="relative mb-4 w-full">
             <input
-                className="w-full rounded-lg px-3 py-3 text-center text-black"
+                className="w-full rounded-lg py-3 pl-3 pr-12 text-center text-black"
                 name="password"
                 type={type}
                 ref={passwordRef}
             />
             <button
                 type="button"
-                className="absolute right-8 flex items-center justify-center text-black"
+                className="absolute end-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-md text-black hover:bg-black/5"
                 onClick={handleEyeToggle}
                 aria-label={visible ? "Dölj lösenord" : "Visa lösenord"}
             >
