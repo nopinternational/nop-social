@@ -38,7 +38,7 @@
     "**/*.mjs",
     "src/pages/firebase.tsx",
     "src/lib/firebase/useFirebaseAuth.ts",
-    "src/middleware.js"
+    "src/proxy.js"
   ],
   "exclude": [
     "node_modules"
