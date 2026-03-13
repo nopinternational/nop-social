@@ -42,8 +42,9 @@ export const AttendingAndPayWithSodality = ({ ticketUrl }: { ticketUrl: string }
         return payments;
     };
 
-    useQuery(["paymets"], fetchPayments, {
-        // enabled: showSpinner,
+    useQuery({
+        queryKey: ["paymets"],
+        queryFn: fetchPayments,
         enabled: false,
         refetchInterval: 2000,
     });
