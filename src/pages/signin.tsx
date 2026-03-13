@@ -5,15 +5,14 @@ import { type GetServerSidePropsContext } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 // import { providers, signIn, getSession, csrfToken } from "next-auth/client/";
-import { getProviders, signIn, getCsrfToken } from "next-auth/react";
-import authOptions from "./api/auth/[...nextauth]";
+import { getProviders, signIn, getCsrfToken, type ClientSafeProvider } from "next-auth/react";
 import { getServerSession } from "next-auth/next";
-import type { Provider } from "next-auth/providers";
+import { authOptions } from "~/server/auth";
 import HighlightText from "~/components/HighlightText";
 import Layout from "~/components/Layout";
 
 type SigninPageProps = {
-  providers: Provider[];
+  providers: Awaited<ReturnType<typeof getProviders>>;
 };
 
 const Signin = ({ providers }: SigninPageProps) => {
@@ -23,9 +22,9 @@ const Signin = ({ providers }: SigninPageProps) => {
     const inputUsername = useRef<HTMLInputElement>(null);
     const inputPassword = useRef<HTMLInputElement>(null);
 
-    const nopAuthSignIn = (providers: Provider[]) => {
-        const nopSigninProvider = Object.values(providers).filter(
-            (provider) => provider.id == "nop-auth"
+    const nopAuthSignIn = (providers: SigninPageProps["providers"]) => {
+        const nopSigninProvider = Object.values(providers ?? {}).filter(
+            (provider: ClientSafeProvider) => provider.id === "nop-auth"
         )[0];
 
         if (!nopSigninProvider) return <div>no nop</div>;
