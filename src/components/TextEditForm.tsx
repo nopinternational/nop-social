@@ -37,7 +37,7 @@ export const TextEditForm: FC<{ placeholder?: string, value?: string, onsubmitHa
             {renderHeading(options?.headingText)}
 
             <textarea
-                className="w-full px-3 py-3 rounded-lg text-black "
+                className="w-full rounded-lg bg-white px-3 py-3 text-black"
                 name="name"
                 value={text}
                 onChange={event => setText(event.target.value)}

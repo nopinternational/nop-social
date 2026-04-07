@@ -54,7 +54,7 @@ const Signin = ({ providers }: SigninPageProps) => {
                 <form className="p-2">
                     <div className="m-2">email</div>
                     <input
-                        className="w-full rounded-lg px-3 py-3 text-center text-black"
+                        className="w-full rounded-lg bg-white px-3 py-3 text-center text-black"
                         name="username"
                         ref={inputUsername}
                     ></input>
@@ -125,7 +125,7 @@ const PasswordInput = ({
     return (
         <div className="relative mb-4 w-full">
             <input
-                className="w-full rounded-lg py-3 pl-3 pr-12 text-center text-black"
+                className="w-full rounded-lg bg-white py-3 pl-3 pr-12 text-center text-black"
                 name="password"
                 type={type}
                 ref={passwordRef}

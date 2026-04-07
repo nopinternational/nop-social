@@ -56,7 +56,7 @@ const EmailCard = ({
                 <form className="p-2" onSubmit={(event) => submitFormClick(event)}>
                     <div className="m-2">email</div>
                     <input
-                        className="w-full rounded-lg px-3 py-3 text-center text-black"
+                        className="w-full rounded-lg bg-white px-3 py-3 text-center text-black"
                         name="email"
                         type="email"
                         required
