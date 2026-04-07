@@ -158,7 +158,7 @@ export const NoPEventForm = ({
         <form className="p-2">
             <div className="m-2">Titel</div>
             <input
-                className="w-full rounded-lg px-3 py-3 text-black"
+                className="w-full rounded-lg bg-white px-3 py-3 text-black"
                 name="title"
                 value={eventInformation.title}
                 onChange={updateEventInformation}
@@ -167,7 +167,7 @@ export const NoPEventForm = ({
 
             <div className="m-2">När (text)</div>
             <input
-                className="w-full rounded-lg px-3 py-3 text-black"
+                className="w-full rounded-lg bg-white px-3 py-3 text-black"
                 name="when"
                 value={eventInformation.when}
                 onChange={updateEventInformation}
@@ -175,7 +175,7 @@ export const NoPEventForm = ({
             <br />
             <div className="m-2">order</div>
             <input
-                className="w-full rounded-lg px-3 py-3 text-black"
+                className="w-full rounded-lg bg-white px-3 py-3 text-black"
                 name="order"
                 type="number"
                 value={eventInformation.order}
@@ -185,7 +185,7 @@ export const NoPEventForm = ({
 
             <div className="m-2">Kort beskrivning</div>
             <textarea
-                className="w-full rounded-lg px-3 py-3 text-black"
+                className="w-full rounded-lg bg-white px-3 py-3 text-black"
                 rows={5}
                 name="description"
                 value={eventInformation.description}
@@ -194,7 +194,7 @@ export const NoPEventForm = ({
 
             <div className="m-2">Lång beskrivning</div>
             <textarea
-                className="w-full rounded-lg px-3 py-3 text-black"
+                className="w-full rounded-lg bg-white px-3 py-3 text-black"
                 rows={5}
                 name="longDesc"
                 value={eventInformation.longDesc}
@@ -233,7 +233,7 @@ export const NoPEventForm = ({
             />
             <div className="m-2">Event ID</div>
             <input
-                className="w-full rounded-lg px-3 py-3 text-black"
+                className="w-full rounded-lg bg-white px-3 py-3 text-black"
                 name="order"
                 type="text"
                 value={eventOptions.memberlyEventId}

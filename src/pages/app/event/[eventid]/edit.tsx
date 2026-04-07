@@ -311,7 +311,7 @@ const AddAsAttendeForm = ({
             <p>Lägg till par till träff. Ange deras namn</p>
             <form>
                 <input
-                    className="w-full rounded-lg px-3 py-3 text-black"
+                    className="w-full rounded-lg bg-white px-3 py-3 text-black"
                     type="text"
                     value={profileNames}
                     onChange={(e) => setProfileName(e.target.value)}
